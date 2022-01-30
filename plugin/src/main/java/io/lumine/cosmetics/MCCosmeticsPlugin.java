@@ -1,10 +1,6 @@
 package io.lumine.cosmetics;
 
-import java.io.IOException;
-
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.PluginManager;
-
 import io.lumine.cosmetics.commands.BaseCommand;
 import io.lumine.cosmetics.commands.admin.AdminCommand;
 import io.lumine.cosmetics.compat.CompatibilityManager;
@@ -13,10 +9,8 @@ import io.lumine.cosmetics.logging.MCLogger;
 import io.lumine.cosmetics.metrics.bStats;
 import io.lumine.cosmetics.nms.VolatileCodeDisabled;
 import io.lumine.cosmetics.nms.VolatileCodeHandler;
+import io.lumine.cosmetics.players.ProfileManager;
 import io.lumine.utils.chat.ColorString;
-import io.lumine.utils.gson.GsonProvider;
-import io.lumine.utils.holograms.BukkitHologramFactory;
-import io.lumine.utils.holograms.HologramFactory;
 import io.lumine.utils.logging.ConsoleColor;
 import io.lumine.utils.plugin.LuminePlugin;
 import io.lumine.utils.version.ServerVersion;
@@ -28,6 +22,8 @@ public class MCCosmeticsPlugin extends LuminePlugin {
 
     @Getter private Configuration configuration;
     @Getter private CompatibilityManager compatibility;
+    
+    @Getter private ProfileManager profiles;
     
     @Getter private BaseCommand baseCommand;
     @Getter private AdminCommand adminCommand;
@@ -71,6 +67,8 @@ public class MCCosmeticsPlugin extends LuminePlugin {
 
         volatileCodeHandler = getVolatileCodeHandler();
         compatibility = new CompatibilityManager(this);
+        
+        profiles = new ProfileManager(this);
         
         getConfiguration().load(this);
         MCLogger.log("MCCosmetics configuration file loaded successfully.");
