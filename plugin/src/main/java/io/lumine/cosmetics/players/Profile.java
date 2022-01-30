@@ -4,10 +4,10 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
-import io.lumine.utils.storage.players.Profile;
+import io.lumine.cosmetics.api.players.CosmeticProfile;
 import lombok.Getter;
 
-public class CosmeticProfile implements Profile {
+public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.Profile {
 
     @Getter private UUID uniqueId;
     @Getter private String name;
@@ -15,9 +15,9 @@ public class CosmeticProfile implements Profile {
     
     @Getter private transient Player player;
     
-    public CosmeticProfile() {}
+    public Profile() {}
     
-    public CosmeticProfile(UUID id, String name) {
+    public Profile(UUID id, String name) {
         this.uniqueId = id;
         this.name = name;
     }

@@ -5,26 +5,29 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 
 import io.lumine.cosmetics.MCCosmeticsPlugin;
+import io.lumine.cosmetics.api.events.CosmeticPlayerLoadedEvent;
 import io.lumine.utils.storage.players.adapters.file.JsonPlayerStorageAdapter;
+import io.lumine.utils.Events;
 import io.lumine.utils.storage.players.PlayerRepository;
 
-public class ProfileManager extends PlayerRepository<MCCosmeticsPlugin,CosmeticProfile> {
+public class ProfileManager extends PlayerRepository<MCCosmeticsPlugin,Profile> {
 
     public ProfileManager(MCCosmeticsPlugin plugin) {
-        super(plugin, CosmeticProfile.class, new JsonPlayerStorageAdapter<>(plugin,CosmeticProfile.class));
+        super(plugin, Profile.class, new JsonPlayerStorageAdapter<>(plugin,Profile.class));
     }
 
     @Override
-    public CosmeticProfile createProfile(UUID id, String name) {
-        return new CosmeticProfile(id,name);
+    public Profile createProfile(UUID id, String name) {
+        return new Profile(id,name);
     }
 
     @Override
-    public void initProfile(CosmeticProfile profile, Player player) {
+    public void initProfile(Profile profile, Player player) {
         profile.initialize(player);
+        Events.call(new CosmeticPlayerLoadedEvent(player,profile));
     }
 
     @Override
-    public void unloadProfile(CosmeticProfile profile, Player player) {}
+    public void unloadProfile(Profile profile, Player player) {}
 
 }

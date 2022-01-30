@@ -1,6 +1,8 @@
 package io.lumine.cosmetics;
 
 import org.bukkit.Bukkit;
+
+import io.lumine.cosmetics.api.MCCosmetics;
 import io.lumine.cosmetics.commands.BaseCommand;
 import io.lumine.cosmetics.commands.admin.AdminCommand;
 import io.lumine.cosmetics.compat.CompatibilityManager;
@@ -142,7 +144,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         try {
             final Class<?> clazz = Class.forName("io.lumine.cosmetics.nms.VolatileCodeEnabled_" + version);
             if (VolatileCodeHandler.class.isAssignableFrom(clazz)) {
-                VCH = (VolatileCodeHandler) clazz.getConstructor().newInstance();
+                VCH = (VolatileCodeHandler) clazz.getConstructor(MCCosmetics.class).newInstance(this);
             }
         } catch (final ClassNotFoundException e) {  
             MCLogger.error(ColorString.get("&6--====|||| &c&lMCCosmetics &6||||====--"));
