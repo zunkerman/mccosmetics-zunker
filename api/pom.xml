@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <artifactId>MCCosmetics-API</artifactId>
+    <parent>
+        <groupId>io.lumine</groupId>
+        <artifactId>MCCosmetics-Plugin</artifactId>
+        <version>${mccosmetics.version}</version>
+    </parent>  
+
+    <repositories>
+        <repository>
+            <id>nexus</id>
+            <url>https://mvn.lumine.io/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- Main dependencies -->
+        <dependency>
+            <groupId>io.lumine</groupId>
+            <artifactId>LumineUtils</artifactId>
+            <version>${lumineutils.version}</version>
+            <scope>provided</scope> 
+        </dependency>
+        <dependency> 
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Spigot API -->
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>${paperapi.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>
