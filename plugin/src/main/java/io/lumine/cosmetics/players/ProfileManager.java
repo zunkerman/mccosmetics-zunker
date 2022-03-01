@@ -12,6 +12,8 @@ import io.lumine.utils.storage.players.PlayerRepository;
 
 public class ProfileManager extends PlayerRepository<MCCosmeticsPlugin,Profile> {
 
+    
+    
     public ProfileManager(MCCosmeticsPlugin plugin) {
         super(plugin, Profile.class, new JsonPlayerStorageAdapter<>(plugin,Profile.class));
     }

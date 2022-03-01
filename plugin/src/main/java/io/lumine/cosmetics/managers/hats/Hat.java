@@ -1,5 +1,6 @@
 package io.lumine.cosmetics.managers.hats;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -12,8 +13,11 @@ import org.bukkit.inventory.ItemStack;
 
 import com.google.common.collect.Lists;
 
+import io.lumine.cosmetics.api.cosmetics.Cosmetic;
+import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.commands.CommandHelper;
 import io.lumine.cosmetics.config.Scope;
+import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.cosmetics.players.Profile;
 import io.lumine.utils.config.properties.Property;
 import io.lumine.utils.config.properties.PropertyHolder;
@@ -33,7 +37,7 @@ import lombok.Data;
 import lombok.Getter;
 
 @Data
-public class Hat implements PropertyHolder,MenuData<Profile> {
+public class Hat extends Cosmetic {
 
     private static final EnumProp<Material> MATERIAL = Property.Enum(Scope.NONE, Material.class, "Material", Material.EMERALD);
 	private static final IntProp MODEL = Property.Int(Scope.NONE, "Model");
@@ -41,6 +45,7 @@ public class Hat implements PropertyHolder,MenuData<Profile> {
 	private static final LangListProp DESCRIPTION = Property.LangList(Scope.NONE, "Description");
 	private static final StringProp TEXTURE = Property.String(Scope.NONE, "Texture");
 
+	private final File file;
 	private final String key;
 	@Getter private List<String> sources = Lists.newArrayList();
 	
@@ -51,12 +56,15 @@ public class Hat implements PropertyHolder,MenuData<Profile> {
 
 	@Getter private ItemStack hatItem;
 
-	public Hat(String key) {
+	public Hat(File file, String key) {
+	    super(CosmeticType.HAT, key);
+	    
+	    this.file = file;
 		this.key = key.toUpperCase();
-		this.material = MATERIAL.get(this);
-		this.model = MODEL.get(this);
-		this.display = DISPLAY.get(this);
-		this.description = DESCRIPTION.get(this);
+		this.material = MATERIAL.fget(file,this);
+		this.model = MODEL.fget(file,this);
+		this.display = DISPLAY.fget(file,this);
+		this.description = DESCRIPTION.fget(file,this);
 
         if(material == Material.PLAYER_HEAD) {
             this.hatItem = ItemFactory.of(this.material)
@@ -82,8 +90,8 @@ public class Hat implements PropertyHolder,MenuData<Profile> {
 	}
 
     @Override
-    public Icon<Profile> getIcon() {
-        return IconBuilder.<Profile>create()
+    public Icon<CosmeticProfile> getIcon() {
+        return IconBuilder.<CosmeticProfile>create()
                 .name(Text.colorize(this.getDisplay()))
                 .item(this.hatItem)
                 .hideFlags()

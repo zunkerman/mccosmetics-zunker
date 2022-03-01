@@ -1,5 +1,10 @@
 package io.lumine.cosmetics.config;
 
+import java.io.File;
+import java.util.Collection;
+
+import com.google.common.collect.Lists;
+
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.utils.config.properties.Property;
 import io.lumine.utils.config.properties.PropertyHolder;
@@ -30,7 +35,26 @@ public class Configuration extends ReloadableModule<MCCosmeticsPlugin> implement
         return "Configuration";
     }
     
+    public Collection<File> getPackFolders() {
+        final File packsFolder = new File(getPlugin().getDataFolder() + System.getProperty("file.separator") + "packs");
+        final Collection<File> packs = Lists.newArrayList();
+        
+        if(!packsFolder.exists()) {
+            packsFolder.mkdir();
+        }
+        if(packsFolder.exists() && packsFolder.isDirectory()) {
+            for(var packFolder : packsFolder.listFiles()) {
+                if(packFolder.isDirectory()) {
+                    packs.add(packFolder);
+                }
+            }
+        }
+        return packs;
+    }
+    
     public int getClockInterval() {
         return CLOCK_INTERVAL.get(this);
     }
+    
+    
 }

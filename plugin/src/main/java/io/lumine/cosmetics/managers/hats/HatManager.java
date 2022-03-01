@@ -1,6 +1,6 @@
 package io.lumine.cosmetics.managers.hats;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -15,21 +15,29 @@ import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import io.lumine.utils.Events;
 import io.lumine.utils.Schedulers;
+import io.lumine.utils.config.properties.Property;
 import io.lumine.utils.config.properties.types.NodeListProp;
+import io.lumine.utils.files.Files;
 import io.lumine.utils.logging.Log;
 import io.lumine.utils.protocol.Protocol;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.events.CosmeticPlayerLoadedEvent;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
+import io.lumine.cosmetics.config.Scope;
+import io.lumine.cosmetics.constants.PackFolders;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.cosmetics.players.Profile;
 
 public class HatManager extends MCCosmeticsManager {
 
-    private final Map<String,Hat> hats = new ConcurrentHashMap<>();
+    private final NodeListProp KEYS = Property.NodeList(Scope.NONE, "");
+    
+    private final Map<String,Hat> hats = Maps.newConcurrentMap();
     
     public HatManager(MCCosmeticsPlugin plugin) {
         super(plugin);
@@ -37,15 +45,26 @@ public class HatManager extends MCCosmeticsManager {
 
     @Override
     public void load(MCCosmeticsPlugin plugin) {
-
-        //
-        // TODO: Load Hats
-        // 
+        final Collection<File> files = Lists.newArrayList();
+        for(var packFolder : plugin.getConfiguration().getPackFolders()) {
+            final File confFolder = new File(packFolder.getAbsolutePath() + System.getProperty("file.separator") + PackFolders.HATS);
+            if(confFolder.exists() && confFolder.isDirectory()) {
+                files.addAll(Files.getAllYaml(confFolder.getAbsolutePath()));
+            }
+        }
+        
+        for(var file : files) {
+            for(var node : KEYS.fget(file)) {
+                var cosmetic = new Hat(file,node);
+                hats.put(node.toUpperCase(), cosmetic);
+            }
+        }
+        
         Log.info("Loaded " + hats.size() + " hats");
         
         Events.subscribe(CosmeticPlayerLoadedEvent.class)
             .handler(event -> {
-                final CosmeticProfile profile = event.getProfile();
+                final var profile = event.getProfile();
     
                 //if(profile.getHat().isPresent()) {
                 //    equipHat(profile);

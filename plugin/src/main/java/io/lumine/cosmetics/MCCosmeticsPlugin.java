@@ -8,6 +8,9 @@ import io.lumine.cosmetics.commands.admin.AdminCommand;
 import io.lumine.cosmetics.compat.CompatibilityManager;
 import io.lumine.cosmetics.config.Configuration;
 import io.lumine.cosmetics.logging.MCLogger;
+import io.lumine.cosmetics.managers.MCCosmeticsManager;
+import io.lumine.cosmetics.managers.hats.HatManager;
+import io.lumine.cosmetics.menus.MenuManager;
 import io.lumine.cosmetics.metrics.bStats;
 import io.lumine.cosmetics.nms.VolatileCodeDisabled;
 import io.lumine.cosmetics.nms.VolatileCodeHandler;
@@ -26,9 +29,12 @@ public class MCCosmeticsPlugin extends LuminePlugin {
     @Getter private CompatibilityManager compatibility;
     
     @Getter private ProfileManager profiles;
+    @Getter private MenuManager menuManager;
     
     @Getter private BaseCommand baseCommand;
     @Getter private AdminCommand adminCommand;
+    
+    @Getter private HatManager hatManager;
 
     private VolatileCodeHandler volatileCodeHandler;
 
@@ -81,8 +87,8 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         this.baseCommand = new BaseCommand(this);
         this.adminCommand = new AdminCommand(this);
 
-        this.registerCommand("mccosmetics", baseCommand);
-        this.registerCommand("cosmetics", adminCommand);
+        this.registerCommand("cosmetics", baseCommand);
+        this.registerCommand("mccosmetics", adminCommand);
 
         if(configuration.isAllowingMetrics())  {
             new bStats(this);
