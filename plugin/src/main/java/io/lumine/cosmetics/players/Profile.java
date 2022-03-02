@@ -1,8 +1,13 @@
 package io.lumine.cosmetics.players;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
+
+import com.google.common.collect.Maps;
 
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
@@ -13,7 +18,9 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
     @Getter private UUID uniqueId;
     @Getter private String name;
     @Getter private long timestamp = System.currentTimeMillis();
-    
+
+    @Getter private EquippedCosmetics cosmeticInventory;
+        
     @Getter private transient Player player;
     
     public Profile() {}
@@ -25,18 +32,17 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
     
     public void initialize(final Player player)  {
         this.player = player;
+        this.equippedCosmetics = new EquippedCosmetics(this);
     }
 
     @Override
     public boolean has(Cosmetic cosmetic) {
-        // TODO Auto-generated method stub
-        return false;
+        return unlockedCosmetics.getOrDefault(cosmetic.getType(), Collections.emptyList()).contains(cosmetic.getKey());
     }
 
     @Override
     public void equip(Cosmetic cosmetic) {
-        // TODO Auto-generated method stub
-        
+         if(this)
     }
 
     @Override

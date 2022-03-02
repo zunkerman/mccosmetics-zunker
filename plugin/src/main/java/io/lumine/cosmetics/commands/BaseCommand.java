@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.constants.Permissions;
@@ -17,6 +18,9 @@ public class BaseCommand extends Command<MCCosmeticsPlugin> {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
+        final var player = (Player) sender;
+        final var profile = getPlugin().getProfiles().getProfile(player);
+        getPlugin().getMenuManager().getCustomizeMenu().open(player,profile);
         return true;
     }
 
@@ -32,7 +36,7 @@ public class BaseCommand extends Command<MCCosmeticsPlugin> {
 
     @Override
     public boolean isConsoleFriendly() {
-        return true;
+        return false;
     }
 
     @Override
