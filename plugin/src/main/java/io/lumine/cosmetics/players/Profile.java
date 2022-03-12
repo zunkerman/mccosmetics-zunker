@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import com.google.common.collect.Maps;
 
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
+import io.lumine.cosmetics.api.players.CosmeticInventory;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import lombok.Getter;
 
@@ -19,7 +20,7 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
     @Getter private String name;
     @Getter private long timestamp = System.currentTimeMillis();
 
-    @Getter private EquippedCosmetics cosmeticInventory;
+    @Getter private CosmeticInventory cosmeticInventory;
         
     @Getter private transient Player player;
     
@@ -32,17 +33,17 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
     
     public void initialize(final Player player)  {
         this.player = player;
-        this.equippedCosmetics = new EquippedCosmetics(this);
+        //this.equippedCosmetics = new EquippedCosmetics(this);
     }
 
     @Override
     public boolean has(Cosmetic cosmetic) {
-        return unlockedCosmetics.getOrDefault(cosmetic.getType(), Collections.emptyList()).contains(cosmetic.getKey());
+        return true; //return unlockedCosmetics.getOrDefault(cosmetic.getType(), Collections.emptyList()).contains(cosmetic.getKey());
     }
 
     @Override
     public void equip(Cosmetic cosmetic) {
-         if(this)
+         //if(this)
     }
 
     @Override
