@@ -1,7 +1,7 @@
 package io.lumine.cosmetics.commands;
 
+import io.lumine.utils.adventure.text.Component;
 import io.lumine.utils.text.Text;
-import net.kyori.adventure.text.Component;
 
 import org.bukkit.command.CommandSender;
 

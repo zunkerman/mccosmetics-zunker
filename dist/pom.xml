@@ -8,6 +8,12 @@
         <version>${mccosmetics.version}</version>
     </parent>  
  
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven-snapshots</id>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
+        </pluginRepository>
+    </pluginRepositories>
     <dependencies>
         <dependency>
             <groupId>io.lumine</groupId>
@@ -49,7 +55,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.3.0-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -60,15 +66,11 @@
                             <relocations>
                                 <relocation>
                                     <pattern>org.bstats</pattern>
-                                    <shadedPattern>io.lumine.xikage.mythicmobs.metrics</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.reflections</pattern>
-                                    <shadedPattern>io.lumine.xikage.mythicmobs.util.reflections</shadedPattern>
+                                    <shadedPattern>io.lumine.cosmetics.metrics</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>io.lumine.utils</pattern>
-                                    <shadedPattern>io.lumine.xikage.mythicmobs.utils</shadedPattern>
+                                    <shadedPattern>io.lumine.cosmetics.utils</shadedPattern>
                                 </relocation>
                             </relocations>
                             <minimizeJar>false</minimizeJar>
@@ -82,7 +84,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <finalName>MythicMobs-${project.parent.version}</finalName>
+                    <finalName>MCCosmetics-${project.parent.version}</finalName>
                     <outputDirectory>../target</outputDirectory>
                 </configuration>
             </plugin>
@@ -92,8 +94,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>16</source>
+                    <target>16</target>
                 </configuration>
             </plugin>
             
