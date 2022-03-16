@@ -1,5 +1,6 @@
 package io.lumine.cosmetics.api.cosmetics;
 
+import io.lumine.cosmetics.api.players.CosmeticInventory;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.utils.config.properties.PropertyHolder;
 import io.lumine.utils.menu.MenuData;
@@ -16,15 +17,32 @@ public abstract class Cosmetic implements PropertyHolder,MenuData<CosmeticProfil
     }
     
     public boolean has(CosmeticProfile profile) {
-        return profile.has(this);
+        return has(profile.getCosmeticInventory());
     }
         
+    public boolean has(CosmeticInventory inventory) {
+        return inventory.getUnlocked(type).contains(key);
+    }
+    
     public void equip(CosmeticProfile profile) {
         profile.equip(this);
     }
     
+    public void equip(CosmeticInventory inventory) {
+        inventory.equip(this);
+    }
+    
     public boolean isEquipped(CosmeticProfile profile) {
         return profile.isEquipped(this);
+    }
+    
+    public boolean isEquipped(CosmeticInventory inventory) {
+        var maybeCosmetic = inventory.getCustomEquipped(type);
+        
+        if(maybeCosmetic.isEmpty()) {
+            return false;
+        }
+        return maybeCosmetic.get().equals(this);
     }
     
 }

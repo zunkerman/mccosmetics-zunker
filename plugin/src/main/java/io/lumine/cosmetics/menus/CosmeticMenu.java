@@ -12,29 +12,29 @@ import lombok.Getter;
 
 public abstract class CosmeticMenu<T> extends ReloadableMenu<T> {
 
-    @Getter protected MCCosmeticsPlugin loungeCore;
+    @Getter protected MCCosmeticsPlugin plugin;
     @Getter protected MenuManager menuManager;
     
     public CosmeticMenu(MCCosmeticsPlugin core, MenuManager manager, MenuProp menu) {
         super(menu);
-        this.loungeCore = core;
+        this.plugin = core;
         this.menuManager = manager;
     }
     
     public CosmeticMenu(MCCosmeticsPlugin core, MenuManager manager, MenuProp menu, boolean buildOnOpen) {
         super(menu, buildOnOpen);
-        this.loungeCore = core;
+        this.plugin = core;
         this.menuManager = manager;
     }
     
-    public void openMenu(Player player, CosmeticMenu menu, Object state) {
-        Profile profile = loungeCore.getProfiles().getProfile(player);
-        
+    public void openMenu(Player player) {
+        Profile profile = plugin.getProfiles().getProfile(player);
+
         //boolean b = profile.getHatIsActive();
         
         //profile.setHatIsActive(false);
         //MainMenu.playMenuClick(player);
-        menu.open(player, state);
+        //menu.open(player, state);
         //profile.setHatIsActive(b);
     }
     

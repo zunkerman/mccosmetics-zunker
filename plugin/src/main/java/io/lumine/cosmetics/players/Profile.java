@@ -12,6 +12,7 @@ import com.google.common.collect.Maps;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.players.CosmeticInventory;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
+import io.lumine.cosmetics.players.inventory.DigitalInventory;
 import lombok.Getter;
 
 public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.Profile {
@@ -20,7 +21,7 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
     @Getter private String name;
     @Getter private long timestamp = System.currentTimeMillis();
 
-    @Getter private CosmeticInventory cosmeticInventory;
+    @Getter private DigitalInventory cosmeticInventory = new DigitalInventory();
         
     @Getter private transient Player player;
     
@@ -33,24 +34,21 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
     
     public void initialize(final Player player)  {
         this.player = player;
-        //this.equippedCosmetics = new EquippedCosmetics(this);
     }
 
     @Override
     public boolean has(Cosmetic cosmetic) {
-        return true; //return unlockedCosmetics.getOrDefault(cosmetic.getType(), Collections.emptyList()).contains(cosmetic.getKey());
+        return cosmeticInventory.hasUnlocked(cosmetic);
     }
 
     @Override
     public void equip(Cosmetic cosmetic) {
-         //if(this)
+        cosmeticInventory.equip(cosmetic);
     }
 
     @Override
     public boolean isEquipped(Cosmetic cosmetic) {
-        // TODO Auto-generated method stub
-        return false;
+        return cosmeticInventory.isEquipped(cosmetic);
     }
-
 
 }

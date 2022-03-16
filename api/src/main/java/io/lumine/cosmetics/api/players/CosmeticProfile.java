@@ -14,6 +14,8 @@ public interface CosmeticProfile {
     
     public Player getPlayer();
     
+    public CosmeticInventory getCosmeticInventory();
+    
     public boolean has(Cosmetic cosmetic);
     
     public void equip(Cosmetic cosmetic);

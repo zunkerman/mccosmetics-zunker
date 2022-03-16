@@ -9,6 +9,7 @@ import io.lumine.cosmetics.commands.admin.AdminCommand;
 import io.lumine.cosmetics.compat.CompatibilityManager;
 import io.lumine.cosmetics.config.Configuration;
 import io.lumine.cosmetics.logging.MCLogger;
+import io.lumine.cosmetics.managers.CosmeticsExecutor;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.cosmetics.managers.hats.HatManager;
 import io.lumine.cosmetics.menus.MenuManager;
@@ -34,6 +35,8 @@ public class MCCosmeticsPlugin extends LuminePlugin {
     
     @Getter private BaseCommand baseCommand;
     @Getter private AdminCommand adminCommand;
+    
+    @Getter private CosmeticsExecutor cosmetics;
     
     @Getter private HatManager hatManager;
     @Getter private BackManager backManager;
@@ -77,6 +80,10 @@ public class MCCosmeticsPlugin extends LuminePlugin {
 
         volatileCodeHandler = getVolatileCodeHandler();
         compatibility = new CompatibilityManager(this);
+        
+        cosmetics = new CosmeticsExecutor(this);
+        
+        hatManager = new HatManager(this);
         
         profiles = new ProfileManager(this);
         

@@ -48,6 +48,7 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
             }
         }
 
+        plugin.getCosmetics().registerCosmeticManager(CosmeticType.type(tClass), this);
         Log.info("Loaded " + cosmetics.size() + " " + type + ".");
     }
 
