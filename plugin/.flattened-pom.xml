@@ -21,7 +21,7 @@
     <dependency>
       <groupId>com.ticxo.modelengine</groupId>
       <artifactId>api</artifactId>
-      <version>R2.2.0</version>
+      <version>R2.5.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
