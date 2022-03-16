@@ -1,20 +1,29 @@
 package io.lumine.cosmetics.constants;
 
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
-import io.lumine.cosmetics.managers.back.Back;
+import io.lumine.cosmetics.managers.back.BackAccessory;
 import io.lumine.cosmetics.managers.hats.Hat;
+import io.lumine.cosmetics.managers.modelengine.MEGAccessory;
+import io.lumine.cosmetics.managers.particle.ParticleAccessory;
+import io.lumine.cosmetics.managers.pets.Pet;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CosmeticType {
 
-    private static final Map<Class<? extends Cosmetic>, CosmeticConstant> constants;
+    private static final Map<Class<? extends Cosmetic>, CosmeticConstant> constants = new HashMap<>();
 
     static {
-        constants = new HashMap<>();
-        constants.put(Hat.class, new CosmeticConstant("HAT", "hats"));
-        constants.put(Back.class, new CosmeticConstant("BACK", "backs"));
+        register(BackAccessory.class, new CosmeticConstant("BACK", "backs"));
+        register(Hat.class, new CosmeticConstant("HAT", "hats"));
+        register(MEGAccessory.class, new CosmeticConstant("MEG", "modelengine"));
+        register(ParticleAccessory.class, new CosmeticConstant("PARTICLE", "particle"));
+        register(Pet.class, new CosmeticConstant("PET", "pet"));
+    }
+
+    public static void register(Class<? extends Cosmetic> clazz, CosmeticConstant cosmeticConstant) {
+        constants.put(clazz, cosmeticConstant);
     }
 
     public static CosmeticConstant get(Class<? extends Cosmetic> tClass) {
