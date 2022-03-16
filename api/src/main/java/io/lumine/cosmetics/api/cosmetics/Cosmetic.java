@@ -1,7 +1,5 @@
 package io.lumine.cosmetics.api.cosmetics;
 
-import org.bukkit.NamespacedKey;
-
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.utils.config.properties.PropertyHolder;
 import io.lumine.utils.menu.MenuData;

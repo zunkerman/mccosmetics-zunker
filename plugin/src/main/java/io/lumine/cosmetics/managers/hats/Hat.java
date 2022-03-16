@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+import io.lumine.cosmetics.managers.back.Back;
 import org.bukkit.Material;
 import org.bukkit.block.data.type.Piston;
 import org.bukkit.block.data.type.TechnicalPiston;
@@ -57,7 +58,7 @@ public class Hat extends Cosmetic {
 	@Getter private ItemStack hatItem;
 
 	public Hat(File file, String key) {
-	    super(CosmeticType.HAT, key);
+	    super(CosmeticType.type(Hat.class), key);
 	    
 	    this.file = file;
 		this.key = key.toUpperCase();
