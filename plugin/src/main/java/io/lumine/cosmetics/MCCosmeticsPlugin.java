@@ -1,5 +1,6 @@
 package io.lumine.cosmetics;
 
+import io.lumine.cosmetics.managers.back.BackManager;
 import org.bukkit.Bukkit;
 
 import io.lumine.cosmetics.api.MCCosmetics;
@@ -35,6 +36,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
     @Getter private AdminCommand adminCommand;
     
     @Getter private HatManager hatManager;
+    @Getter private BackManager backManager;
 
     private VolatileCodeHandler volatileCodeHandler;
 
