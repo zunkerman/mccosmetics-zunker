@@ -74,6 +74,13 @@
     </repositories>
 
     <dependencies>
+        <!-- Modules -->
+        <dependency>
+            <groupId>io.lumine</groupId>
+            <artifactId>MCCosmetics-API</artifactId>
+            <version>${mccosmetics.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <!-- Main dependencies -->
         <dependency>
             <groupId>io.lumine</groupId>
@@ -123,8 +130,14 @@
             <artifactId>datafixerupper</artifactId>
             <version>1.0.20</version>
         </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.25.Final</version>
+            <scope>provided</scope>
+        </dependency>
 
-        <!-- Other -->  
+        <!-- Other -->
         <dependency> 
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
