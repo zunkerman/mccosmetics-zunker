@@ -30,7 +30,7 @@ public class VolatileChannelHandler extends ChannelDuplexHandler {
 			ClientboundSetEquipmentPacket equipmentPacket = ((VolatileHatImpl) nmsHandler.getHatHelper()).replacePlayerPacket(player, playerPacket);
 			if(equipmentPacket != null)
 				super.write(ctx, equipmentPacket, promise.channel().newPromise());
-			
+
 			return;
 		}else if(packet instanceof ClientboundSetEquipmentPacket equipmentPacket) {
 			packet = ((VolatileHatImpl) nmsHandler.getHatHelper()).replaceEquipmentPacket(player, equipmentPacket);
