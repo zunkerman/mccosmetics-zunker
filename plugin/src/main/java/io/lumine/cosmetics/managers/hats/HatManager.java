@@ -14,6 +14,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.io.File;
 
@@ -40,16 +41,23 @@ public class HatManager extends MCCosmeticsManager<Hat> {
                 .handler(event -> {
                     final Player player = (Player) event.getPlayer();
                     getProfiles().awaitProfile(player).thenAcceptAsync(maybeProfile -> {
-                        if(maybeProfile.isEmpty()) {
+                        if(maybeProfile.isEmpty())
                             return;
-                        }
                         final Profile profile = maybeProfile.get();
-                        //if(profile.getHat().isPresent()) {
-                        //    profile.setHatIsActive(true);
-                        //    Schedulers.async().runLater(() -> this.equipHat(profile), 1);
-                        // }
+                        plugin.getVolatileCodeHandler().getHatHelper().applyHatPacket(profile);
                     });
                 }).bindWith(this);
+
+        Events.subscribe(PlayerRespawnEvent.class)
+                .handler(event -> {
+                    final Player player = event.getPlayer();
+                    getProfiles().awaitProfile(player).thenAcceptAsync(maybeProfile -> {
+                        if(maybeProfile.isEmpty())
+                            return;
+                        final Profile profile = maybeProfile.get();
+                        plugin.getVolatileCodeHandler().getHatHelper().applyHatPacket(profile);
+                    });
+                });
 
         Protocol.subscribe(PacketType.Play.Server.ENTITY_EQUIPMENT)
                 .handler(event -> {

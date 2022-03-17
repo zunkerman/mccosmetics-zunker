@@ -9,10 +9,9 @@ import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
 import io.lumine.cosmetics.nms.VolatileHatHelper;
 import io.lumine.cosmetics.players.Profile;
 import lombok.Getter;
+import net.minecraft.network.protocol.game.ClientboundAddPlayerPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -51,7 +50,25 @@ public class VolatileHatImpl implements VolatileHatHelper {
 
     }
 
-    public ClientboundSetEquipmentPacket replacePacket(Player owner, ClientboundSetEquipmentPacket equipmentPacket) {
+    public ClientboundSetEquipmentPacket replacePlayerPacket(Player owner, ClientboundAddPlayerPacket playerPacket) {
+        Player player = (Player) nmsHandler.getEntity(owner.getWorld(), playerPacket.getEntityId());
+
+        Profile profile = plugin.getProfiles().getProfile(player);
+        Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquippedHat();
+
+        if(cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic hat))
+            return null;
+
+        var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic());
+
+        ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(playerPacket.getEntityId(), new ArrayList<>());
+        equipmentPacket.getSlots().add(Pair.of(EquipmentSlot.HEAD, nmsHat));
+
+        return equipmentPacket;
+
+    }
+
+    public ClientboundSetEquipmentPacket replaceEquipmentPacket(Player owner, ClientboundSetEquipmentPacket equipmentPacket) {
 
         Entity entity = nmsHandler.getEntity(owner.getWorld(), equipmentPacket.getEntity());
         if(!(entity instanceof Player player))
