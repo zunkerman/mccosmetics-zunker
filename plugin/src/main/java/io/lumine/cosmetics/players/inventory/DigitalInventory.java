@@ -8,6 +8,7 @@ import java.util.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.api.players.CosmeticInventory;
@@ -19,19 +20,25 @@ public class DigitalInventory implements CosmeticInventory {
 
     @Getter private transient CosmeticProfile profile;
     
+    private transient Optl<Hat> equippedHat;
+    private transient final Map<String,Cosmetic> equippedCustom = Maps.newConcurrentMap();
+    
     @Getter private Map<String,List<String>> unlockedCosmetics = Maps.newConcurrentMap();
     @Getter private Map<String,String> equippedCosmetics = Maps.newConcurrentMap();
     
-    private Optl<Hat> equippedHat;
-    
-    private final Map<String,Cosmetic> equippedCustom = Maps.newConcurrentMap();
-
     @Override
     public void initialize(CosmeticProfile profile) {
         this.profile = profile;
         
         for(var entry : equippedCosmetics.entrySet()) {
+            final var type = entry.getKey();
+            final var name = entry.getValue();
             
+            MCCosmeticsPlugin.inst().getCosmetics().getManager(type).ifPresent(manager -> {
+                manager.getCosmetic(name).ifPresent(maybeCosmetic -> {
+                    equip(((Optional<? extends Cosmetic>) maybeCosmetic).get());
+                });
+            });
         }
     }
 
