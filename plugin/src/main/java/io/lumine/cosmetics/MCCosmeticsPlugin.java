@@ -167,7 +167,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         try {
             final Class<?> clazz = Class.forName("io.lumine.cosmetics.nms.VolatileCodeEnabled_" + version);
             if (VolatileCodeHandler.class.isAssignableFrom(clazz)) {
-                VCH = (VolatileCodeHandler) clazz.getConstructor(MCCosmetics.class).newInstance(this);
+                VCH = (VolatileCodeHandler) clazz.getConstructor(MCCosmeticsPlugin.class).newInstance(this);
             }
         } catch (final ClassNotFoundException e) {  
             MCLogger.error(ColorString.get("&6--====|||| &c&lMCCosmetics &6||||====--"));
