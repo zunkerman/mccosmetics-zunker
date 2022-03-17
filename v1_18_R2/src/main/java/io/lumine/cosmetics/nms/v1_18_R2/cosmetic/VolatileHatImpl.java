@@ -83,7 +83,7 @@ public class VolatileHatImpl implements VolatileHatHelper {
 
         Profile profile = plugin.getProfiles().getProfile(player);
         if(profile == null)
-            return null;
+            return equipmentPacket;
 
         Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquippedHat();
 
