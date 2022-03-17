@@ -18,8 +18,8 @@ public class Pet extends AbstractCosmetic {
 	@Getter
 	private final String petId;
 
-	public Pet(File file, String key) {
-		super(file, CosmeticType.type(Pet.class), key);
+	public Pet(PetManager manager, File file, String key) {
+		super(manager, file, CosmeticType.type(Pet.class), key);
 
 		petId = PET.fget(file, this);
 	}

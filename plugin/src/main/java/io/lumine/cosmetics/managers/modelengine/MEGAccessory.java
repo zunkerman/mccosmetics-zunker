@@ -23,8 +23,8 @@ public class MEGAccessory extends AbstractCosmetic {
 	@Getter
 	private final Orient offset;
 
-	public MEGAccessory(File file, String key) {
-		super(file, CosmeticType.type(MEGAccessory.class), key);
+	public MEGAccessory(MEGManager manager, File file, String key) {
+		super(manager, file, CosmeticType.type(MEGAccessory.class), key);
 
 		modelId = MODEL.fget(file, this);
 		offset = OFFSET.fget(file, this);

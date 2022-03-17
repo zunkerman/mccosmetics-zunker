@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
+import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R1;
 import io.lumine.cosmetics.nms.VolatileHatHelper;
 import io.lumine.cosmetics.players.Profile;
@@ -31,7 +32,7 @@ public class VolatileHatImpl implements VolatileHatHelper {
     }
     
     @Override
-    public void applyHatPacket(Profile profile) {
+    public void applyHatPacket(CosmeticProfile profile) {
         if(profile == null)
             return;
         Player player = profile.getPlayer();

@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 
 import io.lumine.cosmetics.MCCosmeticsPlugin;
+import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.nms.VolatileHatHelper;
 import io.lumine.cosmetics.players.Profile;
 import io.lumine.utils.protocol.Protocol;
@@ -27,7 +28,7 @@ public class VolatileHatImpl implements VolatileHatHelper {
     }
     
     @Override
-    public void applyHatPacket(Profile profile) {
+    public void applyHatPacket(CosmeticProfile profile) {
         if(profile == null) {
             return;
         }

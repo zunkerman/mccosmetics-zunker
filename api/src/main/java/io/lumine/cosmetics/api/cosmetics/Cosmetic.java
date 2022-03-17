@@ -8,14 +8,16 @@ import lombok.Getter;
 
 public abstract class Cosmetic implements PropertyHolder,MenuData<CosmeticProfile> {
 
+    @Getter private final CosmeticManager manager;
     @Getter private final String type;
     @Getter private final String key;
     
-    public Cosmetic(String type, String key) {
+    public Cosmetic(CosmeticManager manager, String type, String key) {
+        this.manager = manager;
         this.type = type;
         this.key = key;
     }
-    
+
     public boolean has(CosmeticProfile profile) {
         return has(profile.getCosmeticInventory());
     }

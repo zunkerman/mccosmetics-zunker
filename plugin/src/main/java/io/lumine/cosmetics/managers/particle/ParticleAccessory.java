@@ -9,8 +9,8 @@ import java.io.File;
 
 public class ParticleAccessory extends AbstractCosmetic {
 
-	public ParticleAccessory(File file, String key) {
-		super(file, CosmeticType.type(ParticleAccessory.class), key);
+	public ParticleAccessory(ParticleManager manager, File file, String key) {
+		super(manager, file, CosmeticType.type(ParticleAccessory.class), key);
 	}
 
 	@Override

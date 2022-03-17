@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
+import io.lumine.cosmetics.api.cosmetics.CosmeticManager;
+import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.config.Scope;
 import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.cosmetics.players.Profile;
@@ -20,7 +22,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
-public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableModule<MCCosmeticsPlugin> {
+public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableModule<MCCosmeticsPlugin> implements CosmeticManager {
 
     protected final NodeListProp KEYS = Property.NodeList(Scope.NONE, "");
     protected final Map<String, T> cosmetics = Maps.newConcurrentMap();
@@ -73,7 +75,7 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
         equip(getProfiles().getProfile(player));
     }
 
-    public abstract void equip(Profile profile);
+    public abstract void equip(CosmeticProfile profile);
 
     protected ProfileManager getProfiles() {
         return plugin.getProfiles();

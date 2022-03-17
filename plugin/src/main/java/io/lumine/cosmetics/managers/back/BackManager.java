@@ -4,6 +4,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.events.CosmeticPlayerLoadedEvent;
+import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.cosmetics.players.Profile;
 import io.lumine.utils.Events;
@@ -84,11 +85,11 @@ public class BackManager extends MCCosmeticsManager<BackAccessory> {
 
     @Override
     public BackAccessory build(File file, String node) {
-        return new BackAccessory(file, node);
+        return new BackAccessory(this, file, node);
     }
 
     @Override
-    public void equip(Profile profile) {
+    public void equip(CosmeticProfile profile) {
         // TODO: 15/3/2022 Equip backpack cosmetics
     }
 }

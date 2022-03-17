@@ -11,8 +11,8 @@ import java.io.File;
 
 public class Hat extends AbstractCosmetic implements ItemCosmetic {
 
-	public Hat(File file, String key) {
-	    super(file, CosmeticType.type(Hat.class), key);
+	public Hat(HatManager manager, File file, String key) {
+	    super(manager, file, CosmeticType.type(Hat.class), key);
 	}
 
 	@Override

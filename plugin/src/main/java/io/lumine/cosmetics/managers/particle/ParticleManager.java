@@ -1,6 +1,7 @@
 package io.lumine.cosmetics.managers.particle;
 
 import io.lumine.cosmetics.MCCosmeticsPlugin;
+import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.cosmetics.players.Profile;
 
@@ -14,11 +15,11 @@ public class ParticleManager extends MCCosmeticsManager<ParticleAccessory> {
 
 	@Override
 	public ParticleAccessory build(File file, String node) {
-		return new ParticleAccessory(file, node);
+		return new ParticleAccessory(this, file, node);
 	}
 
 	@Override
-	public void equip(Profile profile) {
+	public void equip(CosmeticProfile profile) {
 		// TODO: 15/3/2022 Impl particle accessory
 	}
 }

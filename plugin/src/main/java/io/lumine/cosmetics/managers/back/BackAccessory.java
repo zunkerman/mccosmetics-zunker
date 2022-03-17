@@ -11,8 +11,8 @@ import java.io.File;
 
 public class BackAccessory extends AbstractCosmetic implements ItemCosmetic {
 
-	public BackAccessory(File file, String key) {
-		super(file, CosmeticType.type(BackAccessory.class), key);
+	public BackAccessory(BackManager manager, File file, String key) {
+		super(manager, file, CosmeticType.type(BackAccessory.class), key);
 	}
 
 	@Override

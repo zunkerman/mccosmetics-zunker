@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
+import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.api.players.CosmeticInventory;
 import io.lumine.cosmetics.managers.hats.Hat;
 import io.lumine.utils.serialize.Optl;
@@ -16,6 +17,8 @@ import lombok.Getter;
 
 public class DigitalInventory implements CosmeticInventory {
 
+    @Getter private transient CosmeticProfile profile;
+    
     @Getter private Map<String,List<String>> unlockedCosmetics = Maps.newConcurrentMap();
     @Getter private Map<String,String> equippedCosmetics = Maps.newConcurrentMap();
     
@@ -24,7 +27,9 @@ public class DigitalInventory implements CosmeticInventory {
     private final Map<String,Cosmetic> equippedCustom = Maps.newConcurrentMap();
 
     @Override
-    public void initialize() {
+    public void initialize(CosmeticProfile profile) {
+        this.profile = profile;
+        
         for(var entry : equippedCosmetics.entrySet()) {
             
         }
@@ -40,6 +45,7 @@ public class DigitalInventory implements CosmeticInventory {
         } else {
             
         }
+        cosmetic.getManager().equip(profile);
     }
 
     public boolean isEquipped(Cosmetic cosmetic) {

@@ -7,7 +7,7 @@ import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 
 public interface CosmeticInventory {
 
-    public void initialize();
+    public void initialize(CosmeticProfile profile);
     
     public Collection<String> getUnlocked(String type);
     

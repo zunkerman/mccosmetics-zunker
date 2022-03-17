@@ -4,6 +4,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.events.CosmeticPlayerLoadedEvent;
+import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.cosmetics.players.Profile;
@@ -85,11 +86,11 @@ public class HatManager extends MCCosmeticsManager<Hat> {
 
     @Override
     public Hat build(File file, String node) {
-        return new Hat(file, node);
+        return new Hat(this, file, node);
     }
 
     @Override
-    public void equip(Profile profile) {
+    public void equip(CosmeticProfile profile) {
         getPlugin().getVolatileCodeHandler().getHatHelper().applyHatPacket(profile);
     }
 }

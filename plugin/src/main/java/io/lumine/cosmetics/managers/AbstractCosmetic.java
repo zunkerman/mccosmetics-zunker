@@ -40,8 +40,8 @@ public abstract class AbstractCosmetic extends Cosmetic {
 	@Getter
 	protected final ItemStack menuItem;
 
-	public AbstractCosmetic(File file, String type, String key) {
-		super(type, key);
+	public AbstractCosmetic(MCCosmeticsManager manager, File file, String type, String key) {
+		super(manager, type, key);
 
 		this.file = file;
 		this.key = key.toUpperCase();
