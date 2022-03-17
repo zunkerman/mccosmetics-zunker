@@ -5,7 +5,7 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
-import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R1;
+import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
 import io.lumine.cosmetics.nms.VolatileHatHelper;
 import io.lumine.cosmetics.players.Profile;
 import lombok.Getter;
@@ -24,9 +24,9 @@ import java.util.Optional;
 public class VolatileHatImpl implements VolatileHatHelper {
 
     @Getter private final MCCosmeticsPlugin plugin;
-    private final VolatileCodeEnabled_v1_18_R1 nmsHandler;
+    private final VolatileCodeEnabled_v1_18_R2 nmsHandler;
 
-    public VolatileHatImpl(MCCosmeticsPlugin plugin, VolatileCodeEnabled_v1_18_R1 nmsHandler) {
+    public VolatileHatImpl(MCCosmeticsPlugin plugin, VolatileCodeEnabled_v1_18_R2 nmsHandler) {
         this.plugin = plugin;
         this.nmsHandler = nmsHandler;
     }

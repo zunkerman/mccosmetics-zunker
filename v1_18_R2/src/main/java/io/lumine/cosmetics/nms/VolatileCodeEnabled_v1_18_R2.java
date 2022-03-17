@@ -19,14 +19,14 @@ import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-public class VolatileCodeEnabled_v1_18_R1 implements VolatileCodeHandler {
+public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
 
     @Getter private final MCCosmeticsPlugin plugin;
     @Getter private final VolatileHatHelper hatHelper;
 
     private Reflector<ServerLevel> refServerLevel = new Reflector<>(ServerLevel.class, "O");
     
-    public VolatileCodeEnabled_v1_18_R1(MCCosmeticsPlugin plugin) {
+    public VolatileCodeEnabled_v1_18_R2(MCCosmeticsPlugin plugin) {
         this.plugin = plugin;
         this.hatHelper = new VolatileHatImpl(plugin, this);
     }

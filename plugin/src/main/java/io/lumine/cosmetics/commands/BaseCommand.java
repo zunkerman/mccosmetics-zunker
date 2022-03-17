@@ -20,6 +20,11 @@ public class BaseCommand extends Command<MCCosmeticsPlugin> {
     public boolean onCommand(CommandSender sender, String[] args) {
         final var player = (Player) sender;
         final var profile = getPlugin().getProfiles().getProfile(player);
+        
+        if(profile == null) {
+            throw new IllegalStateException("aaaaaaa");
+        }
+        
         getPlugin().getMenuManager().getCustomizeMenu().open(player,profile);
         return true;
     }
