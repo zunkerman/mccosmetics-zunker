@@ -51,7 +51,10 @@ public class VolatileHatImpl implements VolatileHatHelper {
     }
 
     public ClientboundSetEquipmentPacket replacePlayerPacket(Player owner, ClientboundAddPlayerPacket playerPacket) {
-        Player player = (Player) nmsHandler.getEntity(owner.getWorld(), playerPacket.getEntityId());
+
+        Entity entity = nmsHandler.getEntity(owner.getWorld(), playerPacket.getEntityId());
+        if(!(entity instanceof Player player))
+            return null;
 
         Profile profile = plugin.getProfiles().getProfile(player);
         Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquippedHat();
