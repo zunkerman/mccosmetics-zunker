@@ -14,6 +14,7 @@ import lombok.Getter;
 import net.minecraft.network.protocol.game.ClientboundAddPlayerPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -102,10 +103,17 @@ public class VolatileHatImpl implements VolatileHatHelper {
 
             var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic());
 
-            equipmentPacket.getSlots().removeIf(pair -> pair.getFirst() == EquipmentSlot.HEAD);
-            equipmentPacket.getSlots().add(Pair.of(EquipmentSlot.HEAD, nmsHat));
+            // equipmentPacket.getSlots().removeIf(pair -> pair.getFirst() == EquipmentSlot.HEAD);
+            // equipmentPacket.getSlots().add(Pair.of(EquipmentSlot.HEAD, nmsHat));
 
-            return equipmentPacket;
+            List<Pair<EquipmentSlot, ItemStack>> list = new ArrayList<>();
+            list.add(Pair.of(EquipmentSlot.HEAD, nmsHat));
+            for(var pair : equipmentPacket.getSlots()) {
+                if(pair.getFirst() != EquipmentSlot.HEAD)
+                    list.add(pair);
+            }
+
+            return new ClientboundSetEquipmentPacket(equipmentPacket.getEntity(), list);
         }catch (Exception e) {
             e.printStackTrace();
         }
