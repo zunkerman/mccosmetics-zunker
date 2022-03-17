@@ -9,6 +9,7 @@ import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.cosmetics.players.Profile;
 import io.lumine.utils.Events;
+import io.lumine.utils.events.extra.ArmorEquipEvent;
 import io.lumine.utils.protocol.Protocol;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -49,6 +50,17 @@ public class HatManager extends MCCosmeticsManager<Hat> {
                 }).bindWith(this);
 
         Events.subscribe(PlayerRespawnEvent.class)
+                .handler(event -> {
+                    final Player player = event.getPlayer();
+                    getProfiles().awaitProfile(player).thenAcceptAsync(maybeProfile -> {
+                        if(maybeProfile.isEmpty())
+                            return;
+                        final Profile profile = maybeProfile.get();
+                        plugin.getVolatileCodeHandler().getHatHelper().applyHatPacket(profile);
+                    });
+                });
+
+        Events.subscribe(ArmorEquipEvent.class)
                 .handler(event -> {
                     final Player player = event.getPlayer();
                     getProfiles().awaitProfile(player).thenAcceptAsync(maybeProfile -> {
