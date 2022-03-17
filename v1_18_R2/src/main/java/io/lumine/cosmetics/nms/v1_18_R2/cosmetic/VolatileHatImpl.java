@@ -59,20 +59,20 @@ public class VolatileHatImpl implements VolatileHatHelper {
             return null;
 
         Profile profile = plugin.getProfiles().getProfile(player);
-        if(profile != null) {
-            Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquippedHat();
+        if(profile == null)
+            return null;
 
-            if (cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic hat))
-                return null;
+        Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquippedHat();
 
-            var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic());
+        if (cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic hat))
+            return null;
 
-            ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(playerPacket.getEntityId(), new ArrayList<>());
-            equipmentPacket.getSlots().add(Pair.of(EquipmentSlot.HEAD, nmsHat));
+        var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic());
 
-            return equipmentPacket;
-        }
-        return null;
+        ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(playerPacket.getEntityId(), new ArrayList<>());
+        equipmentPacket.getSlots().add(Pair.of(EquipmentSlot.HEAD, nmsHat));
+
+        return equipmentPacket;
     }
 
     public ClientboundSetEquipmentPacket replaceEquipmentPacket(Player owner, ClientboundSetEquipmentPacket equipmentPacket) {
@@ -82,6 +82,9 @@ public class VolatileHatImpl implements VolatileHatHelper {
             return equipmentPacket;
 
         Profile profile = plugin.getProfiles().getProfile(player);
+        if(profile == null)
+            return null;
+
         Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquippedHat();
 
         if(cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic hat))
