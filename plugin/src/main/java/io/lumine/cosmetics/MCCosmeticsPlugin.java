@@ -1,5 +1,6 @@
 package io.lumine.cosmetics;
 
+import io.lumine.cosmetics.listeners.PlayerListeners;
 import io.lumine.cosmetics.managers.back.BackManager;
 import org.bukkit.Bukkit;
 
@@ -91,7 +92,12 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         
         getConfiguration().load(this);
         MCLogger.log("MCCosmetics configuration file loaded successfully.");
-        
+
+        /*
+         * Events
+         */
+        Bukkit.getPluginManager().registerEvents(new PlayerListeners(), this);
+
         /*
          * Commands 
          */
