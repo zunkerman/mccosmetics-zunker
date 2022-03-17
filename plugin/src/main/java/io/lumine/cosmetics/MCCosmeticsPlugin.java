@@ -87,6 +87,8 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         
         profiles = new ProfileManager(this);
         
+        menuManager = new MenuManager(this);
+        
         getConfiguration().load(this);
         MCLogger.log("MCCosmetics configuration file loaded successfully.");
         

@@ -19,7 +19,7 @@ import java.io.File;
 public class HatManager extends MCCosmeticsManager<Hat> {
     
     public HatManager(MCCosmeticsPlugin plugin) {
-        super(plugin, Hat.class);
+        super(plugin, Hat.class);   
     }
 
     @Override

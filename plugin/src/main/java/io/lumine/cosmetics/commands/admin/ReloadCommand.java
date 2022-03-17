@@ -19,7 +19,9 @@ public class ReloadCommand extends Command<MCCosmeticsPlugin> {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        MCCosmeticsPlugin.inst().reloadConfiguration();
+        getPlugin().reloadConfiguration();
+
+        getPlugin().getMenuManager().reload();
 
         CommandHelper.sendSuccess(sender, "MCCosmetics has been reloaded.");
         return true;

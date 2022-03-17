@@ -15,7 +15,7 @@ public class Hat extends AbstractCosmetic {
 
 	@Override
 	public String getPropertyNode() {
-		return "Hats." + this.key;
+		return this.key;
 	}
 
     @Override
