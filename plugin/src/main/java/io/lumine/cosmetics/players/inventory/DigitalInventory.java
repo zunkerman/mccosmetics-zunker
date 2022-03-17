@@ -31,12 +31,12 @@ public class DigitalInventory implements CosmeticInventory {
         this.profile = profile;
         
         for(var entry : equippedCosmetics.entrySet()) {
-            final var type = entry.getKey();
+            final var type = entry.getKey();    
             final var name = entry.getValue();
             
             MCCosmeticsPlugin.inst().getCosmetics().getManager(type).ifPresent(manager -> {
-                manager.getCosmetic(name).ifPresent(maybeCosmetic -> {
-                    equip(((Optional<? extends Cosmetic>) maybeCosmetic).get());
+                manager.getCosmetic(name).ifPresent(cosmetic -> {
+                    equip((Cosmetic) cosmetic);
                 });
             });
         }
@@ -47,6 +47,8 @@ public class DigitalInventory implements CosmeticInventory {
     }
 
     public void equip(Cosmetic cosmetic) {
+        equippedCosmetics.put(cosmetic.getType(), cosmetic.getKey());
+        
         if(cosmetic instanceof Hat hat) {
             equippedHat = Optl.of(hat);
         } else {

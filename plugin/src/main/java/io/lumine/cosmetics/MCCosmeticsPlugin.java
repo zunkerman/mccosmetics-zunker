@@ -4,14 +4,12 @@ import io.lumine.cosmetics.listeners.PlayerListeners;
 import io.lumine.cosmetics.managers.back.BackManager;
 import org.bukkit.Bukkit;
 
-import io.lumine.cosmetics.api.MCCosmetics;
 import io.lumine.cosmetics.commands.BaseCommand;
 import io.lumine.cosmetics.commands.admin.AdminCommand;
 import io.lumine.cosmetics.compat.CompatibilityManager;
 import io.lumine.cosmetics.config.Configuration;
 import io.lumine.cosmetics.logging.MCLogger;
 import io.lumine.cosmetics.managers.CosmeticsExecutor;
-import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.cosmetics.managers.hats.HatManager;
 import io.lumine.cosmetics.menus.MenuManager;
 import io.lumine.cosmetics.metrics.bStats;

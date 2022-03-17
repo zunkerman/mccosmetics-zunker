@@ -1,17 +1,26 @@
 package io.lumine.cosmetics.compat;
 
+import java.util.Optional;
+
+import org.bukkit.Bukkit;
+
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.utils.plugin.ReloadableModule;
+import lombok.Getter;
 
 public class CompatibilityManager extends ReloadableModule<MCCosmeticsPlugin> {
 
+    @Getter private Optional<LumineCoreCompat> lumineCore = Optional.empty();
+    
     public CompatibilityManager(MCCosmeticsPlugin plugin)  {
         super(plugin);
     }
     
     @Override
     public void load(MCCosmeticsPlugin plugin) {
-        
+        if(Bukkit.getPluginManager().getPlugin("LumineCore") != null) {
+            lumineCore = Optional.of(new LumineCoreCompat(plugin));
+        }
     }
   
     @Override

@@ -12,10 +12,17 @@ import io.lumine.utils.storage.players.PlayerRepository;
 
 public class ProfileManager extends PlayerRepository<MCCosmeticsPlugin,Profile> {
 
-    
-    
     public ProfileManager(MCCosmeticsPlugin plugin) {
-        super(plugin, Profile.class, new JsonPlayerStorageAdapter<>(plugin,Profile.class));
+        super(plugin, Profile.class);
+        
+        switch(plugin.getConfiguration().getStorageType()) {
+            case LUMINE:
+                this.initialize(plugin.getCompatibility().getLumineCore().get().getStorageDriver());
+                break;
+            default:
+                this.initialize(new JsonPlayerStorageAdapter<>(plugin,Profile.class));
+                break;
+        }   
     }
 
     @Override
