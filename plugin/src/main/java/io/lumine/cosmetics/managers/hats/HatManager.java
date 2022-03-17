@@ -32,10 +32,7 @@ public class HatManager extends MCCosmeticsManager<Hat> {
         Events.subscribe(CosmeticPlayerLoadedEvent.class)
                 .handler(event -> {
                     final var profile = event.getProfile();
-
-                    //if(profile.getHat().isPresent()) {
-                    //    equipHat(profile);
-                    //}
+                    plugin.getVolatileCodeHandler().getHatHelper().applyHatPacket(profile);
                 }).bindWith(this);
 
         Events.subscribe(InventoryCloseEvent.class)

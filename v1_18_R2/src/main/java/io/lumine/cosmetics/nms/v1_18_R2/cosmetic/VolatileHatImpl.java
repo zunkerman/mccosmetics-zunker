@@ -71,15 +71,8 @@ public class VolatileHatImpl implements VolatileHatHelper {
             equipmentPacket.getSlots().add(Pair.of(EquipmentSlot.HEAD, nmsHat));
 
             return equipmentPacket;
-        }else {
-
-            Schedulers.async().runLater(() -> {
-                applyHatPacket(plugin.getProfiles().getProfile(player));
-            }, 5);
-
-            return null;
         }
-
+        return null;
     }
 
     public ClientboundSetEquipmentPacket replaceEquipmentPacket(Player owner, ClientboundSetEquipmentPacket equipmentPacket) {
