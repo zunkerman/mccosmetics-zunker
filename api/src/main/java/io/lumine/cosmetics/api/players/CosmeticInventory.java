@@ -7,13 +7,15 @@ import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 
 public interface CosmeticInventory {
 
-    public void initialize(CosmeticProfile profile);
+    void initialize(CosmeticProfile profile);
     
-    public Collection<String> getUnlocked(String type);
+    Collection<String> getUnlocked(String type);
     
-    public Optional<Cosmetic> getCustomEquipped(String type);
+    Optional<Cosmetic> getCustomEquipped(String type);
 
-    public Optional<Cosmetic> getEquippedHat();
+    Optional<Cosmetic> getEquippedHat();
+
+    Optional<Cosmetic> getEquippedBack();
     
-    public void equip(Cosmetic cosmetic);
+    void equip(Cosmetic cosmetic);
 }

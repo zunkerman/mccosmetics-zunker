@@ -1,6 +1,9 @@
 package io.lumine.cosmetics.nms;
 
 import io.lumine.cosmetics.MCCosmeticsPlugin;
+import io.lumine.cosmetics.nms.cosmetic.VolatileBackHelper;
+import io.lumine.cosmetics.nms.cosmetic.VolatileHatHelper;
+import io.lumine.cosmetics.nms.v1_18_R2.cosmetic.VolatileBackImpl;
 import io.lumine.cosmetics.nms.v1_18_R2.cosmetic.VolatileHatImpl;
 import io.lumine.cosmetics.nms.v1_18_R2.network.VolatileChannelHandler;
 import io.lumine.utils.reflection.Reflector;
@@ -23,12 +26,14 @@ public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
 
     @Getter private final MCCosmeticsPlugin plugin;
     @Getter private final VolatileHatHelper hatHelper;
+    @Getter private final VolatileBackHelper backHelper;
 
     private Reflector<ServerLevel> refServerLevel = new Reflector<>(ServerLevel.class, "O");
     
     public VolatileCodeEnabled_v1_18_R2(MCCosmeticsPlugin plugin) {
         this.plugin = plugin;
         this.hatHelper = new VolatileHatImpl(plugin, this);
+        this.backHelper = new VolatileBackImpl(plugin, this);
     }
 
     @Override

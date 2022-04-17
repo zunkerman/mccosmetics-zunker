@@ -12,6 +12,7 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.api.players.CosmeticInventory;
+import io.lumine.cosmetics.managers.back.BackAccessory;
 import io.lumine.cosmetics.managers.hats.Hat;
 import io.lumine.utils.serialize.Optl;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class DigitalInventory implements CosmeticInventory {
     @Getter private transient CosmeticProfile profile;
     
     private transient Optl<Hat> equippedHat;
+    private transient Optl<BackAccessory> equippedBack;
     private transient final Map<String,Cosmetic> equippedCustom = Maps.newConcurrentMap();
     
     @Getter private Map<String,List<String>> unlockedCosmetics = Maps.newConcurrentMap();
@@ -69,6 +71,11 @@ public class DigitalInventory implements CosmeticInventory {
     @Override
     public Optional<Cosmetic> getEquippedHat() {
         return Optional.ofNullable(equippedHat.orElseGet(null));
+    }
+
+    @Override
+    public Optional<Cosmetic> getEquippedBack() {
+        return Optional.ofNullable(equippedBack.orElseGet(null));
     }
 
     @Override
