@@ -1,0 +1,24 @@
+ASH-HAT:
+  Model: 1000
+  Display: "&dAsh's Hat"
+  Description:
+  - "&fAsh's hat!"
+  Rarity: 4
+CARSON-HAT:
+  Model: 1001
+  Display: "&dCarson's Hat"
+  Description:
+  - "&fCarson's hat!"
+  Rarity: 4
+PINK_CAT_EARS:
+  Model: 1500
+  Display: "&aCat Ears! (Pink)"
+  Description:
+  - "&fA pair of fluffy pink cat ears!"
+  Rarity: 3
+CACTUS_SUIT:
+  Model: 1501
+  Display: "&aCactus Costume!"
+  Description:
+  - "&fNot a fan of hugs."
+  Rarity: 4

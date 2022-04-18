@@ -1,0 +1,34 @@
+Menu:
+  Display: "Customize Hats"
+  Size: 45
+  Schema:
+  - '$ $ $ $ $ $ $ $ $'
+  - '$ $ $ $ $ $ $ $ $'
+  - '$ $ $ $ $ $ $ $ $'
+  - '$ $ $ $ $ $ $ $ $'
+  - 'P N 1 1 X 1 1 1 B'
+  Icons:
+    FANCY_BORDER:
+      Mapping: 1
+      Material: RED_STAINED_GLASS_PANE
+      Display: ''
+      Model: 1
+    BUTTON_BACK:
+      Mapping: B
+      Material: GOLD_INGOT
+      Model: 4
+      Display: '&7Back to Main Menu &8>>'
+    NEXT_PAGE:
+      Mapping: N
+      Material: GOLD_INGOT
+      Model: 2
+      Display: '&7Next Page &8>>'
+    PREVIOUS_PAGE:
+      Mapping: P
+      Material: GOLD_INGOT
+      Model: 3
+      Display: '&7<< Previous Page'
+    REMOVE_HAT:
+      Mapping: X
+      Material: BARRIER
+      Display: '&4REMOVE HAT'

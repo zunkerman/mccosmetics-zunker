@@ -1,0 +1,79 @@
+Menu:
+  Display: "MCCosmetics Customize"
+  Size: 45
+  Schema:
+  - 1 0 T I C 0 0 E 1
+  - 0 H P G S R 0 A 0
+  - 1 1 1 1 1 1 1 1 B
+  Icons:
+    FANCY_BORDER:
+      Mapping: 1
+      Material: BLACK_STAINED_GLASS_PANE
+      Display: ''
+      Model: 1
+    BUTTON_BACK:
+      Mapping: B
+      Material: GOLD_INGOT
+      Model: 4
+      Display: '&7Back to Main Menu &8>>'
+    BUTTON_CHATTAG:
+      Mapping: T
+      Material: NAME_TAG
+      Display: '&6&lChat Tags'
+      Lore:
+      - '&7Change your chat tag'
+    BUTTON_TITLE:
+      Mapping: I
+      Material: KNOWLEDGE_BOOK
+      Display: '&6&lRank / Titles'
+      Lore:
+      - '&7Change your displayed rank/title'
+    BUTTON_COLORS:
+      Mapping: C
+      Material: PAPER
+      Display: '&6&lColors'
+      Lore:
+      - '&7Change your chat and name colors'
+    BUTTON_HAT:
+      Mapping: H
+      Material: LEATHER_HELMET
+      Display: '&6&lHats'
+      Lore:
+      - '&7Change your hat'
+    BUTTON_PET:
+      Mapping: P
+      Material: DRAGON_EGG
+      Display: '&6&lPets'
+      Lore:
+      - '&7Change your active pet'
+    BUTTON_GADGETS:
+      Mapping: G
+      Material: TRIDENT
+      Display: '&6&lGadget'
+      Lore:
+      - '&7Change your hub-gadget'
+    BUTTON_SPEEDBOOSTERS:
+      Mapping: S
+      Material: SADDLE
+      Display: '&6&lSpeed Boosters'
+      Lore:
+      - '&7Change your hub speed booster'
+    BUTTON_SPRAYS:
+      Mapping: R
+      Material: BLAZE_POWDER
+      Display: '&6&lSprays'
+      Lore:
+      - '&7Change your selected spray'
+    BUTTON_SETTINGS:
+      Mapping: E
+      Material: COMMAND_BLOCK
+      Display: '&6&lServer Settings'
+      Lore:
+      - '&7Change your server settings'
+    BUTTON_GAMES:
+      Mapping: A
+      Material: NETHER_STAR
+      Display: '&6&lGame-Specific Settings'
+      Lore:
+      - '&7View and edit your game-specific'
+      - '&7server settings and customizations.'
