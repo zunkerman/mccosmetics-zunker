@@ -78,7 +78,7 @@
         <dependency>
             <groupId>io.lumine</groupId>
             <artifactId>MCCosmetics-API</artifactId>
-            <version>${mccosmetics.version}</version>
+            <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
         <!-- Main dependencies -->
@@ -92,8 +92,7 @@
             <groupId>io.lumine</groupId>
             <artifactId>MCCosmetics</artifactId>
             <version>${project.parent.version}</version>
-            <scope>compile</scope> 
-            <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
         <dependency> 
             <groupId>org.projectlombok</groupId>
@@ -107,7 +106,6 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.18-R0.1-SNAPSHOT</version>
-            <classifier>shaded</classifier>
             <scope>provided</scope>
         </dependency> 
         
@@ -137,14 +135,6 @@
             <version>4.1.25.Final</version>
             <scope>provided</scope>
         </dependency>
-
-        <!-- Other -->
-        <dependency> 
-            <groupId>com.comphenix.protocol</groupId>
-            <artifactId>ProtocolLib</artifactId>
-            <version>4.6.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency> 
 
     </dependencies>
 

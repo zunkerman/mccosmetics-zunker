@@ -28,7 +28,6 @@
 	<modules>
 	    <module>api</module>
         <module>plugin</module>
-        <module>v1_18</module>
         <module>v1_18_R2</module>
         <module>dist</module>
 	</modules>

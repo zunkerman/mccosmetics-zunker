@@ -167,8 +167,7 @@
             <groupId>io.lumine</groupId>
             <artifactId>MCCosmetics-API</artifactId>
             <version>${project.parent.version}</version>
-            <scope>compile</scope> 
-            <optional>true</optional>
+            <scope>provided</scope> 
         </dependency>
         <dependency>
             <groupId>io.lumine</groupId>

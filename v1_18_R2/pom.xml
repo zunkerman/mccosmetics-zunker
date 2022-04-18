@@ -78,7 +78,7 @@
         <dependency>
             <groupId>io.lumine</groupId>
             <artifactId>MCCosmetics-API</artifactId>
-            <version>${mccosmetics.version}</version>
+            <version>${project.parent.version}</version>
             <scope>provided</scope>
         </dependency>
         <!-- Main dependencies -->
@@ -92,8 +92,7 @@
             <groupId>io.lumine</groupId>
             <artifactId>MCCosmetics</artifactId>
             <version>${project.parent.version}</version>
-            <scope>compile</scope> 
-            <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
         <dependency> 
             <groupId>org.projectlombok</groupId>
@@ -136,6 +135,13 @@
             <artifactId>netty-all</artifactId>
             <version>4.1.25.Final</version>
             <scope>provided</scope>
+        </dependency>
+        
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.8.0-beta4</version>
         </dependency>
 
     </dependencies>
