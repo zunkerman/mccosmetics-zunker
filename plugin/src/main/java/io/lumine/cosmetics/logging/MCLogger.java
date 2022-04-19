@@ -1,13 +1,9 @@
 package io.lumine.cosmetics.logging;
 
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.logging.Level;
-
-import org.bukkit.Bukkit;
-
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.utils.logging.ConsoleColor;
+
+import java.util.logging.Level;
 
 public class MCLogger {
 

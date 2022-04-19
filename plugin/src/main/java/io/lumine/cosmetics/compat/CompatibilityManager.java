@@ -1,12 +1,11 @@
 package io.lumine.cosmetics.compat;
 
-import java.util.Optional;
-
-import org.bukkit.Bukkit;
-
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.utils.plugin.ReloadableModule;
 import lombok.Getter;
+import org.bukkit.Bukkit;
+
+import java.util.Optional;
 
 public class CompatibilityManager extends ReloadableModule<MCCosmeticsPlugin> {
 

@@ -1,8 +1,5 @@
 package io.lumine.cosmetics.compat;
 
-import java.util.Optional;
-import java.util.UUID;
-
 import io.lumine.core.LumineCore;
 import io.lumine.core.players.PlayerProfile;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
@@ -10,6 +7,9 @@ import io.lumine.cosmetics.players.Profile;
 import io.lumine.utils.plugin.PluginModule;
 import io.lumine.utils.promise.Promise;
 import io.lumine.utils.storage.players.PlayerStorageAdapter;
+
+import java.util.Optional;
+import java.util.UUID;
 
 public class LumineCoreCompat {
 

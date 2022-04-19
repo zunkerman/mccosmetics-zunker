@@ -1,14 +1,13 @@
 package io.lumine.cosmetics.commands.admin;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.bukkit.command.CommandSender;
-
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.commands.CommandHelper;
 import io.lumine.cosmetics.constants.Permissions;
 import io.lumine.utils.commands.Command;
+import org.bukkit.command.CommandSender;
+
+import java.util.Collections;
+import java.util.List;
 
 public class AdminCommand extends Command<MCCosmeticsPlugin> {
 

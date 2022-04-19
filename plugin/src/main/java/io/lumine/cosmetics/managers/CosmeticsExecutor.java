@@ -1,14 +1,13 @@
 package io.lumine.cosmetics.managers;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
-
 import com.google.common.collect.Maps;
-
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.utils.plugin.ReloadableModule;
 import lombok.Getter;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
 
 public class CosmeticsExecutor extends ReloadableModule<MCCosmeticsPlugin> {
 

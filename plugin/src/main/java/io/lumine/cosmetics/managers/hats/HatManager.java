@@ -1,19 +1,13 @@
 package io.lumine.cosmetics.managers.hats;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketContainer;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.events.CosmeticPlayerLoadedEvent;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
-import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.cosmetics.players.Profile;
 import io.lumine.utils.Events;
-import io.lumine.utils.events.extra.ArmorEquipEvent; 
-import io.lumine.utils.protocol.Protocol;
-import org.bukkit.entity.Entity;
+import io.lumine.utils.events.extra.ArmorEquipEvent;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 

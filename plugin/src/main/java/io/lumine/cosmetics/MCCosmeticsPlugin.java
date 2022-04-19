@@ -1,15 +1,13 @@
 package io.lumine.cosmetics;
 
-import io.lumine.cosmetics.listeners.PlayerListeners;
-import io.lumine.cosmetics.managers.back.BackManager;
-import org.bukkit.Bukkit;
-
 import io.lumine.cosmetics.commands.BaseCommand;
 import io.lumine.cosmetics.commands.admin.AdminCommand;
 import io.lumine.cosmetics.compat.CompatibilityManager;
 import io.lumine.cosmetics.config.Configuration;
+import io.lumine.cosmetics.listeners.PlayerListeners;
 import io.lumine.cosmetics.logging.MCLogger;
 import io.lumine.cosmetics.managers.CosmeticsExecutor;
+import io.lumine.cosmetics.managers.back.BackManager;
 import io.lumine.cosmetics.managers.hats.HatManager;
 import io.lumine.cosmetics.menus.MenuManager;
 import io.lumine.cosmetics.metrics.bStats;
@@ -21,6 +19,7 @@ import io.lumine.utils.logging.ConsoleColor;
 import io.lumine.utils.plugin.LuminePlugin;
 import io.lumine.utils.version.ServerVersion;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 
 public class MCCosmeticsPlugin extends LuminePlugin {
 

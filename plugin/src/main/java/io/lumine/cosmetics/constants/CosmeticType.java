@@ -6,7 +6,6 @@ import io.lumine.cosmetics.managers.hats.Hat;
 import io.lumine.cosmetics.managers.modelengine.MEGAccessory;
 import io.lumine.cosmetics.managers.particle.ParticleAccessory;
 import io.lumine.cosmetics.managers.pets.Pet;
-import io.lumine.utils.logging.Log;
 
 import java.util.HashMap;
 import java.util.Map;

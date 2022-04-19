@@ -1,10 +1,9 @@
 package io.lumine.cosmetics.api.players;
 
-import java.util.UUID;
-
+import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import org.bukkit.entity.Player;
 
-import io.lumine.cosmetics.api.cosmetics.Cosmetic;
+import java.util.UUID;
 
 public interface CosmeticProfile {
 

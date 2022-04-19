@@ -1,11 +1,10 @@
 package io.lumine.cosmetics.api.events;
 
+import io.lumine.cosmetics.api.players.CosmeticProfile;
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
-import io.lumine.cosmetics.api.players.CosmeticProfile;
-import lombok.Getter;
 
 public class CosmeticPlayerLoadedEvent extends Event {
 
