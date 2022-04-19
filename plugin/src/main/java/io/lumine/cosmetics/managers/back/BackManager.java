@@ -32,6 +32,6 @@ public class BackManager extends MCCosmeticsManager<BackAccessory> {
 
     @Override
     public void equip(CosmeticProfile profile) {
-        plugin.getVolatileCodeHandler().getBackHelper().applyBackPacket(profile);
+        getPlugin().getVolatileCodeHandler().getBackHelper().applyBackPacket(profile);
     }
 }

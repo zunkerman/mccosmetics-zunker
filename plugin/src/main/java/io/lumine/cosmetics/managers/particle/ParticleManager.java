@@ -8,8 +8,8 @@ import java.io.File;
 
 public class ParticleManager extends MCCosmeticsManager<ParticleAccessory> {
 
-	public ParticleManager(MCCosmeticsPlugin plugin, Class<ParticleAccessory> megAccessoryClass) {
-		super(plugin, megAccessoryClass);
+	public ParticleManager(MCCosmeticsPlugin plugin, Class<ParticleAccessory> particleAccessoryClass) {
+		super(plugin, particleAccessoryClass);
 	}
 
 	@Override

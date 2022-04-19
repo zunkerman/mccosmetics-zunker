@@ -5,6 +5,7 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
+import io.lumine.cosmetics.managers.back.BackAccessory;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
 import io.lumine.cosmetics.nms.cosmetic.VolatileBackHelper;
 import io.netty.buffer.Unpooled;
@@ -43,7 +44,7 @@ public class VolatileBackImpl implements VolatileBackHelper {
 		if (profile == null)
 			return;
 		Player player = profile.getPlayer();
-		Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquippedBack();
+		Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(BackAccessory.class);
 
 		if (cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic back))
 			return;

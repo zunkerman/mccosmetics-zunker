@@ -3,6 +3,7 @@ package io.lumine.cosmetics.nms.v1_18_R2.network;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
+import io.lumine.cosmetics.managers.back.BackAccessory;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
 import io.lumine.cosmetics.players.Profile;
 import io.netty.channel.ChannelDuplexHandler;
@@ -55,7 +56,7 @@ public class VolatileChannelHandler extends ChannelDuplexHandler {
 
 	private void handleSpawn(Profile profile) {
 
-		Optional<Cosmetic> maybeBack = profile.getCosmeticInventory().getEquippedBack();
+		Optional<Cosmetic> maybeBack = profile.getCosmeticInventory().getEquipped(BackAccessory.class);
 		if (maybeBack.isPresent() && maybeBack.get() instanceof ItemCosmetic) {
 			nmsHandler.getBackHelper().respawnForPlayer(profile.getPlayer(), player);
 		}
@@ -64,7 +65,7 @@ public class VolatileChannelHandler extends ChannelDuplexHandler {
 
 	private void handleDespawn(Profile profile) {
 
-		Optional<Cosmetic> maybeBack = profile.getCosmeticInventory().getEquippedBack();
+		Optional<Cosmetic> maybeBack = profile.getCosmeticInventory().getEquipped(BackAccessory.class);
 		if (maybeBack.isPresent() && maybeBack.get() instanceof ItemCosmetic) {
 			nmsHandler.getBackHelper().despawnForPlayer(profile.getPlayer(), player);
 		}
