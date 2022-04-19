@@ -85,6 +85,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         cosmetics = new CosmeticsExecutor(this);
         
         hatManager = new HatManager(this);
+        backManager = new BackManager(this);
         sprayManager = new SprayManager(this);
         
         profiles = new ProfileManager(this);
