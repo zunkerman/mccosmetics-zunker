@@ -1,14 +1,13 @@
 package io.lumine.cosmetics.players;
 
-import java.util.UUID;
-
-import org.bukkit.entity.Player;
-
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.events.CosmeticPlayerLoadedEvent;
-import io.lumine.utils.storage.players.adapters.file.JsonPlayerStorageAdapter;
 import io.lumine.utils.Events;
 import io.lumine.utils.storage.players.PlayerRepository;
+import io.lumine.utils.storage.players.adapters.file.JsonPlayerStorageAdapter;
+import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class ProfileManager extends PlayerRepository<MCCosmeticsPlugin,Profile> {
 
