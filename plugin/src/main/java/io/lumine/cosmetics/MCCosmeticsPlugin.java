@@ -11,6 +11,7 @@ import io.lumine.cosmetics.config.Configuration;
 import io.lumine.cosmetics.logging.MCLogger;
 import io.lumine.cosmetics.managers.CosmeticsExecutor;
 import io.lumine.cosmetics.managers.hats.HatManager;
+import io.lumine.cosmetics.managers.sprays.SprayManager;
 import io.lumine.cosmetics.menus.MenuManager;
 import io.lumine.cosmetics.metrics.bStats;
 import io.lumine.cosmetics.nms.VolatileCodeDisabled;
@@ -39,6 +40,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
     
     @Getter private HatManager hatManager;
     @Getter private BackManager backManager;
+    @Getter private SprayManager sprayManager;
 
     private VolatileCodeHandler volatileCodeHandler;
 
@@ -83,6 +85,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         cosmetics = new CosmeticsExecutor(this);
         
         hatManager = new HatManager(this);
+        sprayManager = new SprayManager(this);
         
         profiles = new ProfileManager(this);
         

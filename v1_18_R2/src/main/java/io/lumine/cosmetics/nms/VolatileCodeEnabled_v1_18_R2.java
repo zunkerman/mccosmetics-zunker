@@ -3,8 +3,10 @@ package io.lumine.cosmetics.nms;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.nms.cosmetic.VolatileBackHelper;
 import io.lumine.cosmetics.nms.cosmetic.VolatileHatHelper;
+import io.lumine.cosmetics.nms.cosmetic.VolatileSprayHelper;
 import io.lumine.cosmetics.nms.v1_18_R2.cosmetic.VolatileBackImpl;
 import io.lumine.cosmetics.nms.v1_18_R2.cosmetic.VolatileHatImpl;
+import io.lumine.cosmetics.nms.v1_18_R2.cosmetic.VolatileSprayImpl;
 import io.lumine.cosmetics.nms.v1_18_R2.network.VolatileChannelHandler;
 import io.lumine.utils.reflection.Reflector;
 import io.netty.channel.Channel;
@@ -27,6 +29,7 @@ public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
     @Getter private final MCCosmeticsPlugin plugin;
     @Getter private final VolatileHatHelper hatHelper;
     @Getter private final VolatileBackHelper backHelper;
+    @Getter private final VolatileSprayHelper sprayHelper;
 
     private Reflector<ServerLevel> refServerLevel = new Reflector<>(ServerLevel.class, "O");
     
@@ -34,6 +37,7 @@ public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
         this.plugin = plugin;
         this.hatHelper = new VolatileHatImpl(plugin, this);
         this.backHelper = new VolatileBackImpl(plugin, this);
+        this.sprayHelper = new VolatileSprayImpl(plugin, this);
     }
 
     @Override
@@ -83,6 +87,12 @@ public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
         PersistentEntitySectionManager<net.minecraft.world.entity.Entity> entityManager = (PersistentEntitySectionManager<net.minecraft.world.entity.Entity>) refServerLevel.get(level, "O");
         net.minecraft.world.entity.Entity entity = entityManager.getEntityGetter().get(id);
         return entity == null ? null : entity.getBukkitEntity();
+    }
+
+    @Override
+    public void removeFakeEntity(int arg0) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

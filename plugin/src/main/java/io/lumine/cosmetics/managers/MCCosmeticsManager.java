@@ -29,10 +29,8 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
     protected final Class<T> tClass;
 
     public MCCosmeticsManager(MCCosmeticsPlugin plugin, Class<T> tClass) {
-        super(plugin,false); 
+        super(plugin, false); 
         this.tClass = tClass;
-        
-        load(plugin);
     }
 
     @Override
@@ -48,7 +46,7 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
 
         for(var file : files) {
             for(var node : KEYS.fget(file)) {
-                cosmetics.put(node.toUpperCase(), build(file, node));
+                cosmetics.put(node, build(file, node));
             }
         }
 

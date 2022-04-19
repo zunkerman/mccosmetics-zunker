@@ -6,6 +6,7 @@ import io.lumine.cosmetics.managers.hats.Hat;
 import io.lumine.cosmetics.managers.modelengine.MEGAccessory;
 import io.lumine.cosmetics.managers.particle.ParticleAccessory;
 import io.lumine.cosmetics.managers.pets.Pet;
+import io.lumine.cosmetics.managers.sprays.Spray;
 import io.lumine.utils.logging.Log;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class CosmeticType {
         register(MEGAccessory.class, new CosmeticConstant("MEG", "modelengine"));
         register(ParticleAccessory.class, new CosmeticConstant("PARTICLE", "particle"));
         register(Pet.class, new CosmeticConstant("PET", "pet"));
+        register(Spray.class, new CosmeticConstant("SPRAY", "sprays"));
     }
 
     public static void register(Class<? extends Cosmetic> clazz, CosmeticConstant cosmeticConstant) {

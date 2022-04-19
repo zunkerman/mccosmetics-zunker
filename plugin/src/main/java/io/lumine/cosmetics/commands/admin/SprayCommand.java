@@ -4,25 +4,36 @@ import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import io.lumine.cosmetics.MCCosmeticsPlugin;
+import io.lumine.cosmetics.api.MCCosmetics;
 import io.lumine.cosmetics.commands.CommandHelper;
 import io.lumine.cosmetics.constants.Permissions;
 import io.lumine.utils.commands.Command;
 
-public class AdminCommand extends Command<MCCosmeticsPlugin> {
+public class SprayCommand extends Command<MCCosmeticsPlugin> {
 
-    public AdminCommand(MCCosmeticsPlugin plugin) {
+    public SprayCommand(AdminCommand plugin) {
         super(plugin);
-        
-        addSubCommands(
-                new ReloadCommand(this),
-                new SprayCommand(this));
     }
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        CommandHelper.sendSuccess(sender, "MCCosmetics!");
+
+        var player = (Player) sender;
+        var sprayName = args[0];
+        var maybeSpray = getPlugin().getSprayManager().getCosmetic(sprayName);
+
+        if(maybeSpray.isEmpty()) {
+            CommandHelper.sendSuccess(sender, "Spray not found.");
+            return true;
+        }
+        
+        var spray = maybeSpray.get();
+
+        CommandHelper.sendSuccess(sender, "Using spray "+sprayName+"...");
+        getPlugin().getSprayManager().useSpray(player, spray);
         return true;
     }
 
@@ -38,11 +49,11 @@ public class AdminCommand extends Command<MCCosmeticsPlugin> {
 
     @Override
     public boolean isConsoleFriendly() {
-        return true;
+        return false;
     }
 
     @Override
     public String getName() {
-        return null;
+        return "spray";
     }
 }

@@ -44,7 +44,7 @@ public abstract class AbstractCosmetic extends Cosmetic {
 		super(manager, type, key);
 
 		this.file = file;
-		this.key = key.toUpperCase();
+		this.key = key;
 		this.material = MATERIAL.fget(file,this);
 		this.model = MODEL.fget(file,this);
 		this.display = DISPLAY.fget(file,this);
