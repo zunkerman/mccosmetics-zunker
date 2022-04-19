@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
-import io.lumine.cosmetics.players.inventory.DigitalInventory;
 import lombok.Getter;
 
 public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.Profile {
@@ -15,7 +14,7 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
     @Getter private String name;
     @Getter private long timestamp = System.currentTimeMillis();
 
-    @Getter private DigitalInventory cosmeticInventory = new DigitalInventory();
+    @Getter private ProfileInventory cosmeticInventory = new ProfileInventory();
         
     @Getter private transient Player player;
     

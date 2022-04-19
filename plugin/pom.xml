@@ -162,12 +162,11 @@
         </pluginRepository>
     </pluginRepositories>
     <dependencies>
-        <!-- Main dependencies -->
         <dependency>
             <groupId>io.lumine</groupId>
             <artifactId>MCCosmetics-API</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>provided</scope> 
+            <version>${mccosmetics.version}</version>
+            <scope>compile</scope> 
         </dependency>
         <dependency>
             <groupId>io.lumine</groupId>

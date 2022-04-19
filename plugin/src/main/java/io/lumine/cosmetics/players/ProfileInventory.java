@@ -1,4 +1,4 @@
-package io.lumine.cosmetics.players.inventory;
+package io.lumine.cosmetics.players;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +17,7 @@ import io.lumine.cosmetics.managers.hats.Hat;
 import io.lumine.utils.serialize.Optl;
 import lombok.Getter;
 
-public class DigitalInventory implements CosmeticInventory {
+public class ProfileInventory implements CosmeticInventory {
 
     @Getter private transient CosmeticProfile profile;
     
