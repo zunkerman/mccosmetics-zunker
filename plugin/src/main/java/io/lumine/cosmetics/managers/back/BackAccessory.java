@@ -17,7 +17,7 @@ public class BackAccessory extends AbstractCosmetic implements ItemCosmetic {
 
 	@Override
 	public String getPropertyNode() {
-		return "Backs." + this.key;
+		return this.key;
 	}
 
 	@Override

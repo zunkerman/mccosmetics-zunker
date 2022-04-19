@@ -42,7 +42,7 @@ public class VolatileHatImpl implements VolatileHatHelper {
             if (profile == null)
                 return;
             Player player = profile.getPlayer();
-            Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquippedHat();
+            Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(Hat.class);
 
             if (cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic hat))
                 return;

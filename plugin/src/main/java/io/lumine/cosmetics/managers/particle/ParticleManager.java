@@ -3,14 +3,13 @@ package io.lumine.cosmetics.managers.particle;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
-import io.lumine.cosmetics.players.Profile;
 
 import java.io.File;
 
 public class ParticleManager extends MCCosmeticsManager<ParticleAccessory> {
 
-	public ParticleManager(MCCosmeticsPlugin plugin, Class<ParticleAccessory> megAccessoryClass) {
-		super(plugin, megAccessoryClass);
+	public ParticleManager(MCCosmeticsPlugin plugin, Class<ParticleAccessory> particleAccessoryClass) {
+		super(plugin, particleAccessoryClass);
 	}
 
 	@Override

@@ -1,9 +1,8 @@
 package io.lumine.cosmetics.metrics;
 
-import org.bstats.bukkit.Metrics;
-
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.logging.MCLogger;
+import org.bstats.bukkit.Metrics;
 
 public class bStats {
 

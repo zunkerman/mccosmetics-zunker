@@ -1,12 +1,11 @@
 package io.lumine.cosmetics.players;
 
-import java.util.UUID;
-
-import org.bukkit.entity.Player;
-
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import lombok.Getter;
+import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.Profile {
 

@@ -28,7 +28,7 @@ public class HatManager extends MCCosmeticsManager<Hat> {
         Events.subscribe(CosmeticPlayerLoadedEvent.class)
                 .handler(event -> {
                     final var profile = event.getProfile();
-                    plugin.getVolatileCodeHandler().getHatHelper().applyHatPacket(profile);
+                    equip(profile);
                 }).bindWith(this);
 
         Events.subscribe(InventoryCloseEvent.class)
@@ -38,7 +38,7 @@ public class HatManager extends MCCosmeticsManager<Hat> {
                         if(maybeProfile.isEmpty())
                             return;
                         final Profile profile = maybeProfile.get();
-                        plugin.getVolatileCodeHandler().getHatHelper().applyHatPacket(profile);
+                        equip(profile);
                     });
                 }).bindWith(this);
 
@@ -49,7 +49,7 @@ public class HatManager extends MCCosmeticsManager<Hat> {
                         if(maybeProfile.isEmpty())
                             return;
                         final Profile profile = maybeProfile.get();
-                        plugin.getVolatileCodeHandler().getHatHelper().applyHatPacket(profile);
+                        equip(profile);
                     });
                 }).bindWith(this);
 
@@ -61,7 +61,7 @@ public class HatManager extends MCCosmeticsManager<Hat> {
                             return;
                         }
                         final Profile profile = maybeProfile.get();
-                        plugin.getVolatileCodeHandler().getHatHelper().applyHatPacket(profile);
+                        equip(profile);
                     });
                 }).bindWith(this);
     }

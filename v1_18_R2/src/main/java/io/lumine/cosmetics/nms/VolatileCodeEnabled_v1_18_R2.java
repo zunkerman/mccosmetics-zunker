@@ -43,7 +43,7 @@ public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
     @Override
     public void injectPlayer(Player player) {
         ServerPlayer ply = ((CraftPlayer) player).getHandle();
-        VolatileChannelHandler cdh = new VolatileChannelHandler(player);
+        VolatileChannelHandler cdh = new VolatileChannelHandler(player, this);
 
         ChannelPipeline pipeline = ply.connection.getConnection().channel.pipeline();
         for (String name : pipeline.toMap().keySet()) {
@@ -69,6 +69,13 @@ public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
             for(Packet<?> packet : packets) {
                 connection.send(packet);
             }
+        }
+    }
+
+    public void broadcast(Player player, Packet<?>... packets) {
+        var connection = ((CraftPlayer) player).getHandle().connection;
+        for(Packet<?> packet : packets) {
+            connection.send(packet);
         }
     }
 

@@ -39,12 +39,9 @@ public abstract class Cosmetic implements PropertyHolder,MenuData<CosmeticProfil
     }
     
     public boolean isEquipped(CosmeticInventory inventory) {
-        var maybeCosmetic = inventory.getCustomEquipped(type);
-        
-        if(maybeCosmetic.isEmpty()) {
-            return false;
-        }
-        return maybeCosmetic.get().equals(this);
+        var maybeCosmetic = inventory.getEquipped(getClass());
+
+        return maybeCosmetic.isPresent() && maybeCosmetic.get().equals(this);
     }
     
 }

@@ -2,7 +2,6 @@ package io.lumine.cosmetics.commands;
 
 import io.lumine.utils.adventure.text.Component;
 import io.lumine.utils.text.Text;
-
 import org.bukkit.command.CommandSender;
 
 public class CommandHelper {

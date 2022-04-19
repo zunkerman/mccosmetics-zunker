@@ -8,7 +8,6 @@ import io.lumine.cosmetics.api.cosmetics.CosmeticManager;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.config.Scope;
 import io.lumine.cosmetics.constants.CosmeticType;
-import io.lumine.cosmetics.players.Profile;
 import io.lumine.cosmetics.players.ProfileManager;
 import io.lumine.utils.config.properties.Property;
 import io.lumine.utils.config.properties.types.NodeListProp;

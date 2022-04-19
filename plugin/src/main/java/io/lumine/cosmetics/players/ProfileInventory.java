@@ -1,30 +1,26 @@
 package io.lumine.cosmetics.players;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
-import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.api.players.CosmeticInventory;
+import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.managers.back.BackAccessory;
 import io.lumine.cosmetics.managers.hats.Hat;
 import io.lumine.utils.serialize.Optl;
 import lombok.Getter;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 public class ProfileInventory implements CosmeticInventory {
 
     @Getter private transient CosmeticProfile profile;
-    
-    private transient Optl<Hat> equippedHat;
-    private transient Optl<BackAccessory> equippedBack;
-    private transient final Map<String,Cosmetic> equippedCustom = Maps.newConcurrentMap();
-    
+
+    private transient final Map<Class<? extends Cosmetic>, Cosmetic> equipped = Maps.newConcurrentMap();
     @Getter private Map<String,List<String>> unlockedCosmetics = Maps.newConcurrentMap();
     @Getter private Map<String,String> equippedCosmetics = Maps.newConcurrentMap();
     
@@ -50,12 +46,7 @@ public class ProfileInventory implements CosmeticInventory {
 
     public void equip(Cosmetic cosmetic) {
         equippedCosmetics.put(cosmetic.getType(), cosmetic.getKey());
-        
-        if(cosmetic instanceof Hat hat) {
-            equippedHat = Optl.of(hat);
-        } else {
-            
-        }
+        equipped.put(cosmetic.getClass(), cosmetic);
         cosmetic.getManager().equip(profile);
     }
 
@@ -64,23 +55,13 @@ public class ProfileInventory implements CosmeticInventory {
     }
 
     @Override
-    public Optional<Cosmetic> getCustomEquipped(String type) {
-        return Optional.ofNullable(equippedCustom.getOrDefault(type, null));
-    }
-
-    @Override
-    public Optional<Cosmetic> getEquippedHat() {
-        return Optional.ofNullable(equippedHat.orElseGet(null));
-    }
-
-    @Override
-    public Optional<Cosmetic> getEquippedBack() {
-        return Optional.ofNullable(equippedBack.orElseGet(null));
-    }
-
-    @Override
     public Collection<String> getUnlocked(String type) {
         return unlockedCosmetics.getOrDefault(type, Lists.newArrayList());
     }
-    
+
+    @Override
+    public Optional<Cosmetic> getEquipped(Class<? extends Cosmetic> tClass) {
+        return Optional.ofNullable(equipped.get(tClass));
+    }
+
 }

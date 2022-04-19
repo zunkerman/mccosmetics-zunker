@@ -1,14 +1,12 @@
 package io.lumine.cosmetics.menus;
 
-import org.bukkit.entity.Player;
-
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.players.Profile;
 import io.lumine.utils.config.properties.types.MenuProp;
 import io.lumine.utils.menu.EditableMenuBuilder;
-import io.lumine.utils.menu.Menu;
 import io.lumine.utils.menu.ReloadableMenu;
 import lombok.Getter;
+import org.bukkit.entity.Player;
 
 public abstract class CosmeticMenu<T> extends ReloadableMenu<T> {
 

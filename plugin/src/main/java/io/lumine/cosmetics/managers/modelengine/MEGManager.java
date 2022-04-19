@@ -3,7 +3,6 @@ package io.lumine.cosmetics.managers.modelengine;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
-import io.lumine.cosmetics.players.Profile;
 
 import java.io.File;
 

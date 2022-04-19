@@ -5,13 +5,14 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
+import io.lumine.cosmetics.managers.back.BackAccessory;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
 import io.lumine.cosmetics.nms.cosmetic.VolatileBackHelper;
-import io.netty.buffer.EmptyByteBuf;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundAddMobPacket;
+import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
 import net.minecraft.world.entity.EntityType;
@@ -43,7 +44,7 @@ public class VolatileBackImpl implements VolatileBackHelper {
 		if (profile == null)
 			return;
 		Player player = profile.getPlayer();
-		Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquippedBack();
+		Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(BackAccessory.class);
 
 		if (cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic back))
 			return;
@@ -68,6 +69,33 @@ public class VolatileBackImpl implements VolatileBackHelper {
 
 		nmsHandler.broadcast(player.getWorld(), mobPacket, equipmentPacket, passengersPacket);
 
+	}
+
+	public void respawnForPlayer(Player wearer, Player observer) {
+		if(!activeProfile.containsKey(wearer))
+			return;
+
+		final var stand = activeProfile.get(wearer);
+
+		ClientboundAddMobPacket mobPacket = new ClientboundAddMobPacket(stand);
+		ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(stand.getId(), List.of(Pair.of(EquipmentSlot.HEAD, stand.getItemBySlot(EquipmentSlot.HEAD))));
+
+		FriendlyByteBuf bb = new FriendlyByteBuf(Unpooled.buffer());
+		bb.writeVarInt(wearer.getEntityId());
+		bb.writeVarIntArray(new int[] { stand.getId() });
+		ClientboundSetPassengersPacket passengersPacket = new ClientboundSetPassengersPacket(bb);
+
+		nmsHandler.broadcast(observer, mobPacket, equipmentPacket, passengersPacket);
+
+	}
+
+	public void despawnForPlayer(Player wearer, Player observer) {
+		if(!activeProfile.containsKey(wearer))
+			return;
+
+		final var stand = activeProfile.get(wearer);
+		ClientboundRemoveEntitiesPacket removePacket = new ClientboundRemoveEntitiesPacket(stand.getId());
+		nmsHandler.broadcast(observer, removePacket);
 	}
 
 }

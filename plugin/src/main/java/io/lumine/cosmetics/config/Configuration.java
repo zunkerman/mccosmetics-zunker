@@ -1,10 +1,6 @@
 package io.lumine.cosmetics.config;
 
-import java.io.File;
-import java.util.Collection;
-
 import com.google.common.collect.Lists;
-
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.utils.config.properties.Property;
 import io.lumine.utils.config.properties.PropertyHolder;
@@ -12,6 +8,9 @@ import io.lumine.utils.config.properties.types.EnumProp;
 import io.lumine.utils.config.properties.types.IntProp;
 import io.lumine.utils.plugin.ReloadableModule;
 import lombok.Getter;
+
+import java.io.File;
+import java.util.Collection;
 
 public class Configuration extends ReloadableModule<MCCosmeticsPlugin> implements PropertyHolder {
     
