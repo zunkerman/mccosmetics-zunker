@@ -12,6 +12,8 @@ public class BackManager extends MCCosmeticsManager<BackAccessory> {
 
     public BackManager(MCCosmeticsPlugin plugin) {
         super(plugin, BackAccessory.class);
+
+        load(plugin);
     }
 
     @Override

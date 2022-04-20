@@ -1,5 +1,6 @@
 package io.lumine.cosmetics.nms.v1_18_R2.cosmetic;
 
+import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
@@ -10,22 +11,22 @@ import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
 import io.lumine.cosmetics.nms.cosmetic.VolatileHatHelper;
 import io.lumine.cosmetics.players.Profile;
 import lombok.Getter;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddPlayerPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-public class VolatileHatImpl implements VolatileHatHelper {
+public class VolatileHatImpl extends AbstractCosmeticHandler implements VolatileHatHelper {
 
     @Getter private final MCCosmeticsPlugin plugin;
     private final VolatileCodeEnabled_v1_18_R2 nmsHandler;
+    private final Map<Integer, Player> playerTracker = Maps.newConcurrentMap();
 
     public VolatileHatImpl(MCCosmeticsPlugin plugin, VolatileCodeEnabled_v1_18_R2 nmsHandler) {
         this.plugin = plugin;
@@ -35,88 +36,64 @@ public class VolatileHatImpl implements VolatileHatHelper {
     @Override
     public void applyHatPacket(CosmeticProfile profile) {
 
-        try {
-            if (profile == null)
-                return;
-            Player player = profile.getPlayer();
-            Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(Hat.class);
+        if (profile == null)
+            return;
 
-            if (cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic hat))
-                return;
+        Player player = profile.getPlayer();
+        Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(Hat.class);
 
-            var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic());
+        if (cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic hat))
+            return;
 
-            List<Pair<EquipmentSlot, net.minecraft.world.item.ItemStack>> slots = new ArrayList<>();
-            slots.add(Pair.of(EquipmentSlot.HEAD, nmsHat));
-            ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), slots);
+        var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic());
 
-            nmsHandler.broadcast(player.getWorld(), equipmentPacket);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+        playerTracker.put(player.getEntityId(), player);
+
+        ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsHat)));
+
+        nmsHandler.broadcastAround(player, equipmentPacket);
 
     }
 
-    public ClientboundSetEquipmentPacket replacePlayerPacket(Player owner, ClientboundAddPlayerPacket playerPacket) {
+    @Override
+    public void read(Player sender, Packet<?> packet) {
 
-        try {
-            Entity entity = nmsHandler.getEntity(owner.getWorld(), playerPacket.getEntityId());
-            if(!(entity instanceof Player player))
-                return null;
+    }
 
-            Profile profile = plugin.getProfiles().getProfile(player);
-            if(profile == null)
-                return null;
-
-            Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(Hat.class);
-
-            if (cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic hat))
-                return null;
-
-            var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic());
-
-            ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(playerPacket.getEntityId(), new ArrayList<>());
-            equipmentPacket.getSlots().add(Pair.of(EquipmentSlot.HEAD, nmsHat));
-
-            return equipmentPacket;
-        }catch (Exception e) {
-            e.printStackTrace();
+    @Override
+    public List<Packet<?>> write(Player receiver, Packet<?> packet) {
+        if(packet instanceof ClientboundAddPlayerPacket playerPacket) {
+            int id = playerPacket.getEntityId();
+            Profile profile = getProfile(receiver, id);
+            if(profile != null)
+                return handleSpawn(profile);
+        }else if(packet instanceof ClientboundSetEquipmentPacket equipmentPacket) {
+            int id = equipmentPacket.getEntity();
+            Profile profile = getProfile(receiver, id);
+            if(profile != null)
+                return handleSpawn(profile);
         }
+
         return null;
     }
 
-    public ClientboundSetEquipmentPacket replaceEquipmentPacket(Player owner, ClientboundSetEquipmentPacket equipmentPacket) {
-        try {
-            Entity entity = nmsHandler.getEntity(owner.getWorld(), equipmentPacket.getEntity());
-            if (!(entity instanceof Player player))
-                return equipmentPacket;
+    private Profile getProfile(Player receiver, int id) {
+        final var entity = nmsHandler.getEntity(receiver.getWorld(), id);
+        if(!(entity instanceof Player player))
+            return null;
+        return plugin.getProfiles().getProfile(player);
+    }
 
-            Profile profile = plugin.getProfiles().getProfile(player);
-            if (profile == null)
-                return equipmentPacket;
+    public List<Packet<?>> handleSpawn(Profile profile) {
+        Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(Hat.class);
+        if(cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic hat))
+            return null;
 
-            Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(Hat.class);
+        final var player = profile.getPlayer();
+        final var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic());
+        ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsHat)));
 
-            if (cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic hat))
-                return equipmentPacket;
-
-            var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic());
-
-            // equipmentPacket.getSlots().removeIf(pair -> pair.getFirst() == EquipmentSlot.HEAD);
-            // equipmentPacket.getSlots().add(Pair.of(EquipmentSlot.HEAD, nmsHat));
-
-            List<Pair<EquipmentSlot, ItemStack>> list = new ArrayList<>();
-            list.add(Pair.of(EquipmentSlot.HEAD, nmsHat));
-            for(var pair : equipmentPacket.getSlots()) {
-                if(pair.getFirst() != EquipmentSlot.HEAD)
-                    list.add(pair);
-            }
-
-            return new ClientboundSetEquipmentPacket(equipmentPacket.getEntity(), list);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return List.of(equipmentPacket);
     }
 
 }

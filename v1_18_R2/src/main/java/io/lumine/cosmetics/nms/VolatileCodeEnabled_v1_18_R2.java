@@ -79,6 +79,13 @@ public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
         }
     }
 
+    public void broadcastAround(Player wearer, Packet<?>... packets) {
+        final var level = ((CraftWorld) wearer.getWorld()).getHandle();
+        final var trackedEntity = level.getChunkSource().chunkMap.entityMap.get(wearer.getEntityId());
+        for(Packet<?> packet : packets)
+            trackedEntity.broadcastAndSend(packet);
+    }
+
     public void broadcast(World world, Packet<?>... packets) {
         for(Player player : world.getPlayers()) {
             var connection = ((CraftPlayer) player).getHandle().connection;

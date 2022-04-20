@@ -15,7 +15,8 @@ import java.io.File;
 
 public class MEGAccessory extends AbstractCosmetic {
 
-	private static final StringProp MODEL = Property.String(Scope.NONE, "ID");
+	private static final StringProp MODEL = Property.String(Scope.NONE, "ModelId");
+	private static final StringProp STATE = Property.String(Scope.NONE, "State");
 	private static final OrientProp OFFSET = Property.Orient(Scope.NONE, "Offset");
 
 	@Getter
@@ -33,7 +34,7 @@ public class MEGAccessory extends AbstractCosmetic {
 
 	@Override
 	public String getPropertyNode() {
-		return "MEG." + key;
+		return key;
 	}
 
 	@Override

@@ -17,7 +17,7 @@ public class CosmeticType {
     private static final Map<Class<? extends Cosmetic>, CosmeticConstant> constants = new HashMap<>();
 
     static {
-        register(BackAccessory.class, new CosmeticConstant("BACK", "backs"));
+        register(BackAccessory.class, new CosmeticConstant("BACK_ACCESSORY", "backs"));
         register(Hat.class, new CosmeticConstant("HAT", "hats"));
         register(MEGAccessory.class, new CosmeticConstant("MEG", "modelengine"));
         register(ParticleAccessory.class, new CosmeticConstant("PARTICLE", "particle"));
