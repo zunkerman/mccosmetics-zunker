@@ -6,7 +6,7 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
-import io.lumine.cosmetics.managers.hats.Hat;
+import io.lumine.cosmetics.managers.offhand.Offhand;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
 import io.lumine.cosmetics.players.Profile;
@@ -21,13 +21,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class VolatileHatImpl implements VolatileEquipmentHelper {
+public class VolatileOffhandImpl implements VolatileEquipmentHelper {
 
     @Getter private final MCCosmeticsPlugin plugin;
     private final VolatileCodeEnabled_v1_18_R2 nmsHandler;
     private final Map<Integer, Player> playerTracker = Maps.newConcurrentMap();
 
-    public VolatileHatImpl(MCCosmeticsPlugin plugin, VolatileCodeEnabled_v1_18_R2 nmsHandler) {
+    public VolatileOffhandImpl(MCCosmeticsPlugin plugin, VolatileCodeEnabled_v1_18_R2 nmsHandler) {
         this.plugin = plugin;
         this.nmsHandler = nmsHandler;
     }
@@ -39,16 +39,16 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
             return;
 
         Player player = profile.getPlayer();
-        Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(Hat.class);
+        Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(Offhand.class);
 
-        if (cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic hat))
+        if (cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic offhand))
             return;
 
-        var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic());
+        var nmsOffhand = CraftItemStack.asNMSCopy(offhand.getCosmetic());
 
         playerTracker.put(player.getEntityId(), player);
 
-        ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsHat)));
+        ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.OFFHAND, nmsOffhand)));
 
         nmsHandler.broadcastAround(player, equipmentPacket);
 
@@ -79,13 +79,13 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
     }
 
     public List<Object> handleSpawn(Profile profile) {
-        Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(Hat.class);
-        if(cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic hat))
+        Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(Offhand.class);
+        if(cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic offhand))
             return null;
 
         final var player = profile.getPlayer();
-        final var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic());
-        ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsHat)));
+        final var nmsOffhand = CraftItemStack.asNMSCopy(offhand.getCosmetic());
+        ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.OFFHAND, nmsOffhand)));
 
         return List.of(equipmentPacket);
     }

@@ -2,6 +2,7 @@ package io.lumine.cosmetics;
 
 import io.lumine.cosmetics.listeners.PlayerListeners;
 import io.lumine.cosmetics.managers.back.BackManager;
+import io.lumine.cosmetics.managers.offhand.OffhandManager;
 import org.bukkit.Bukkit;
 
 import io.lumine.cosmetics.commands.BaseCommand;
@@ -41,6 +42,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
     @Getter private HatManager hatManager;
     @Getter private BackManager backManager;
     @Getter private SprayManager sprayManager;
+    @Getter private OffhandManager offhandManager;
 
     private VolatileCodeHandler volatileCodeHandler;
 
@@ -87,6 +89,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         hatManager = new HatManager(this);
         backManager = new BackManager(this);
         sprayManager = new SprayManager(this);
+        offhandManager = new OffhandManager(this);
         
         profiles = new ProfileManager(this);
         

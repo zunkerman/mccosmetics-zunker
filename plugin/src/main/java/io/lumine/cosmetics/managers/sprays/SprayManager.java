@@ -1,26 +1,25 @@
 package io.lumine.cosmetics.managers.sprays;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.config.Scope;
 import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
+import io.lumine.cosmetics.nms.cosmetic.VolatileSprayHelper;
 import io.lumine.utils.config.properties.Property;
 import io.lumine.utils.config.properties.types.DoubleProp;
 import io.lumine.utils.config.properties.types.StringProp;
 import io.lumine.utils.files.Files;
 import io.lumine.utils.logging.Log;
 import io.lumine.utils.numbers.Numbers;
-
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.util.RayTraceResult;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import java.io.File;
 import java.util.Collection;
@@ -122,7 +121,7 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
     }
     
     public void spawnSpray(Player player, Spray spray, Location location, BlockFace face, int rotation) {
-        int eid = getPlugin().getVolatileCodeHandler().getSprayHelper().drawSpray(spray, location, face, rotation);
+        int eid = ((VolatileSprayHelper) getPlugin().getVolatileCodeHandler().getCosmeticHelper(Spray.class)).drawSpray(spray, location, face, rotation);
     }
     
     private int getRotation(float yaw, boolean allowDiagonals) {

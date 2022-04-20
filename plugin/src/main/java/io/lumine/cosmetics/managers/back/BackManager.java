@@ -4,6 +4,7 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.events.CosmeticPlayerLoadedEvent;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
+import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
 import io.lumine.utils.Events;
 
 import java.io.File;
@@ -25,6 +26,7 @@ public class BackManager extends MCCosmeticsManager<BackAccessory> {
                     final var profile = event.getProfile();
                     equip(profile);
                 }).bindWith(this);
+
     }
 
     @Override
@@ -34,6 +36,6 @@ public class BackManager extends MCCosmeticsManager<BackAccessory> {
 
     @Override
     public void equip(CosmeticProfile profile) {
-        getPlugin().getVolatileCodeHandler().getBackHelper().applyBackPacket(profile);
+        ((VolatileEquipmentHelper) getPlugin().getVolatileCodeHandler().getCosmeticHelper(BackAccessory.class)).apply(profile);
     }
 }

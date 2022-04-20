@@ -20,11 +20,11 @@ import java.util.List;
 
 public abstract class AbstractCosmetic extends Cosmetic {
 
-	private static final EnumProp<Material> MATERIAL = Property.Enum(Scope.NONE, Material.class, "Material", Material.EMERALD);
-	private static final IntProp MODEL = Property.Int(Scope.NONE, "Model");
-	private static final LangProp DISPLAY = Property.Lang(Scope.NONE, "Display");
-	private static final LangListProp DESCRIPTION = Property.LangList(Scope.NONE, "Description");
-	private static final StringProp TEXTURE = Property.String(Scope.NONE, "Texture");
+	protected static final EnumProp<Material> MATERIAL = Property.Enum(Scope.NONE, Material.class, "Material", Material.EMERALD);
+	protected static final IntProp MODEL = Property.Int(Scope.NONE, "Model");
+	protected static final LangProp DISPLAY = Property.Lang(Scope.NONE, "Display");
+	protected static final LangListProp DESCRIPTION = Property.LangList(Scope.NONE, "Description");
+	protected static final StringProp TEXTURE = Property.String(Scope.NONE, "Texture");
 
 	protected final File file;
 	protected final String key;
@@ -32,13 +32,13 @@ public abstract class AbstractCosmetic extends Cosmetic {
 	protected final List<String> sources = Lists.newArrayList();
 
 	// Menu Item
-	protected final Material material;
-	protected final int model;
+	protected Material material;
+	protected int model;
 	@Getter
-	protected final String display;
-	protected final List<String> description;
+	protected String display;
+	protected List<String> description;
 	@Getter
-	protected final ItemStack menuItem;
+	protected ItemStack menuItem;
 
 	public AbstractCosmetic(MCCosmeticsManager manager, File file, String type, String key) {
 		super(manager, type, key);

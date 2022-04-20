@@ -1,6 +1,5 @@
 package io.lumine.cosmetics.nms.v1_18_R2.cosmetic;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
@@ -9,12 +8,11 @@ import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.managers.back.BackAccessory;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
-import io.lumine.cosmetics.nms.cosmetic.VolatileBackHelper;
+import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
 import io.lumine.cosmetics.players.Profile;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -27,9 +25,8 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
 
-public class VolatileBackImpl extends AbstractCosmeticHandler implements VolatileBackHelper {
+public class VolatileBackImpl implements VolatileEquipmentHelper {
 
 	@Getter
 	private final MCCosmeticsPlugin plugin;
@@ -43,7 +40,7 @@ public class VolatileBackImpl extends AbstractCosmeticHandler implements Volatil
 	}
 
 	@Override
-	public void applyBackPacket(CosmeticProfile profile) {
+	public void apply(CosmeticProfile profile) {
 		if (profile == null)
 			return;
 		Player player = profile.getPlayer();
@@ -79,7 +76,7 @@ public class VolatileBackImpl extends AbstractCosmeticHandler implements Volatil
 	}
 
 	@Override
-	public void read(Player sender, Packet<?> packet) {
+	public void read(Player sender, Object packet) {
 		if(packet instanceof ServerboundMovePlayerPacket) {
 			final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(sender);
 			handleRotate(profile);
@@ -87,7 +84,7 @@ public class VolatileBackImpl extends AbstractCosmeticHandler implements Volatil
 	}
 
 	@Override
-	public List<Packet<?>> write(Player receiver, Packet<?> packet) {
+	public List<Object> write(Player receiver, Object packet) {
 		if(packet instanceof ClientboundAddPlayerPacket playerPacket) {
 			int id = playerPacket.getEntityId();
 			if(playerTracker.containsKey(id)) {
@@ -114,11 +111,11 @@ public class VolatileBackImpl extends AbstractCosmeticHandler implements Volatil
 		final var nmsPlayer = ((CraftPlayer) wearer).getHandle();
 		final var stand = activeProfile.get(wearer);
 
-		ClientboundRotateHeadPacket packet = new ClientboundRotateHeadPacket(stand, VolatileBackHelper.toByte(nmsPlayer.getYRot()));
+		ClientboundRotateHeadPacket packet = new ClientboundRotateHeadPacket(stand, VolatileEquipmentHelper.toByte(nmsPlayer.getYRot()));
 		nmsHandler.broadcastAround(wearer, packet);
 	}
 
-	private List<Packet<?>> handleSpawn(Profile profile) {
+	private List<Object> handleSpawn(Profile profile) {
 		if(!hasBack(profile))
 			return null;
 
@@ -133,7 +130,7 @@ public class VolatileBackImpl extends AbstractCosmeticHandler implements Volatil
 		return List.of(mobPacket, dataPacket, equipmentPacket, passengersPacket);
 	}
 
-	private List<Packet<?>> handleDespawn(Player player) {
+	private List<Object> handleDespawn(Player player) {
 		final var stand = activeProfile.get(player);
 		if(stand == null)
 			return null;

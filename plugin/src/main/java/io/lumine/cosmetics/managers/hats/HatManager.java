@@ -4,6 +4,7 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.events.CosmeticPlayerLoadedEvent;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
+import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
 import io.lumine.cosmetics.players.Profile;
 import io.lumine.utils.Events;
 import io.lumine.utils.events.extra.ArmorEquipEvent; 
@@ -73,6 +74,6 @@ public class HatManager extends MCCosmeticsManager<Hat> {
 
     @Override
     public void equip(CosmeticProfile profile) {
-        getPlugin().getVolatileCodeHandler().getHatHelper().applyHatPacket(profile);
+        ((VolatileEquipmentHelper) getPlugin().getVolatileCodeHandler().getCosmeticHelper(Hat.class)).apply(profile);
     }
 }

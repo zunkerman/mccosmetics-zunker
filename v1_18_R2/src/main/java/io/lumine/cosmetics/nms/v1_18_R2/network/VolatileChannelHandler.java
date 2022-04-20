@@ -1,12 +1,10 @@
 package io.lumine.cosmetics.nms.v1_18_R2.network;
 
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
-import io.lumine.cosmetics.nms.v1_18_R2.cosmetic.AbstractCosmeticHandler;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import lombok.Getter;
-import net.minecraft.network.protocol.Packet;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -26,20 +24,14 @@ public class VolatileChannelHandler extends ChannelDuplexHandler {
 	public void write(ChannelHandlerContext ctx, Object obj, ChannelPromise promise) {
 
 		try {
-			if (!(obj instanceof Packet<?> packet)) {
-				super.write(ctx, obj, promise);
-				return;
+
+			List<Object> packets = new ArrayList<>();
+
+			for(final var helper : nmsHandler.getCosmeticHelpers()) {
+				final var writes = helper.write(player, obj);
+				if(writes != null)
+					packets.addAll(writes);
 			}
-
-			List<Packet<?>> packets = new ArrayList<>();
-
-			final var hat = ((AbstractCosmeticHandler) nmsHandler.getHatHelper()).write(player, packet);
-			if (hat != null)
-				packets.addAll(hat);
-
-			final var back = ((AbstractCosmeticHandler) nmsHandler.getBackHelper()).write(player, packet);
-			if (back != null)
-				packets.addAll(back);
 
 			if(!packets.contains(obj))
 				super.write(ctx, obj, promise);
@@ -57,9 +49,8 @@ public class VolatileChannelHandler extends ChannelDuplexHandler {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object obj) throws Exception {
 
-		if(obj instanceof Packet<?> packet) {
-			((AbstractCosmeticHandler) nmsHandler.getHatHelper()).read(player, packet);
-			((AbstractCosmeticHandler) nmsHandler.getBackHelper()).read(player, packet);
+		for(final var helper : nmsHandler.getCosmeticHelpers()) {
+			helper.read(player, obj);
 		}
 
 		super.channelRead(ctx, obj);
