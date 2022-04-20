@@ -1,5 +1,10 @@
 package io.lumine.cosmetics.managers.sprays;
 
+import io.lumine.utils.Events;
+import io.lumine.utils.cooldown.Cooldown;
+import io.lumine.utils.cooldown.CooldownMap;
+import io.lumine.core.players.PlayerIdentity;
+import io.lumine.core.utils.Schedulers;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.config.Scope;
@@ -17,6 +22,8 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.util.RayTraceResult;
 
 import com.google.common.collect.Lists;
@@ -25,18 +32,25 @@ import com.google.common.collect.Maps;
 import java.io.File;
 import java.util.Collection;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SprayManager extends MCCosmeticsManager<Spray> {
 
-    private static final StringProp SPRAY_SOUND = Property.String(Scope.CONFIG, "", "");
+    private static final StringProp SPRAY_SOUND = Property.String(Scope.CONFIG, "", "entity.cat.hiss");
     private static final DoubleProp SPRAY_SOUND_VOL = Property.Double(Scope.CONFIG, "", 1D);
-    private static final DoubleProp SPRAY_SOUND_PI = Property.Double(Scope.CONFIG, "", 1D);
+    private static final DoubleProp SPRAY_SOUND_PI = Property.Double(Scope.CONFIG, "", 2D);
+    
+    private final static CooldownMap<UUID> keytapTimer = CooldownMap.create(Cooldown.of(500, TimeUnit.MILLISECONDS));
     
     private final AtomicInteger currentMapId = new AtomicInteger(Integer.MIN_VALUE);
     
     private final Map<String,SprayImage> images = Maps.newConcurrentMap();
-    
+
+    private final Map<UUID,Integer> activeByPlayer = new ConcurrentHashMap<>(); 
+
     public SprayManager(MCCosmeticsPlugin plugin) {
         super(plugin, Spray.class);   
         
@@ -48,6 +62,19 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
         loadSprayImages();
         
         super.load(plugin);
+        
+        Events.subscribe(PlayerQuitEvent.class)
+            .handler(event -> {
+                removeSpray(event.getPlayer());
+            }).bindWith(this);
+        
+        Events.subscribe(PlayerSwapHandItemsEvent.class)
+            .filter(event -> event.getPlayer().isSneaking())
+            .handler(event -> {
+                if(!keytapTimer.test(event.getPlayer().getUniqueId())) {
+                    useSpray(event.getPlayer());
+                }
+            }).bindWith(this);
     }
 
     @Override
@@ -91,7 +118,14 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
     }
     
     public boolean useSpray(Player player) {
-        return useSpray(player, null);
+        var profile = getPlugin().getProfiles().getProfile(player);
+        var maybeSpray = profile.getCosmeticInventory().getEquipped(Spray.class);
+        
+        if(maybeSpray.isPresent()) {
+            return useSpray(player, (Spray) maybeSpray.get());
+        } else {
+            return false;
+        }
     }
     
     public boolean useSpray(Player player, Spray spray) {
@@ -122,7 +156,31 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
     }
     
     public void spawnSpray(Player player, Spray spray, Location location, BlockFace face, int rotation) {
+        removeSpray(player);
+        
         int eid = getPlugin().getVolatileCodeHandler().getSprayHelper().drawSpray(spray, location, face, rotation);
+                
+        activeByPlayer.put(player.getUniqueId(), eid);
+        
+        final var sound = SPRAY_SOUND.get();
+        final double volume = SPRAY_SOUND_VOL.get();
+        final double pitch = SPRAY_SOUND_PI.get();
+        
+        location.getWorld().getPlayers().forEach(p -> p.playSound(location, sound, (float) volume, (float) pitch));
+         
+        Schedulers.sync().runLater(() -> {
+            location.getWorld().getPlayers().forEach(p -> p.playSound(location, sound, (float) volume, (float) pitch));
+        }, 2);
+        Schedulers.sync().runLater(() -> {
+            location.getWorld().getPlayers().forEach(p -> p.playSound(location, sound, (float) volume, (float) pitch));
+        }, 4);
+    }
+    
+    public void removeSpray(Player player) {
+        if(activeByPlayer.containsKey(player.getUniqueId())) {
+            int oid = activeByPlayer.get(player.getUniqueId());
+            getPlugin().getVolatileCodeHandler().removeFakeEntity(oid);
+        }
     }
     
     private int getRotation(float yaw, boolean allowDiagonals) {

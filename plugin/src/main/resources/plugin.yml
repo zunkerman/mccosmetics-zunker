@@ -19,6 +19,9 @@ commands:
   cosmetics:
     description: MCCosmetics user command
     aliases: [cosmetic]
+  spray:
+    description: Use your equipped spray
+    aliases: [s]
 permissions:
   mccosmetics.admin.command:
     description: Gives access to the base admin commands
