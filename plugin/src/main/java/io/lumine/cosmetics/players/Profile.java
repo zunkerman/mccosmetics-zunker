@@ -44,4 +44,8 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
         return cosmeticInventory.isEquipped(cosmetic);
     }
 
+    public void reloadCosmetics() {
+        cosmeticInventory.initialize(this);
+    }
+
 }

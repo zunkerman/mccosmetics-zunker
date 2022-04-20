@@ -4,6 +4,7 @@ import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.managers.back.BackAccessory;
 import io.lumine.cosmetics.managers.hats.Hat;
 import io.lumine.cosmetics.managers.modelengine.MEGAccessory;
+import io.lumine.cosmetics.managers.offhand.Offhand;
 import io.lumine.cosmetics.managers.particle.ParticleAccessory;
 import io.lumine.cosmetics.managers.pets.Pet;
 import io.lumine.cosmetics.managers.sprays.Spray;
@@ -17,12 +18,13 @@ public class CosmeticType {
     private static final Map<Class<? extends Cosmetic>, CosmeticConstant> constants = new HashMap<>();
 
     static {
-        register(BackAccessory.class, new CosmeticConstant("BACK", "backs"));
+        register(BackAccessory.class, new CosmeticConstant("BACK_ACCESSORY", "backs"));
         register(Hat.class, new CosmeticConstant("HAT", "hats"));
         register(MEGAccessory.class, new CosmeticConstant("MEG", "modelengine"));
         register(ParticleAccessory.class, new CosmeticConstant("PARTICLE", "particle"));
         register(Pet.class, new CosmeticConstant("PET", "pet"));
         register(Spray.class, new CosmeticConstant("SPRAY", "sprays"));
+        register(Offhand.class, new CosmeticConstant("OFFHAND", "offhands"));
     }
 
     public static void register(Class<? extends Cosmetic> clazz, CosmeticConstant cosmeticConstant) {

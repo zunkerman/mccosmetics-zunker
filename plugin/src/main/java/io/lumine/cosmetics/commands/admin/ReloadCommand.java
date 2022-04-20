@@ -20,6 +20,8 @@ public class ReloadCommand extends Command<MCCosmeticsPlugin> {
         getPlugin().reloadConfiguration();
 
         getPlugin().getMenuManager().reload();
+        
+        getPlugin().getProfiles().reloadAllCosmetics();
 
         CommandHelper.sendSuccess(sender, "MCCosmetics has been reloaded.");
         return true;

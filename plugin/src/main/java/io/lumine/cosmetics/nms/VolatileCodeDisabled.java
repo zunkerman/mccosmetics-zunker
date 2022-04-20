@@ -1,25 +1,20 @@
 package io.lumine.cosmetics.nms;
 
-import io.lumine.cosmetics.nms.cosmetic.VolatileBackHelper;
-import io.lumine.cosmetics.nms.cosmetic.VolatileHatHelper;
-import io.lumine.cosmetics.nms.cosmetic.VolatileSprayHelper;
-
+import io.lumine.cosmetics.api.cosmetics.Cosmetic;
+import io.lumine.cosmetics.nms.cosmetic.VolatileCosmeticHelper;
 import org.bukkit.entity.Player;
+
+import java.util.Collection;
 
 public class VolatileCodeDisabled implements VolatileCodeHandler {
 
     @Override
-    public VolatileHatHelper getHatHelper() {
+    public VolatileCosmeticHelper getCosmeticHelper(Class<? extends Cosmetic> tClass) {
         return null;
     }
 
     @Override
-    public VolatileBackHelper getBackHelper() {
-        return null;
-    }
-    
-    @Override
-    public VolatileSprayHelper getSprayHelper() {
+    public Collection<VolatileCosmeticHelper> getCosmeticHelpers() {
         return null;
     }
 

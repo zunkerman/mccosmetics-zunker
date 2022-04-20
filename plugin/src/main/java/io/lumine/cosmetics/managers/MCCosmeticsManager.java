@@ -8,6 +8,8 @@ import io.lumine.cosmetics.api.cosmetics.CosmeticManager;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.config.Scope;
 import io.lumine.cosmetics.constants.CosmeticType;
+import io.lumine.cosmetics.nms.VolatileCodeHandler;
+import io.lumine.cosmetics.nms.cosmetic.VolatileCosmeticHelper;
 import io.lumine.cosmetics.players.ProfileManager;
 import io.lumine.utils.config.properties.Property;
 import io.lumine.utils.config.properties.types.NodeListProp;
@@ -76,6 +78,14 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
 
     protected ProfileManager getProfiles() {
         return plugin.getProfiles();
+    }
+    
+    protected VolatileCodeHandler getNMS() {
+        return plugin.getVolatileCodeHandler();
+    }
+    
+    protected VolatileCosmeticHelper getNMSHelper() {
+        return getNMS().getCosmeticHelper(tClass);
     }
 
 }

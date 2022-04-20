@@ -38,4 +38,8 @@ public class ProfileManager extends PlayerRepository<MCCosmeticsPlugin,Profile> 
     @Override
     public void unloadProfile(Profile profile, Player player) {}
 
+    public void reloadAllCosmetics() {
+        this.getKnownProfiles().forEach(profile -> profile.reloadCosmetics());
+    }
+
 }

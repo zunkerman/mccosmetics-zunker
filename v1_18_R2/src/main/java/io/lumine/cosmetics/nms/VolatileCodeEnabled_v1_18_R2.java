@@ -1,11 +1,16 @@
 package io.lumine.cosmetics.nms;
 
+import com.google.common.collect.Maps;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
-import io.lumine.cosmetics.nms.cosmetic.VolatileBackHelper;
-import io.lumine.cosmetics.nms.cosmetic.VolatileHatHelper;
-import io.lumine.cosmetics.nms.cosmetic.VolatileSprayHelper;
+import io.lumine.cosmetics.api.cosmetics.Cosmetic;
+import io.lumine.cosmetics.managers.back.BackAccessory;
+import io.lumine.cosmetics.managers.hats.Hat;
+import io.lumine.cosmetics.managers.offhand.Offhand;
+import io.lumine.cosmetics.managers.sprays.Spray;
+import io.lumine.cosmetics.nms.cosmetic.VolatileCosmeticHelper;
 import io.lumine.cosmetics.nms.v1_18_R2.cosmetic.VolatileBackImpl;
 import io.lumine.cosmetics.nms.v1_18_R2.cosmetic.VolatileHatImpl;
+import io.lumine.cosmetics.nms.v1_18_R2.cosmetic.VolatileOffhandImpl;
 import io.lumine.cosmetics.nms.v1_18_R2.cosmetic.VolatileSprayImpl;
 import io.lumine.cosmetics.nms.v1_18_R2.network.VolatileChannelHandler;
 import io.lumine.utils.reflection.Reflector;
@@ -24,20 +29,32 @@ import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
+import java.util.Map;
+
 public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
 
     @Getter private final MCCosmeticsPlugin plugin;
-    @Getter private final VolatileHatHelper hatHelper;
-    @Getter private final VolatileBackHelper backHelper;
-    @Getter private final VolatileSprayHelper sprayHelper;
+    private final Map<Class<? extends Cosmetic>, VolatileCosmeticHelper> cosmeticHelpers = Maps.newConcurrentMap();
 
     private Reflector<ServerLevel> refServerLevel = new Reflector<>(ServerLevel.class, "O");
     
     public VolatileCodeEnabled_v1_18_R2(MCCosmeticsPlugin plugin) {
         this.plugin = plugin;
-        this.hatHelper = new VolatileHatImpl(plugin, this);
-        this.backHelper = new VolatileBackImpl(plugin, this);
-        this.sprayHelper = new VolatileSprayImpl(plugin, this);
+        cosmeticHelpers.put(Hat.class, new VolatileHatImpl(plugin, this));
+        cosmeticHelpers.put(BackAccessory.class, new VolatileBackImpl(plugin, this));
+        cosmeticHelpers.put(Spray.class, new VolatileSprayImpl(plugin, this));
+        cosmeticHelpers.put(Offhand.class, new VolatileOffhandImpl(plugin, this));
+    }
+
+    @Override
+    public VolatileCosmeticHelper getCosmeticHelper(Class<? extends Cosmetic> tClass) {
+        return cosmeticHelpers.get(tClass);
+    }
+
+    @Override
+    public Collection<VolatileCosmeticHelper> getCosmeticHelpers() {
+        return cosmeticHelpers.values();
     }
 
     @Override
@@ -77,6 +94,13 @@ public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
         for(Packet<?> packet : packets) {
             connection.send(packet);
         }
+    }
+
+    public void broadcastAround(Player wearer, Packet<?>... packets) {
+        final var level = ((CraftWorld) wearer.getWorld()).getHandle();
+        final var trackedEntity = level.getChunkSource().chunkMap.entityMap.get(wearer.getEntityId());
+        for(Packet<?> packet : packets)
+            trackedEntity.broadcastAndSend(packet);
     }
 
     public void broadcast(World world, Packet<?>... packets) {

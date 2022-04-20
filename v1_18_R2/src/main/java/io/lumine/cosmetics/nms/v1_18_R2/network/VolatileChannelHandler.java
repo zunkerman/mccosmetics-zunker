@@ -1,20 +1,14 @@
 package io.lumine.cosmetics.nms.v1_18_R2.network;
 
-import io.lumine.cosmetics.MCCosmeticsPlugin;
-import io.lumine.cosmetics.api.cosmetics.Cosmetic;
-import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
-import io.lumine.cosmetics.managers.back.BackAccessory;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
-import io.lumine.cosmetics.players.Profile;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import lombok.Getter;
-import net.minecraft.network.protocol.game.ClientboundAddPlayerPacket;
-import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import org.bukkit.entity.Player;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VolatileChannelHandler extends ChannelDuplexHandler {
 
@@ -27,49 +21,39 @@ public class VolatileChannelHandler extends ChannelDuplexHandler {
 	}
 
 	@Override
-	public void write(ChannelHandlerContext ctx, Object packet, ChannelPromise promise) throws Exception {
+	public void write(ChannelHandlerContext ctx, Object obj, ChannelPromise promise) {
 
-		if(packet instanceof ClientboundAddPlayerPacket playerPacket) {
-			final var entity = nmsHandler.getEntity(player.getWorld(), playerPacket.getEntityId());
-			if(entity instanceof Player spawnedPlayer) {
-				final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(spawnedPlayer);
-				handleSpawn(profile);
+		try {
+
+			List<Object> packets = new ArrayList<>();
+
+			for(final var helper : nmsHandler.getCosmeticHelpers()) {
+				final var writes = helper.write(player, obj);
+				if(writes != null)
+					packets.addAll(writes);
 			}
-		}else if(packet instanceof ClientboundRemoveEntitiesPacket removePacket) {
-			for(int id : removePacket.getEntityIds()) {
-				final var entity = nmsHandler.getEntity(player.getWorld(), id);
-				if(entity instanceof Player despawnedPlayer) {
-					final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(despawnedPlayer);
-					handleDespawn(profile);
-				}
+
+			if(!packets.contains(obj))
+				super.write(ctx, obj, promise);
+			packets.remove(obj);
+
+			for (var p : packets) {
+				super.write(ctx, p, promise.channel().newPromise());
 			}
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
 
-		super.write(ctx, packet, promise);
 	}
 
 	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object packet) throws Exception {
+	public void channelRead(ChannelHandlerContext ctx, Object obj) throws Exception {
 
-		super.channelRead(ctx, packet);
-	}
-
-	private void handleSpawn(Profile profile) {
-
-		Optional<Cosmetic> maybeBack = profile.getCosmeticInventory().getEquipped(BackAccessory.class);
-		if (maybeBack.isPresent() && maybeBack.get() instanceof ItemCosmetic) {
-			nmsHandler.getBackHelper().respawnForPlayer(profile.getPlayer(), player);
+		for(final var helper : nmsHandler.getCosmeticHelpers()) {
+			helper.read(player, obj);
 		}
 
-	}
-
-	private void handleDespawn(Profile profile) {
-
-		Optional<Cosmetic> maybeBack = profile.getCosmeticInventory().getEquipped(BackAccessory.class);
-		if (maybeBack.isPresent() && maybeBack.get() instanceof ItemCosmetic) {
-			nmsHandler.getBackHelper().despawnForPlayer(profile.getPlayer(), player);
-		}
-
+		super.channelRead(ctx, obj);
 	}
 
 }
