@@ -10,6 +10,7 @@ import java.util.Optional;
 public class CompatibilityManager extends ReloadableModule<MCCosmeticsPlugin> {
 
     @Getter private Optional<LumineCoreCompat> lumineCore = Optional.empty();
+    @Getter private Optional<MCPetsCompat> mcpets = Optional.empty();
     
     public CompatibilityManager(MCCosmeticsPlugin plugin)  {
         super(plugin);
@@ -19,6 +20,9 @@ public class CompatibilityManager extends ReloadableModule<MCCosmeticsPlugin> {
     public void load(MCCosmeticsPlugin plugin) {
         if(Bukkit.getPluginManager().getPlugin("LumineCore") != null) {
             lumineCore = Optional.of(new LumineCoreCompat(plugin));
+        }
+        if(Bukkit.getPluginManager().getPlugin("MCPets") != null) {
+            mcpets = Optional.of(new MCPetsCompat(plugin));
         }
     }
   

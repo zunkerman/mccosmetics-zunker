@@ -232,6 +232,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>fr.nocsy</groupId>
+            <artifactId>mcpets</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>LibsDisguises</groupId>
             <artifactId>LibsDisguises</artifactId>
             <version>10.0.24</version>

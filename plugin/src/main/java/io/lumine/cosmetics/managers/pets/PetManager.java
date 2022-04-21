@@ -8,8 +8,8 @@ import java.io.File;
 
 public class PetManager extends MCCosmeticsManager<Pet> {
 
-	public PetManager(MCCosmeticsPlugin plugin, Class<Pet> petClass) {
-		super(plugin, petClass);
+	public PetManager(MCCosmeticsPlugin plugin) {
+		super(plugin, Pet.class);
 	}
 
 	@Override
@@ -19,6 +19,17 @@ public class PetManager extends MCCosmeticsManager<Pet> {
 
 	@Override
 	public void equip(CosmeticProfile profile) {
-		// TODO: 15/3/2022 Impl pet
+		var maybePet = profile.getCosmeticInventory().getEquipped(Pet.class);
+		
+		if(maybePet.isEmpty()) {
+		    return;
+		}
+		
+		var pet = maybePet.get();
+		
+		if(pet.getSpawner().isValid()) {
+		    
+		}
+		
 	}
 }
