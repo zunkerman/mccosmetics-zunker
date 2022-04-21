@@ -25,11 +25,10 @@ public class PetManager extends MCCosmeticsManager<Pet> {
 		    return;
 		}
 		
-		var pet = maybePet.get();
+		var pet = (Pet) maybePet.get();
 		
 		if(pet.getSpawner().isValid()) {
-		    
+		    pet.getSpawner().equip(profile.getPlayer());
 		}
-		
 	}
 }
