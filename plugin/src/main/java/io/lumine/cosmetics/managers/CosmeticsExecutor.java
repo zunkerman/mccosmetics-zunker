@@ -2,6 +2,7 @@ package io.lumine.cosmetics.managers;
 
 import com.google.common.collect.Maps;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
+import io.lumine.utils.events.extra.ArmorEquipEventListener;
 import io.lumine.utils.plugin.ReloadableModule;
 import lombok.Getter;
 
@@ -13,8 +14,12 @@ public class CosmeticsExecutor extends ReloadableModule<MCCosmeticsPlugin> {
 
     @Getter private final Map<String,MCCosmeticsManager> cosmeticManagers = Maps.newConcurrentMap();
     
+    private final ArmorEquipEventListener armorEquipListener;
+    
     public CosmeticsExecutor(MCCosmeticsPlugin plugin) {
         super(plugin);
+        
+        this.armorEquipListener = new ArmorEquipEventListener();
     }
 
     @Override
