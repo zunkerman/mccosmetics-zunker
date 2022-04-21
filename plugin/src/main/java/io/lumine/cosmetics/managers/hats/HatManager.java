@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.io.File;
+import java.util.logging.Level;
 
 public class HatManager extends MCCosmeticsManager<Hat> {
     
@@ -35,17 +36,6 @@ public class HatManager extends MCCosmeticsManager<Hat> {
         Events.subscribe(InventoryCloseEvent.class)
                 .handler(event -> {
                     final Player player = (Player) event.getPlayer();
-                    getProfiles().awaitProfile(player).thenAcceptAsync(maybeProfile -> {
-                        if(maybeProfile.isEmpty())
-                            return;
-                        final Profile profile = maybeProfile.get();
-                        equip(profile);
-                    });
-                }).bindWith(this);
-
-        Events.subscribe(PlayerRespawnEvent.class)
-                .handler(event -> {
-                    final Player player = event.getPlayer();
                     getProfiles().awaitProfile(player).thenAcceptAsync(maybeProfile -> {
                         if(maybeProfile.isEmpty())
                             return;

@@ -11,9 +11,10 @@ import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
 import io.lumine.cosmetics.players.Profile;
 import lombok.Getter;
-import net.minecraft.network.protocol.game.ClientboundAddPlayerPacket;
-import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.*;
 import net.minecraft.world.entity.EquipmentSlot;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 
@@ -52,6 +53,20 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
 
         nmsHandler.broadcastAround(player, equipmentPacket);
 
+    }
+
+    @Override
+    public void read(Player sender, Object packet) {
+        if(packet instanceof ServerboundAcceptTeleportationPacket) {
+            final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(sender);
+            final var list = handleSpawn(profile);
+            if(list == null)
+                return;
+            final var connection = ((CraftPlayer) sender).getHandle().connection;
+            for(Object obj : list) {
+                connection.send((Packet<?>) obj);
+            }
+        }
     }
 
     @Override

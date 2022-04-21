@@ -99,6 +99,12 @@ public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
     public void broadcastAround(Player wearer, Packet<?>... packets) {
         final var level = ((CraftWorld) wearer.getWorld()).getHandle();
         final var trackedEntity = level.getChunkSource().chunkMap.entityMap.get(wearer.getEntityId());
+
+        if(trackedEntity == null) {
+            broadcast(wearer.getWorld(), packets);
+            return;
+        }
+
         for(Packet<?> packet : packets)
             trackedEntity.broadcastAndSend(packet);
     }
