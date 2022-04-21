@@ -6,6 +6,7 @@ import io.lumine.cosmetics.managers.offhand.OffhandManager;
 import org.bukkit.Bukkit;
 
 import io.lumine.cosmetics.commands.BaseCommand;
+import io.lumine.cosmetics.commands.SprayCommand;
 import io.lumine.cosmetics.commands.admin.AdminCommand;
 import io.lumine.cosmetics.compat.CompatibilityManager;
 import io.lumine.cosmetics.config.Configuration;
@@ -111,6 +112,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
 
         this.registerCommand("cosmetics", baseCommand);
         this.registerCommand("mccosmetics", adminCommand);
+        this.registerCommand("spray", new SprayCommand(this));
 
         if(configuration.isAllowingMetrics())  {
             new bStats(this);

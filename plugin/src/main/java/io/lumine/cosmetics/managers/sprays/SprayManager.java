@@ -87,7 +87,7 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
         images.clear();
         
         final Collection<File> files = Lists.newArrayList();
-        final String type = CosmeticType.folder(tClass);
+        final String type = CosmeticType.folder(cosmeticClass);
         for(var packFolder : plugin.getConfiguration().getPackFolders()) {
             final File confFolder = new File(packFolder.getAbsolutePath() + System.getProperty("file.separator") + type);
             if(confFolder.exists() && confFolder.isDirectory()) {

@@ -30,19 +30,19 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
 
     protected final NodeListProp KEYS = Property.NodeList(Scope.NONE, "");
     protected final Map<String, T> cosmetics = Maps.newConcurrentMap();
-    protected final Class<T> tClass;
+    @Getter protected final Class<T> cosmeticClass;
     
     @Getter protected SelectionMenu menu;
 
     public MCCosmeticsManager(MCCosmeticsPlugin plugin, Class<T> tClass) {
         super(plugin, false); 
-        this.tClass = tClass;
+        this.cosmeticClass = tClass;
     }
 
     @Override
     public void load(MCCosmeticsPlugin plugin) {
         final Collection<File> files = Lists.newArrayList();
-        final String type = CosmeticType.folder(tClass);
+        final String type = CosmeticType.folder(cosmeticClass);
         for(var packFolder : plugin.getConfiguration().getPackFolders()) {
             final File confFolder = new File(packFolder.getAbsolutePath() + System.getProperty("file.separator") + type);
             if(confFolder.exists() && confFolder.isDirectory()) {
@@ -67,7 +67,7 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
             menu.reload();
         }
 
-        plugin.getCosmetics().registerCosmeticManager(CosmeticType.type(tClass), this);
+        plugin.getCosmetics().registerCosmeticManager(CosmeticType.type(cosmeticClass), this);
         Log.info("Loaded " + cosmetics.size() + " " + type + ".");
     }
 
@@ -101,7 +101,7 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
     }
     
     protected VolatileCosmeticHelper getNMSHelper() {
-        return getNMS().getCosmeticHelper(tClass);
+        return getNMS().getCosmeticHelper(cosmeticClass);
     }
 
 }
