@@ -13,6 +13,7 @@ import io.lumine.cosmetics.players.Profile;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -25,6 +26,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
 
 public class VolatileBackImpl implements VolatileEquipmentHelper {
 
@@ -80,6 +82,15 @@ public class VolatileBackImpl implements VolatileEquipmentHelper {
 		if(packet instanceof ServerboundMovePlayerPacket) {
 			final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(sender);
 			handleRotate(profile);
+		}else if(packet instanceof ServerboundAcceptTeleportationPacket) {
+			final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(sender);
+			final var list = handleSpawn(profile);
+			if(list == null)
+				return;
+			final var connection = ((CraftPlayer) sender).getHandle().connection;
+			for(Object obj : list) {
+				connection.send((Packet<?>) obj);
+			}
 		}
 	}
 

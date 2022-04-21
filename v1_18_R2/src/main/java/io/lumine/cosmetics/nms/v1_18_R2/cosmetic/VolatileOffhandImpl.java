@@ -6,13 +6,14 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
+import io.lumine.cosmetics.logging.MCLogger;
 import io.lumine.cosmetics.managers.offhand.Offhand;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
 import io.lumine.cosmetics.players.Profile;
 import lombok.Getter;
-import net.minecraft.network.protocol.game.ClientboundAddPlayerPacket;
-import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
+import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.protocol.status.ClientboundStatusResponsePacket;
 import net.minecraft.world.entity.EquipmentSlot;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -66,6 +67,10 @@ public class VolatileOffhandImpl implements VolatileEquipmentHelper {
             Profile profile = getProfile(receiver, id);
             if(profile != null)
                 return handleSpawn(profile);
+        }else if(packet instanceof ClientboundEntityEventPacket entityEventPacket){
+            if(entityEventPacket.getEventId() == 55) {
+                // TODO: 20/4/2022 override this 
+            }
         }
 
         return null;
