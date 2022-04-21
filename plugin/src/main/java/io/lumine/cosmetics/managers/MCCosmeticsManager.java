@@ -8,6 +8,7 @@ import io.lumine.cosmetics.api.cosmetics.CosmeticManager;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.config.Scope;
 import io.lumine.cosmetics.constants.CosmeticType;
+import io.lumine.cosmetics.menus.SelectionMenu;
 import io.lumine.cosmetics.nms.VolatileCodeHandler;
 import io.lumine.cosmetics.nms.cosmetic.VolatileCosmeticHelper;
 import io.lumine.cosmetics.players.ProfileManager;
@@ -16,6 +17,8 @@ import io.lumine.utils.config.properties.types.NodeListProp;
 import io.lumine.utils.files.Files;
 import io.lumine.utils.logging.Log;
 import io.lumine.utils.plugin.ReloadableModule;
+import lombok.Getter;
+
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -28,6 +31,8 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
     protected final NodeListProp KEYS = Property.NodeList(Scope.NONE, "");
     protected final Map<String, T> cosmetics = Maps.newConcurrentMap();
     protected final Class<T> tClass;
+    
+    @Getter protected SelectionMenu menu;
 
     public MCCosmeticsManager(MCCosmeticsPlugin plugin, Class<T> tClass) {
         super(plugin, false); 
@@ -49,6 +54,17 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
             for(var node : KEYS.fget(file)) {
                 cosmetics.put(node, build(file, node));
             }
+        }
+
+        if(menu == null) {
+            var menuFile = new File(plugin.getDataFolder(), "menus/selection_" + type);
+            
+            if(menuFile.exists()) {
+                menu = new SelectionMenu(plugin, plugin.getMenuManager(), type);
+                menu.reload();
+            }
+        } else {
+            menu.reload();
         }
 
         plugin.getCosmetics().registerCosmeticManager(CosmeticType.type(tClass), this);

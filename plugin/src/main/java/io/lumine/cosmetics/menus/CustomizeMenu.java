@@ -28,7 +28,12 @@ public class CustomizeMenu extends CosmeticMenu<Profile> {
                 icon.getBuilder().click((profile,player) -> {
                     // TODO: sorting
                     List<Cosmetic> cosmetics = Lists.newArrayList(manager.getAllCosmetics());
-                    getMenuManager().getSelectionMenu().open(player, profile, cosmetics);
+                    
+                    if(manager.getMenu() == null) {
+                        getMenuManager().getSelectionMenu().open(player, profile, cosmetics);
+                    } else {
+                        manager.getMenu().open(player, profile, cosmetics);
+                    }
                 });
             });
         }

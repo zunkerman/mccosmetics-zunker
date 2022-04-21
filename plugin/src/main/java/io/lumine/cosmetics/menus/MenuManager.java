@@ -7,7 +7,7 @@ import lombok.Getter;
 public class MenuManager extends ReloadableModule<MCCosmeticsPlugin> {
 
     @Getter private CustomizeMenu customizeMenu;
-    @Getter private SelectionMenu selectionMenu;
+    @Getter private GenericSelectionMenu selectionMenu;
 
     public MenuManager(MCCosmeticsPlugin plugin) {
         super(plugin);
@@ -17,7 +17,7 @@ public class MenuManager extends ReloadableModule<MCCosmeticsPlugin> {
     public void load(MCCosmeticsPlugin plugin) {
         if(customizeMenu == null) {
             customizeMenu = new CustomizeMenu(plugin,this);
-            selectionMenu = new SelectionMenu(plugin,this);
+            selectionMenu = new GenericSelectionMenu(plugin,this);
         }
         
         customizeMenu.reload();
