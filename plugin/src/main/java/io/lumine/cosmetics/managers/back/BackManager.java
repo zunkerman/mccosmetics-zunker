@@ -7,6 +7,9 @@ import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.cosmetics.managers.gestures.Gesture;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
+import io.lumine.cosmetics.players.Profile;
+import io.lumine.utils.Events;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.File;
 
@@ -16,6 +19,21 @@ public class BackManager extends MCCosmeticsManager<BackAccessory> implements Hi
         super(plugin, BackAccessory.class);
 
         load(plugin);
+    }
+
+    @Override
+    public void load(MCCosmeticsPlugin plugin) {
+        super.load(plugin);
+
+        Events.subscribe(PlayerQuitEvent.class)
+                .handler(event -> {
+                    getProfiles().awaitProfile(event.getPlayer()).thenAcceptAsync(maybeProfile -> {
+                        if(maybeProfile.isEmpty())
+                            return;
+                        final Profile profile = maybeProfile.get();
+                        unequip(profile);
+                    });
+                }).bindWith(this);
     }
 
     @Override
@@ -43,6 +61,8 @@ public class BackManager extends MCCosmeticsManager<BackAccessory> implements Hi
 
     @Override
     public void show(CosmeticProfile profile) {
+        if(profile.getPlayer().isDead())
+            return;
         profile.setHidden(getCosmeticClass(), false);
         getHelper().apply(profile);
     }
