@@ -85,7 +85,7 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
 
     @Override
     public void unequip(CosmeticProfile profile) {
-
+        removeSpray(profile.getPlayer());
     }
 
     private void loadSprayImages() {
