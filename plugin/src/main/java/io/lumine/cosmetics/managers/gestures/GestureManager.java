@@ -1,17 +1,25 @@
 package io.lumine.cosmetics.managers.gestures;
 
+import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.ticxo.playeranimator.api.PlayerAnimator;
-import com.ticxo.playeranimator.api.model.player.PlayerModel;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
+import io.lumine.utils.Events;
 import io.lumine.utils.files.Files;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 
 import java.io.File;
+import java.util.Map;
 
 public class GestureManager extends MCCosmeticsManager<Gesture> {
+
+	private final Map<Player, CustomPlayerModel> ticking = Maps.newConcurrentMap();
 
 	public GestureManager(MCCosmeticsPlugin plugin) {
 		super(plugin, Gesture.class);
@@ -23,6 +31,18 @@ public class GestureManager extends MCCosmeticsManager<Gesture> {
 	public void load(MCCosmeticsPlugin plugin) {
 		loadGestures();
 		super.load(plugin);
+
+		Events.subscribe(PlayerToggleSneakEvent.class).handler(event -> quit(event.getPlayer(), QuitMethod.SNEAK)).bindWith(this);
+		Events.subscribe(PlayerJumpEvent.class).handler(event -> quit(event.getPlayer(), QuitMethod.JUMP)).bindWith(this);
+		Events.subscribe(PlayerQuitEvent.class).handler(event -> quit(event.getPlayer(), null)).bindWith(this);
+
+	}
+
+	public void quit(Player player, QuitMethod method) {
+		if(!ticking.containsKey(player))
+			return;
+		final var model = ticking.get(player);
+		model.stopAnimation(method);
 	}
 
 	@Override
@@ -37,14 +57,17 @@ public class GestureManager extends MCCosmeticsManager<Gesture> {
 			return;
 
 		final var player = profile.getPlayer();
-		PlayerModel model = new PlayerModel(player);
+		CustomPlayerModel model = new CustomPlayerModel(player, gesture.getQuitMethod(), () -> {
+			profile.unequip(gesture);
+		});
+		ticking.put(player, model);
 		final var animation = model.getTexture().isSlim() ? gesture.getSlimGesture() : gesture.getDefaultGesture();
 		model.playAnimation(animation);
 	}
 
 	@Override
 	public void unequip(CosmeticProfile profile) {
-
+		ticking.remove(profile.getPlayer());
 	}
 
 	private void loadGestures() {
