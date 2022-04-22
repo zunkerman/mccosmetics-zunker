@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface VolatileCosmeticHelper {
 
-	default void read(Player sender, Object packet) {
-
+	default boolean read(Player sender, Object packet, boolean isCanceled) {
+		return true;
 	}
 
 	default List<Object> write(Player receiver, Object packet) {

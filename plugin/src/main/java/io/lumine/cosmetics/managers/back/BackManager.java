@@ -37,11 +37,13 @@ public class BackManager extends MCCosmeticsManager<BackAccessory> implements Hi
     public void hide(CosmeticProfile profile, Cosmetic request) {
         if(!(request instanceof Gesture))
             return;
+        profile.setHidden(getCosmeticClass(), true);
         getHelper().unapply(profile);
     }
 
     @Override
     public void show(CosmeticProfile profile) {
+        profile.setHidden(getCosmeticClass(), false);
         getHelper().apply(profile);
     }
 

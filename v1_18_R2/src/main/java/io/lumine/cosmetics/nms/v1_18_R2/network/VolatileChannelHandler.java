@@ -49,11 +49,13 @@ public class VolatileChannelHandler extends ChannelDuplexHandler {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object obj) throws Exception {
 
+		boolean isCanceled = false;
 		for(final var helper : nmsHandler.getCosmeticHelpers()) {
-			helper.read(player, obj);
+			isCanceled |= !helper.read(player, obj, isCanceled);
 		}
 
-		super.channelRead(ctx, obj);
+		if(!isCanceled)
+			super.channelRead(ctx, obj);
 	}
 
 }

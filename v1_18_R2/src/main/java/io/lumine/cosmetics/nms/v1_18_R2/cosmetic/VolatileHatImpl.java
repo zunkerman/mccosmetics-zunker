@@ -14,7 +14,6 @@ import lombok.Getter;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -53,7 +52,6 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsHat)));
 
         nmsHandler.broadcastAroundAndSelf(player, equipmentPacket);
-
     }
 
     @Override
@@ -65,17 +63,22 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
     }
 
     @Override
-    public void read(Player sender, Object packet) {
+    public boolean read(Player sender, Object packet, boolean isCanceled) {
         if(packet instanceof ServerboundAcceptTeleportationPacket) {
             final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(sender);
+            if(profile == null || profile.isHidden(Hat.class))
+                return true;
+
             final var list = handleSpawn(profile);
             if(list == null)
-                return;
+                return true;
+
             final var connection = ((CraftPlayer) sender).getHandle().connection;
             for(Object obj : list) {
                 connection.send((Packet<?>) obj);
             }
         }
+        return true;
     }
 
     @Override
@@ -83,12 +86,12 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
         if(packet instanceof ClientboundAddPlayerPacket playerPacket) {
             int id = playerPacket.getEntityId();
             Profile profile = getProfile(receiver, id);
-            if(profile != null)
+            if(profile != null && !profile.isHidden(Hat.class))
                 return handleSpawn(profile);
         }else if(packet instanceof ClientboundSetEquipmentPacket equipmentPacket) {
             int id = equipmentPacket.getEntity();
             Profile profile = getProfile(receiver, id);
-            if(profile != null)
+            if(profile != null && !profile.isHidden(Hat.class))
                 return handleSpawn(profile);
         }
 

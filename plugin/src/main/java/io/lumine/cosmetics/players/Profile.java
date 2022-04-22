@@ -45,8 +45,21 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
     }
 
     @Override
+    public void setHidden(Class<? extends Cosmetic> cosmetic, boolean flag) {
+        if(flag)
+            cosmeticInventory.getHidden().add(cosmetic);
+        else
+            cosmeticInventory.getHidden().remove(cosmetic);
+    }
+
+    @Override
     public boolean isEquipped(Cosmetic cosmetic) {
         return cosmeticInventory.isEquipped(cosmetic);
+    }
+
+    @Override
+    public boolean isHidden(Class<? extends Cosmetic> cosmetic) {
+        return cosmeticInventory.getHidden().contains(cosmetic);
     }
 
     public void reloadCosmetics() {

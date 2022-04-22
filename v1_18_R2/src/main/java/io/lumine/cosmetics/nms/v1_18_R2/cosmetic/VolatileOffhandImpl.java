@@ -6,6 +6,8 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
+import io.lumine.cosmetics.logging.MCLogger;
+import io.lumine.cosmetics.managers.hats.Hat;
 import io.lumine.cosmetics.managers.offhand.Offhand;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
@@ -70,17 +72,13 @@ public class VolatileOffhandImpl implements VolatileEquipmentHelper {
         if(packet instanceof ClientboundAddPlayerPacket playerPacket) {
             int id = playerPacket.getEntityId();
             Profile profile = getProfile(receiver, id);
-            if(profile != null)
+            if(profile != null && !profile.isHidden(Offhand.class))
                 return handleSpawn(profile);
         }else if(packet instanceof ClientboundSetEquipmentPacket equipmentPacket) {
             int id = equipmentPacket.getEntity();
             Profile profile = getProfile(receiver, id);
-            if(profile != null)
+            if(profile != null && !profile.isHidden(Offhand.class))
                 return handleSpawn(profile);
-        }else if(packet instanceof ClientboundEntityEventPacket entityEventPacket){
-            if(entityEventPacket.getEventId() == 55) {
-                // TODO: 20/4/2022 override this 
-            }
         }
 
         return null;
