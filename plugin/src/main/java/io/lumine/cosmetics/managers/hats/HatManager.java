@@ -1,21 +1,21 @@
 package io.lumine.cosmetics.managers.hats;
 
 import io.lumine.cosmetics.MCCosmeticsPlugin;
-import io.lumine.cosmetics.api.events.CosmeticPlayerLoadedEvent;
+import io.lumine.cosmetics.api.cosmetics.Cosmetic;
+import io.lumine.cosmetics.api.cosmetics.manager.HideableCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
+import io.lumine.cosmetics.managers.gestures.Gesture;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
 import io.lumine.cosmetics.players.Profile;
 import io.lumine.utils.Events;
 import io.lumine.utils.events.extra.ArmorEquipEvent; 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.io.File;
-import java.util.logging.Level;
 
-public class HatManager extends MCCosmeticsManager<Hat> {
+public class HatManager extends MCCosmeticsManager<Hat> implements HideableCosmetic {
     
     public HatManager(MCCosmeticsPlugin plugin) {
         super(plugin, Hat.class);   
@@ -58,11 +58,27 @@ public class HatManager extends MCCosmeticsManager<Hat> {
 
     @Override
     public void equip(CosmeticProfile profile) {
-        ((VolatileEquipmentHelper) getPlugin().getVolatileCodeHandler().getCosmeticHelper(Hat.class)).apply(profile);
+        getHelper().apply(profile);
     }
 
     @Override
     public void unequip(CosmeticProfile profile) {
-        ((VolatileEquipmentHelper) getPlugin().getVolatileCodeHandler().getCosmeticHelper(Hat.class)).unapply(profile);
+        getHelper().unapply(profile);
+    }
+
+    @Override
+    public void hide(CosmeticProfile profile, Cosmetic request) {
+        if(!(request instanceof Gesture))
+            return;
+        getHelper().unapply(profile);
+    }
+
+    @Override
+    public void show(CosmeticProfile profile) {
+        getHelper().apply(profile);
+    }
+
+    protected VolatileEquipmentHelper getHelper() {
+        return (VolatileEquipmentHelper) getNMSHelper();
     }
 }

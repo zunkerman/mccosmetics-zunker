@@ -18,6 +18,8 @@ public interface CosmeticProfile {
     public boolean has(Cosmetic cosmetic);
     
     public void equip(Cosmetic cosmetic);
+
+    public void unequip(Cosmetic cosmetic);
     
     public boolean isEquipped(Cosmetic cosmetic);
     

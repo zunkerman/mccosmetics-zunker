@@ -4,14 +4,12 @@ import com.google.common.collect.Maps;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.managers.back.BackAccessory;
+import io.lumine.cosmetics.managers.gestures.Gesture;
 import io.lumine.cosmetics.managers.hats.Hat;
 import io.lumine.cosmetics.managers.offhand.Offhand;
 import io.lumine.cosmetics.managers.sprays.Spray;
 import io.lumine.cosmetics.nms.cosmetic.VolatileCosmeticHelper;
-import io.lumine.cosmetics.nms.v1_18_R2.cosmetic.VolatileBackImpl;
-import io.lumine.cosmetics.nms.v1_18_R2.cosmetic.VolatileHatImpl;
-import io.lumine.cosmetics.nms.v1_18_R2.cosmetic.VolatileOffhandImpl;
-import io.lumine.cosmetics.nms.v1_18_R2.cosmetic.VolatileSprayImpl;
+import io.lumine.cosmetics.nms.v1_18_R2.cosmetic.*;
 import io.lumine.cosmetics.nms.v1_18_R2.network.VolatileChannelHandler;
 import io.lumine.utils.reflection.Reflector;
 import io.netty.channel.Channel;
@@ -25,7 +23,6 @@ import net.minecraft.world.level.entity.PersistentEntitySectionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
@@ -48,6 +45,7 @@ public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
         cosmeticHelpers.put(BackAccessory.class, new VolatileBackImpl(plugin, this));
         cosmeticHelpers.put(Spray.class, new VolatileSprayImpl(plugin, this));
         cosmeticHelpers.put(Offhand.class, new VolatileOffhandImpl(plugin, this));
+        cosmeticHelpers.put(Gesture.class, new VolatileGestureImpl(plugin, this));
     }
 
     @Override
@@ -99,7 +97,7 @@ public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
         }
     }
 
-    public void broadcastAround(Player wearer, Packet<?>... packets) {
+    public void broadcastAroundAndSelf(Player wearer, Packet<?>... packets) {
         final var level = ((CraftWorld) wearer.getWorld()).getHandle();
         final var trackedEntity = level.getChunkSource().chunkMap.entityMap.get(wearer.getEntityId());
 
@@ -110,6 +108,19 @@ public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
 
         for(Packet<?> packet : packets)
             trackedEntity.broadcastAndSend(packet);
+    }
+
+    public void broadcastAround(Player wearer, Packet<?>... packets) {
+        final var level = ((CraftWorld) wearer.getWorld()).getHandle();
+        final var trackedEntity = level.getChunkSource().chunkMap.entityMap.get(wearer.getEntityId());
+
+        if(trackedEntity == null) {
+            broadcast(wearer.getWorld(), packets);
+            return;
+        }
+
+        for(Packet<?> packet : packets)
+            trackedEntity.broadcast(packet);
     }
 
     public void broadcast(World world, Packet<?>... packets) {

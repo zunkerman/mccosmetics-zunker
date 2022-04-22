@@ -52,7 +52,7 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
 
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsHat)));
 
-        nmsHandler.broadcastAround(player, equipmentPacket);
+        nmsHandler.broadcastAroundAndSelf(player, equipmentPacket);
 
     }
 
@@ -60,10 +60,8 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
     public void unapply(CosmeticProfile profile) {
         final var nmsPlayer = ((CraftPlayer) profile.getPlayer()).getHandle();
         final var item = nmsPlayer.getItemBySlot(EquipmentSlot.HEAD);
-        if(item == ItemStack.EMPTY)
-            return;
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(nmsPlayer.getId(), List.of(Pair.of(EquipmentSlot.HEAD, item)));
-        nmsHandler.broadcastAround(nmsPlayer.getBukkitEntity(), equipmentPacket);
+        nmsHandler.broadcastAroundAndSelf(nmsPlayer.getBukkitEntity(), equipmentPacket);
     }
 
     @Override

@@ -26,7 +26,6 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
 
 public class VolatileBackImpl implements VolatileEquipmentHelper {
 
@@ -67,14 +66,14 @@ public class VolatileBackImpl implements VolatileEquipmentHelper {
 			ClientboundSetEntityDataPacket dataPacket = new ClientboundSetEntityDataPacket(stand.getId(), stand.getEntityData(), true);
 			ClientboundSetPassengersPacket passengersPacket = createPassengerPacket(player.getEntityId(), stand.getId());
 
-			nmsHandler.broadcastAround(player, mobPacket, dataPacket, passengersPacket);
+			nmsHandler.broadcastAroundAndSelf(player, mobPacket, dataPacket, passengersPacket);
 		}
 
 		stand.setItemSlot(EquipmentSlot.HEAD, nmsBack);
 
 		ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(stand.getId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsBack)));
 
-		nmsHandler.broadcastAround(player, equipmentPacket);
+		nmsHandler.broadcastAroundAndSelf(player, equipmentPacket);
 	}
 
 	@Override
@@ -84,16 +83,16 @@ public class VolatileBackImpl implements VolatileEquipmentHelper {
 		if(stand == null)
 			return;
 		ClientboundRemoveEntitiesPacket removePacket = new ClientboundRemoveEntitiesPacket(stand.getId());
-		nmsHandler.broadcastAround(player, removePacket);
+		nmsHandler.broadcastAroundAndSelf(player, removePacket);
 	}
 
 	@Override
 	public void read(Player sender, Object packet) {
+		final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(sender);
+
 		if(packet instanceof ServerboundMovePlayerPacket) {
-			final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(sender);
 			handleRotate(profile);
 		}else if(packet instanceof ServerboundAcceptTeleportationPacket) {
-			final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(sender);
 			final var list = handleSpawn(profile);
 			if(list == null)
 				return;
@@ -133,7 +132,7 @@ public class VolatileBackImpl implements VolatileEquipmentHelper {
 		final var stand = activeProfile.get(wearer);
 
 		ClientboundRotateHeadPacket packet = new ClientboundRotateHeadPacket(stand, VolatileEquipmentHelper.toByte(nmsPlayer.getYRot()));
-		nmsHandler.broadcastAround(wearer, packet);
+		nmsHandler.broadcastAroundAndSelf(wearer, packet);
 	}
 
 	private List<Object> handleSpawn(Profile profile) {

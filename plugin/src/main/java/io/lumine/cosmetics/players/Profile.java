@@ -40,6 +40,11 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
     }
 
     @Override
+    public void unequip(Cosmetic cosmetic) {
+        cosmeticInventory.unequip(cosmetic.getClass());
+    }
+
+    @Override
     public boolean isEquipped(Cosmetic cosmetic) {
         return cosmeticInventory.isEquipped(cosmetic);
     }
