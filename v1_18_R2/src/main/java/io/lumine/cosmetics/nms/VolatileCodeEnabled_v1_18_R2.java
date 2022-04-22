@@ -25,8 +25,11 @@ import net.minecraft.world.level.entity.PersistentEntitySectionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -132,4 +135,13 @@ public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
         
     }
 
+    @Override
+    public void setBodyYaw(LivingEntity entity, double yaw) {
+        ((CraftLivingEntity) entity).getHandle().yBodyRot = (float) yaw;
+    }
+
+    @Override
+    public float getBodyYaw(LivingEntity entity) {
+        return ((CraftLivingEntity) entity).getHandle().yBodyRot;
+    }
 }

@@ -22,7 +22,7 @@ public class CustomizeMenu extends CosmeticMenu<Profile> {
 
         for(var entry : getPlugin().getCosmetics().getCosmeticManagers().entrySet()) {
             final var manager = entry.getValue();
-            final var type = CosmeticType.folder(manager.getCosmeticClass());
+            final var type = CosmeticType.type(manager.getCosmeticClass());
 
             builder.getIcon("BUTTON_" + type.toUpperCase()).ifPresent(icon -> {
                 Log.info("Found cosmetic menu button for {0}", type);

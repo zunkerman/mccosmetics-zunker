@@ -18,18 +18,6 @@ public class BackManager extends MCCosmeticsManager<BackAccessory> {
     }
 
     @Override
-    public void load(MCCosmeticsPlugin plugin) {
-        super.load(plugin);
-
-        Events.subscribe(CosmeticPlayerLoadedEvent.class)
-                .handler(event -> {
-                    final var profile = event.getProfile();
-                    equip(profile);
-                }).bindWith(this);
-
-    }
-
-    @Override
     public BackAccessory build(File file, String node) {
         return new BackAccessory(this, file, node);
     }

@@ -27,12 +27,6 @@ public class HatManager extends MCCosmeticsManager<Hat> {
     public void load(MCCosmeticsPlugin plugin) {
         super.load(plugin);
 
-        Events.subscribe(CosmeticPlayerLoadedEvent.class)
-                .handler(event -> {
-                    final var profile = event.getProfile();
-                    equip(profile);
-                }).bindWith(this);
-
         Events.subscribe(InventoryCloseEvent.class)
                 .handler(event -> {
                     final Player player = (Player) event.getPlayer();

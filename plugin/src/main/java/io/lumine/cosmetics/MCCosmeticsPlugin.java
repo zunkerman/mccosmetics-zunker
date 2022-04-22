@@ -1,18 +1,19 @@
 package io.lumine.cosmetics;
 
-import io.lumine.cosmetics.listeners.PlayerListeners;
-import io.lumine.cosmetics.managers.back.BackManager;
-import io.lumine.cosmetics.managers.offhand.OffhandManager;
-import org.bukkit.Bukkit;
-
+import com.ticxo.playeranimator.PlayerAnimatorImpl;
 import io.lumine.cosmetics.commands.BaseCommand;
 import io.lumine.cosmetics.commands.SprayCommand;
 import io.lumine.cosmetics.commands.admin.AdminCommand;
 import io.lumine.cosmetics.compat.CompatibilityManager;
 import io.lumine.cosmetics.config.Configuration;
+import io.lumine.cosmetics.listeners.PlayerListeners;
 import io.lumine.cosmetics.logging.MCLogger;
 import io.lumine.cosmetics.managers.CosmeticsExecutor;
+import io.lumine.cosmetics.managers.back.BackManager;
+import io.lumine.cosmetics.managers.gestures.GestureManager;
 import io.lumine.cosmetics.managers.hats.HatManager;
+import io.lumine.cosmetics.managers.modelengine.MEGManager;
+import io.lumine.cosmetics.managers.offhand.OffhandManager;
 import io.lumine.cosmetics.managers.sprays.SprayManager;
 import io.lumine.cosmetics.menus.MenuManager;
 import io.lumine.cosmetics.metrics.bStats;
@@ -24,6 +25,7 @@ import io.lumine.utils.logging.ConsoleColor;
 import io.lumine.utils.plugin.LuminePlugin;
 import io.lumine.utils.version.ServerVersion;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 
 public class MCCosmeticsPlugin extends LuminePlugin {
 
@@ -44,6 +46,8 @@ public class MCCosmeticsPlugin extends LuminePlugin {
     @Getter private BackManager backManager;
     @Getter private SprayManager sprayManager;
     @Getter private OffhandManager offhandManager;
+    @Getter private MEGManager megManager;
+    @Getter private GestureManager gestureManager;
 
     private VolatileCodeHandler volatileCodeHandler;
 
@@ -77,6 +81,8 @@ public class MCCosmeticsPlugin extends LuminePlugin {
             MCLogger.log("The server is running Spigot; disabled PaperSpigot exclusive functionality");
         }
 
+        PlayerAnimatorImpl.initialize(this);
+
         /*
          * Plugin Components
          */
@@ -91,6 +97,8 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         backManager = new BackManager(this);
         sprayManager = new SprayManager(this);
         offhandManager = new OffhandManager(this);
+        megManager = new MEGManager(this);
+        gestureManager = new GestureManager(this);
         
         profiles = new ProfileManager(this);
         

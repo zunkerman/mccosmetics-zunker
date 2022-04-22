@@ -2,6 +2,8 @@ package io.lumine.cosmetics.nms;
 
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.nms.cosmetic.VolatileCosmeticHelper;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -16,5 +18,9 @@ public interface VolatileCodeHandler {
     void removePlayer(Player player);
 
     void removeFakeEntity(int id);
+
+
+    void setBodyYaw(LivingEntity entity, double yaw);
+    float getBodyYaw(LivingEntity entity);
 
 }
