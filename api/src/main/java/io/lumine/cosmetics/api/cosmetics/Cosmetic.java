@@ -1,5 +1,6 @@
 package io.lumine.cosmetics.api.cosmetics;
 
+import io.lumine.cosmetics.api.cosmetics.manager.CosmeticManager;
 import io.lumine.cosmetics.api.players.CosmeticInventory;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.utils.config.properties.PropertyHolder;

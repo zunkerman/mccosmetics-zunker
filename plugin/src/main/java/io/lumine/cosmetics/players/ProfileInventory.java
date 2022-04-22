@@ -22,7 +22,7 @@ public class ProfileInventory implements CosmeticInventory {
 
     @Getter private transient CosmeticProfile profile;
 
-    private transient final Map<Class<? extends Cosmetic>, Cosmetic> equipped = Maps.newConcurrentMap();
+    @Getter private transient final Map<Class<? extends Cosmetic>, Cosmetic> equipped = Maps.newConcurrentMap();
     @Getter private final Map<String,List<String>> unlockedCosmetics = Maps.newConcurrentMap();
     @Getter private final Map<String,String> equippedCosmetics = Maps.newConcurrentMap();
     

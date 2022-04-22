@@ -53,7 +53,7 @@ public class VolatileOffhandImpl implements VolatileEquipmentHelper {
 
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.OFFHAND, nmsOffhand)));
 
-        nmsHandler.broadcastAround(player, equipmentPacket);
+        nmsHandler.broadcastAroundAndSelf(player, equipmentPacket);
 
     }
 
@@ -61,10 +61,8 @@ public class VolatileOffhandImpl implements VolatileEquipmentHelper {
     public void unapply(CosmeticProfile profile) {
         final var nmsPlayer = ((CraftPlayer) profile.getPlayer()).getHandle();
         final var item = nmsPlayer.getItemBySlot(EquipmentSlot.OFFHAND);
-        if(item == ItemStack.EMPTY)
-            return;
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(nmsPlayer.getId(), List.of(Pair.of(EquipmentSlot.OFFHAND, item)));
-        nmsHandler.broadcastAround(nmsPlayer.getBukkitEntity(), equipmentPacket);
+        nmsHandler.broadcastAroundAndSelf(nmsPlayer.getBukkitEntity(), equipmentPacket);
     }
 
     @Override

@@ -8,6 +8,7 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
+import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
 import io.lumine.utils.Events;
 import io.lumine.utils.files.Files;
 import org.bukkit.entity.Player;
@@ -63,11 +64,14 @@ public class GestureManager extends MCCosmeticsManager<Gesture> {
 		ticking.put(player, model);
 		final var animation = model.getTexture().isSlim() ? gesture.getSlimGesture() : gesture.getDefaultGesture();
 		model.playAnimation(animation);
+
+		((VolatileEquipmentHelper) getPlugin().getVolatileCodeHandler().getCosmeticHelper(Gesture.class)).apply(profile);
 	}
 
 	@Override
 	public void unequip(CosmeticProfile profile) {
 		ticking.remove(profile.getPlayer());
+		((VolatileEquipmentHelper) getPlugin().getVolatileCodeHandler().getCosmeticHelper(Gesture.class)).unapply(profile);
 	}
 
 	private void loadGestures() {

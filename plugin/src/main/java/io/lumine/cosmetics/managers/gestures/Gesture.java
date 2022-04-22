@@ -25,14 +25,12 @@ public class Gesture extends AbstractCosmetic {
 	private static final StringProp SLIM = Property.String(Scope.NONE, "Slim");
 	private static final BooleanProp CAN_MOVE = Property.Boolean(Scope.NONE, "CanMove", false);
 	private static final BooleanProp CAN_LOOK = Property.Boolean(Scope.NONE, "CanLook", false);
-	private static final BooleanProp FORCE_LOOP = Property.Boolean(Scope.NONE, "CanLook", false);
 	private static final EnumProp<QuitMethod> QUIT_CONTROL = Property.Enum(Scope.NONE, QuitMethod.class,"QuitControl", QuitMethod.SNEAK);
 
 	@Getter private final String defaultGesture;
 	@Getter private final String slimGesture;
 	@Getter private final boolean canMove;
 	@Getter private final boolean canLook;
-	@Getter private final boolean forceLoop;
 	@Getter private final QuitMethod quitMethod;
 
 	public Gesture(GestureManager manager, File file, String key) {
@@ -47,7 +45,6 @@ public class Gesture extends AbstractCosmetic {
 
 		canMove = CAN_MOVE.fget(file, this);
 		canLook = CAN_LOOK.fget(file, this);
-		forceLoop = FORCE_LOOP.fget(file, this);
 		quitMethod = QUIT_CONTROL.fget(file, this);
 	}
 
