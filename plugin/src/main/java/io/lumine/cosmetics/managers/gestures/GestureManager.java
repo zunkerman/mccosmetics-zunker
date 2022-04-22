@@ -42,6 +42,11 @@ public class GestureManager extends MCCosmeticsManager<Gesture> {
 		model.playAnimation(animation);
 	}
 
+	@Override
+	public void unequip(CosmeticProfile profile) {
+
+	}
+
 	private void loadGestures() {
 
 		final String type = CosmeticType.folder(cosmeticClass);

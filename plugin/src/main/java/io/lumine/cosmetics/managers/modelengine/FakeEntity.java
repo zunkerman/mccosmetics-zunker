@@ -50,17 +50,17 @@ public class FakeEntity extends BukkitPlayer {
 
 	@Override
 	public Location getLocation() {
+		Location location = player.getLocation();
 		Vector offset;
 		if (anchor == ModelAnchor.HEAD) {
-			MCLogger.log("head");
-			double pYaw = Math.toRadians(player.getLocation().getYaw());
-			double pPitch = Math.toRadians(player.getLocation().getPitch());
+			double pYaw = Math.toRadians(location.getYaw());
+			double pPitch = Math.toRadians(location.getPitch());
 			offset = Offset.rotateYaw(Offset.rotatePitch(this.offset.clone(), pitch + pPitch), yaw + pYaw);
 		} else {
 			double pYaw = getBodyYaw();
 			offset = Offset.rotateYaw(this.offset.clone(), yaw + pYaw);
 		}
-		return player.getLocation().add(offset);
+		return location.add(offset);
 	}
 
 	@Override

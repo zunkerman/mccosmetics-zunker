@@ -26,4 +26,9 @@ public class BackManager extends MCCosmeticsManager<BackAccessory> {
     public void equip(CosmeticProfile profile) {
         ((VolatileEquipmentHelper) getPlugin().getVolatileCodeHandler().getCosmeticHelper(BackAccessory.class)).apply(profile);
     }
+
+    @Override
+    public void unequip(CosmeticProfile profile) {
+        ((VolatileEquipmentHelper) getPlugin().getVolatileCodeHandler().getCosmeticHelper(BackAccessory.class)).unapply(profile);
+    }
 }

@@ -82,7 +82,12 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
 
     @Override
     public void equip(CosmeticProfile profile) {}
-    
+
+    @Override
+    public void unequip(CosmeticProfile profile) {
+
+    }
+
     private void loadSprayImages() {
         images.clear();
         

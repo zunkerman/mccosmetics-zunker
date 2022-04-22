@@ -11,6 +11,7 @@ import io.lumine.utils.events.extra.ArmorEquipEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
 import java.io.File;
 
@@ -48,17 +49,17 @@ public class OffhandManager extends MCCosmeticsManager<Offhand> {
                     });
                 }).bindWith(this);
 
-        Events.subscribe(ArmorEquipEvent.class)
+        Events.subscribe(PlayerSwapHandItemsEvent.class)
                 .handler(event -> {
                     final Player player = event.getPlayer();
                     getProfiles().awaitProfile(player).thenAcceptAsync(maybeProfile -> {
-                        if(maybeProfile.isEmpty()) {
+                        if(maybeProfile.isEmpty())
                             return;
-                        }
                         final Profile profile = maybeProfile.get();
                         equip(profile);
                     });
                 }).bindWith(this);
+
     }
 
     @Override
@@ -69,5 +70,10 @@ public class OffhandManager extends MCCosmeticsManager<Offhand> {
     @Override
     public void equip(CosmeticProfile profile) {
         ((VolatileEquipmentHelper) getPlugin().getVolatileCodeHandler().getCosmeticHelper(Offhand.class)).apply(profile);
+    }
+
+    @Override
+    public void unequip(CosmeticProfile profile) {
+        ((VolatileEquipmentHelper) getPlugin().getVolatileCodeHandler().getCosmeticHelper(Offhand.class)).unapply(profile);
     }
 }

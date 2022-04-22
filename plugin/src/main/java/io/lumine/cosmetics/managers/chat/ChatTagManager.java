@@ -28,6 +28,11 @@ public class ChatTagManager extends MCCosmeticsManager<ChatTag> {
 
     @Override
     public void equip(CosmeticProfile profile) {}
-    
-    
+
+    @Override
+    public void unequip(CosmeticProfile profile) {
+
+    }
+
+
 }

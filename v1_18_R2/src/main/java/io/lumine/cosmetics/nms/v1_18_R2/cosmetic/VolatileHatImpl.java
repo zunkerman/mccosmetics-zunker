@@ -14,6 +14,7 @@ import lombok.Getter;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -53,6 +54,16 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
 
         nmsHandler.broadcastAround(player, equipmentPacket);
 
+    }
+
+    @Override
+    public void unapply(CosmeticProfile profile) {
+        final var nmsPlayer = ((CraftPlayer) profile.getPlayer()).getHandle();
+        final var item = nmsPlayer.getItemBySlot(EquipmentSlot.HEAD);
+        if(item == ItemStack.EMPTY)
+            return;
+        ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(nmsPlayer.getId(), List.of(Pair.of(EquipmentSlot.HEAD, item)));
+        nmsHandler.broadcastAround(nmsPlayer.getBukkitEntity(), equipmentPacket);
     }
 
     @Override

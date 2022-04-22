@@ -31,4 +31,9 @@ public class PetManager extends MCCosmeticsManager<Pet> {
 		    pet.getSpawner().equip(profile.getPlayer());
 		}
 	}
+
+	@Override
+	public void unequip(CosmeticProfile profile) {
+
+	}
 }

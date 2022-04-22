@@ -5,6 +5,7 @@ import com.ticxo.modelengine.api.animation.StateProperty;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
+import io.lumine.cosmetics.logging.MCLogger;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.utils.Events;
 import org.bukkit.entity.Player;
@@ -64,12 +65,12 @@ public class MEGManager extends MCCosmeticsManager<MEGAccessory> {
 		activeModel.setAnimationMode(meg.getMode());
 
 		ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(player.getUniqueId());
-		if(modeledEntity == null) {
-			modeledEntity = ModelEngineAPI.api.getModelManager().createModeledEntity(new FakeEntity(player, meg.getOffset(), meg.getAnchor()));
+		if(modeledEntity != null) {
+			modeledEntity.clearModels();
+			modeledEntity.getAllActiveModel().clear();
 		}
 
-		modeledEntity.clearModels();
-		modeledEntity.getAllActiveModel().clear();
+		modeledEntity = ModelEngineAPI.api.getModelManager().createModeledEntity(new FakeEntity(player, meg.getOffset(), meg.getAnchor()));
 		modeledEntity.addActiveModel(activeModel);
 		modeledEntity.setInvisible(false);
 		modeledEntity.detectPlayers();

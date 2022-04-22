@@ -4,6 +4,7 @@ import com.ticxo.modelengine.api.util.ConfigManager;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.config.Scope;
 import io.lumine.cosmetics.constants.CosmeticType;
+import io.lumine.cosmetics.logging.MCLogger;
 import io.lumine.cosmetics.managers.AbstractCosmetic;
 import io.lumine.utils.config.properties.Property;
 import io.lumine.utils.config.properties.types.EnumProp;

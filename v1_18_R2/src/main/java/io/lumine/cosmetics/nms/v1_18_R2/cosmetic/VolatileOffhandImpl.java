@@ -6,15 +6,17 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
-import io.lumine.cosmetics.logging.MCLogger;
 import io.lumine.cosmetics.managers.offhand.Offhand;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
 import io.lumine.cosmetics.players.Profile;
 import lombok.Getter;
-import net.minecraft.network.protocol.game.*;
-import net.minecraft.network.protocol.status.ClientboundStatusResponsePacket;
+import net.minecraft.network.protocol.game.ClientboundAddPlayerPacket;
+import net.minecraft.network.protocol.game.ClientboundEntityEventPacket;
+import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 
@@ -53,6 +55,16 @@ public class VolatileOffhandImpl implements VolatileEquipmentHelper {
 
         nmsHandler.broadcastAround(player, equipmentPacket);
 
+    }
+
+    @Override
+    public void unapply(CosmeticProfile profile) {
+        final var nmsPlayer = ((CraftPlayer) profile.getPlayer()).getHandle();
+        final var item = nmsPlayer.getItemBySlot(EquipmentSlot.OFFHAND);
+        if(item == ItemStack.EMPTY)
+            return;
+        ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(nmsPlayer.getId(), List.of(Pair.of(EquipmentSlot.OFFHAND, item)));
+        nmsHandler.broadcastAround(nmsPlayer.getBukkitEntity(), equipmentPacket);
     }
 
     @Override

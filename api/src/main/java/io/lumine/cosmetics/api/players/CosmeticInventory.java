@@ -14,4 +14,6 @@ public interface CosmeticInventory {
     Optional<Cosmetic> getEquipped(Class<? extends Cosmetic> tClass);
     
     void equip(Cosmetic cosmetic);
+
+    void unequip(Class<? extends Cosmetic> tClass);
 }

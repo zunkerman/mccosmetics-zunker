@@ -15,7 +15,7 @@ public class ParticleAccessory extends AbstractCosmetic {
 
 	@Override
 	public String getPropertyNode() {
-		return "Particle." + key;
+		return key;
 	}
 
 	@Override

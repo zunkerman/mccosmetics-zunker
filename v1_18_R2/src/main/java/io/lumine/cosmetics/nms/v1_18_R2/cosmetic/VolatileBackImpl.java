@@ -78,6 +78,16 @@ public class VolatileBackImpl implements VolatileEquipmentHelper {
 	}
 
 	@Override
+	public void unapply(CosmeticProfile profile) {
+		Player player = profile.getPlayer();
+		ArmorStand stand = activeProfile.remove(player);
+		if(stand == null)
+			return;
+		ClientboundRemoveEntitiesPacket removePacket = new ClientboundRemoveEntitiesPacket(stand.getId());
+		nmsHandler.broadcastAround(player, removePacket);
+	}
+
+	@Override
 	public void read(Player sender, Object packet) {
 		if(packet instanceof ServerboundMovePlayerPacket) {
 			final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(sender);

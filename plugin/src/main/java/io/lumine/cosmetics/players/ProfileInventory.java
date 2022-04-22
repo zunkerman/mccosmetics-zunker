@@ -6,8 +6,10 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.players.CosmeticInventory;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
+import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.cosmetics.managers.back.BackAccessory;
 import io.lumine.cosmetics.managers.hats.Hat;
+import io.lumine.cosmetics.managers.sprays.Spray;
 import io.lumine.utils.serialize.Optl;
 import lombok.Getter;
 
@@ -21,8 +23,8 @@ public class ProfileInventory implements CosmeticInventory {
     @Getter private transient CosmeticProfile profile;
 
     private transient final Map<Class<? extends Cosmetic>, Cosmetic> equipped = Maps.newConcurrentMap();
-    @Getter private Map<String,List<String>> unlockedCosmetics = Maps.newConcurrentMap();
-    @Getter private Map<String,String> equippedCosmetics = Maps.newConcurrentMap();
+    @Getter private final Map<String,List<String>> unlockedCosmetics = Maps.newConcurrentMap();
+    @Getter private final Map<String,String> equippedCosmetics = Maps.newConcurrentMap();
     
     @Override
     public void initialize(CosmeticProfile profile) {
@@ -48,6 +50,14 @@ public class ProfileInventory implements CosmeticInventory {
         equippedCosmetics.put(cosmetic.getType(), cosmetic.getKey());
         equipped.put(cosmetic.getClass(), cosmetic);
         cosmetic.getManager().equip(profile);
+    }
+
+    @Override
+    public void unequip(Class<? extends Cosmetic> tClass) {
+        equippedCosmetics.remove(CosmeticType.type(tClass));
+        final var pCos = equipped.remove(tClass);
+        if(pCos != null)
+            pCos.getManager().unequip(profile);
     }
 
     public boolean isEquipped(Cosmetic cosmetic) {

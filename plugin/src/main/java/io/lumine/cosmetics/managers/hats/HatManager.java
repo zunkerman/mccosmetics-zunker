@@ -60,4 +60,9 @@ public class HatManager extends MCCosmeticsManager<Hat> {
     public void equip(CosmeticProfile profile) {
         ((VolatileEquipmentHelper) getPlugin().getVolatileCodeHandler().getCosmeticHelper(Hat.class)).apply(profile);
     }
+
+    @Override
+    public void unequip(CosmeticProfile profile) {
+        ((VolatileEquipmentHelper) getPlugin().getVolatileCodeHandler().getCosmeticHelper(Hat.class)).unapply(profile);
+    }
 }

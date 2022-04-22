@@ -21,4 +21,9 @@ public class ParticleManager extends MCCosmeticsManager<ParticleAccessory> {
 	public void equip(CosmeticProfile profile) {
 		// TODO: 15/3/2022 Impl particle accessory
 	}
+
+	@Override
+	public void unequip(CosmeticProfile profile) {
+
+	}
 }
