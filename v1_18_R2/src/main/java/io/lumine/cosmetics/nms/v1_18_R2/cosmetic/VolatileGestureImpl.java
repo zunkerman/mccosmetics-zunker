@@ -1,5 +1,6 @@
 package io.lumine.cosmetics.nms.v1_18_R2.cosmetic;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.util.Pair;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
@@ -25,10 +26,7 @@ import org.bukkit.craftbukkit.v1_18_R2.attribute.CraftAttributeMap;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class VolatileGestureImpl implements VolatileEquipmentHelper {
 
@@ -43,6 +41,7 @@ public class VolatileGestureImpl implements VolatileEquipmentHelper {
 	private final MCCosmeticsPlugin plugin;
 	private final VolatileCodeEnabled_v1_18_R2 nmsHandler;
 	private final Set<Player> activeProfile = Sets.newConcurrentHashSet();
+	private final Map<Integer, Player> playerTracker = Maps.newConcurrentMap();
 
 	private Horse horse;
 
@@ -63,6 +62,7 @@ public class VolatileGestureImpl implements VolatileEquipmentHelper {
 		if (cosmetic.isEmpty() || !(cosmetic.get() instanceof Gesture gesture))
 			return;
 
+		playerTracker.put(player.getEntityId(), player);
 		getHorsed(player);
 		player.setInvisible(true);
 		for(final var value : profile.getCosmeticInventory().getEquipped().values()) {
@@ -71,6 +71,8 @@ public class VolatileGestureImpl implements VolatileEquipmentHelper {
 				continue;
 			hide.hide(profile, gesture);
 		}
+		ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), empty);
+		nmsHandler.broadcastAroundAndSelf(player, equipmentPacket);
 	}
 
 	@Override
@@ -82,6 +84,7 @@ public class VolatileGestureImpl implements VolatileEquipmentHelper {
 			return;
 
 		activeProfile.remove(player);
+		playerTracker.remove(player.getEntityId());
 		nmsHandler.broadcast(player, new ClientboundRemoveEntitiesPacket(horse.getId()));
 
 		player.setInvisible(false);
@@ -91,6 +94,13 @@ public class VolatileGestureImpl implements VolatileEquipmentHelper {
 				continue;
 			hide.show(profile);
 		}
+
+		final var nmsPlayer = ((CraftPlayer) player).getHandle();
+		List<Pair<EquipmentSlot, ItemStack>> equipment = new ArrayList<>();
+		for(EquipmentSlot slot : EquipmentSlot.values())
+			equipment.add(Pair.of(slot, nmsPlayer.getItemBySlot(slot)));
+		ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), equipment);
+		nmsHandler.broadcastAroundAndSelf(player, equipmentPacket);
 	}
 
 	private ClientboundSetPassengersPacket createPassengerPacket(int mount, int... driver) {
@@ -122,13 +132,13 @@ public class VolatileGestureImpl implements VolatileEquipmentHelper {
 	}
 
 	@Override
-	public void read(Player sender, Object packet) {
+	public boolean read(Player sender, Object packet, boolean isCanceled) {
 		final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(sender);
 		if(profile == null)
-			return;
+			return true;
 		final var opt = profile.getCosmeticInventory().getEquipped(Gesture.class);
 		if(opt.isEmpty() || !(opt.get() instanceof Gesture gesture))
-			return;
+			return true;
 
 		if(packet instanceof ServerboundPlayerInputPacket inputPacket) {
 			final var manager = (GestureManager) gesture.getManager();
@@ -136,6 +146,27 @@ public class VolatileGestureImpl implements VolatileEquipmentHelper {
 				manager.quit(sender, QuitMethod.SNEAK);
 			if(inputPacket.isJumping())
 				manager.quit(sender, QuitMethod.JUMP);
+		}else if(packet instanceof ServerboundSetCarriedItemPacket setSlotPacket) {
+			int oSlot = sender.getInventory().getHeldItemSlot();
+			if(oSlot != setSlotPacket.getSlot()) {
+				nmsHandler.broadcast(sender, new ClientboundSetCarriedItemPacket(oSlot));
+				return false;
+			}
 		}
+		return true;
+	}
+
+	@Override
+	public List<Object> write(Player receiver, Object packet) {
+		if(packet instanceof ClientboundSetEquipmentPacket equipmentPacket) {
+			int id = equipmentPacket.getEntity();
+			final var spawnedPlayer = playerTracker.get(id);
+			if(spawnedPlayer == null)
+				return null;
+			final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(spawnedPlayer);
+			if(profile != null)
+				return List.of(new ClientboundSetEquipmentPacket(id, empty));
+		}
+		return null;
 	}
 }

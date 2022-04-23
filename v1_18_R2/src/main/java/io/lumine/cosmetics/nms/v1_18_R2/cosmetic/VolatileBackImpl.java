@@ -6,6 +6,7 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
+import io.lumine.cosmetics.logging.MCLogger;
 import io.lumine.cosmetics.managers.back.BackAccessory;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
@@ -18,6 +19,7 @@ import net.minecraft.network.protocol.game.*;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
@@ -50,12 +52,14 @@ public class VolatileBackImpl implements VolatileEquipmentHelper {
 		if (cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic back))
 			return;
 
+		var nmsPlayer = ((CraftPlayer) player).getHandle();
 		var nmsBack = CraftItemStack.asNMSCopy(back.getCosmetic());
 
 		ArmorStand stand = activeProfile.get(player);
 		if(stand == null) {
 			playerTracker.put(player.getEntityId(), player);
 			stand = new ArmorStand(EntityType.ARMOR_STAND, ((CraftWorld) player.getWorld()).getHandle());
+			stand.moveTo(nmsPlayer.getX(), nmsPlayer.getY() + nmsPlayer.getPassengersRidingOffset() + stand.getMyRidingOffset(), nmsPlayer.getZ(), nmsPlayer.getYRot(), 0);
 			stand.setMarker(true);
 			stand.setInvisible(true);
 			stand.setSilent(true);
@@ -82,25 +86,28 @@ public class VolatileBackImpl implements VolatileEquipmentHelper {
 		ArmorStand stand = activeProfile.remove(player);
 		if(stand == null)
 			return;
+		playerTracker.remove(player.getEntityId());
 		ClientboundRemoveEntitiesPacket removePacket = new ClientboundRemoveEntitiesPacket(stand.getId());
 		nmsHandler.broadcastAroundAndSelf(player, removePacket);
 	}
 
 	@Override
-	public void read(Player sender, Object packet) {
+	public boolean read(Player sender, Object packet, boolean isCanceled) {
 		final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(sender);
-
+		if(profile == null || profile.isHidden(BackAccessory.class))
+			return true;
 		if(packet instanceof ServerboundMovePlayerPacket) {
 			handleRotate(profile);
 		}else if(packet instanceof ServerboundAcceptTeleportationPacket) {
 			final var list = handleSpawn(profile);
 			if(list == null)
-				return;
+				return true;
 			final var connection = ((CraftPlayer) sender).getHandle().connection;
 			for(Object obj : list) {
 				connection.send((Packet<?>) obj);
 			}
 		}
+		return true;
 	}
 
 	@Override
@@ -110,6 +117,8 @@ public class VolatileBackImpl implements VolatileEquipmentHelper {
 			if(playerTracker.containsKey(id)) {
 				final var spawnedPlayer = playerTracker.get(id);
 				final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(spawnedPlayer);
+				if(profile == null || profile.isHidden(BackAccessory.class))
+					return null;
 				return handleSpawn(profile);
 			}
 		}else if(packet instanceof ClientboundRemoveEntitiesPacket removePacket) {
@@ -119,6 +128,28 @@ public class VolatileBackImpl implements VolatileEquipmentHelper {
 				}
 			}
 		}
+		/*
+		else if(packet instanceof ClientboundMoveEntityPacket moveEntityPacket) {
+			FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
+			moveEntityPacket.write(byteBuf);
+			int id = byteBuf.readVarInt();
+			if(playerTracker.containsKey(id)) {
+				final var spawnedPlayer = playerTracker.get(id);
+				final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(spawnedPlayer);
+				if(profile == null || profile.isHidden(BackAccessory.class))
+					return null;
+				return handleMove(profile, moveEntityPacket);
+			}
+		}else if(packet instanceof ClientboundTeleportEntityPacket teleportEntityPacket) {
+			int id = teleportEntityPacket.getId();
+			if(playerTracker.containsKey(id)) {
+				final var spawnedPlayer = playerTracker.get(id);
+				final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(spawnedPlayer);
+				if(profile == null || profile.isHidden(BackAccessory.class))
+					return null;
+				return handleTeleport(profile);
+			}
+		}*/
 
 		return null;
 	}
@@ -156,6 +187,52 @@ public class VolatileBackImpl implements VolatileEquipmentHelper {
 			return null;
 		ClientboundRemoveEntitiesPacket removePacket = new ClientboundRemoveEntitiesPacket(stand.getId());
 		return List.of(removePacket);
+	}
+
+	private List<Object> handleMove(Profile profile, ClientboundMoveEntityPacket moveEntityPacket) {
+		if(!hasBack(profile))
+			return null;
+
+		final var wearer = profile.getPlayer();
+		final var stand = activeProfile.get(wearer);
+
+		ClientboundMoveEntityPacket move;
+		if(moveEntityPacket.hasPosition() && moveEntityPacket.hasRotation()) {
+			move = new ClientboundMoveEntityPacket.PosRot(
+					stand.getId(),
+					moveEntityPacket.getXa(),
+					moveEntityPacket.getYa(),
+					moveEntityPacket.getZa(),
+					moveEntityPacket.getyRot(),
+					moveEntityPacket.getxRot(),
+					false);
+		}else if(moveEntityPacket.hasPosition()) {
+			move = new ClientboundMoveEntityPacket.Pos(
+					stand.getId(),
+					moveEntityPacket.getXa(),
+					moveEntityPacket.getYa(),
+					moveEntityPacket.getZa(),
+					false);
+		}else {
+			move = new ClientboundMoveEntityPacket.Rot(
+					stand.getId(),
+					moveEntityPacket.getyRot(),
+					moveEntityPacket.getxRot(),
+					false);
+		}
+		return List.of(move);
+	}
+
+	private List<Object> handleTeleport(Profile profile) {
+		if(!hasBack(profile))
+			return null;
+
+		final var wearer = profile.getPlayer();
+		final var nmsPlayer = ((CraftPlayer) wearer).getHandle();
+		final var stand = activeProfile.get(wearer);
+		stand.moveTo(nmsPlayer.getX(), nmsPlayer.getY() + nmsPlayer.getPassengersRidingOffset() + stand.getMyRidingOffset(), nmsPlayer.getZ(), nmsPlayer.getYRot(), 0);
+
+		return List.of(new ClientboundTeleportEntityPacket(stand));
 	}
 
 	private boolean hasBack(Profile profile) {

@@ -2,6 +2,7 @@ package io.lumine.cosmetics.players;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.players.CosmeticInventory;
@@ -13,16 +14,14 @@ import io.lumine.cosmetics.managers.sprays.Spray;
 import io.lumine.utils.serialize.Optl;
 import lombok.Getter;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class ProfileInventory implements CosmeticInventory {
 
     @Getter private transient CosmeticProfile profile;
 
     @Getter private transient final Map<Class<? extends Cosmetic>, Cosmetic> equipped = Maps.newConcurrentMap();
+    @Getter private transient final Set<Class<? extends Cosmetic>> hidden = Sets.newConcurrentHashSet();
     @Getter private final Map<String,List<String>> unlockedCosmetics = Maps.newConcurrentMap();
     @Getter private final Map<String,String> equippedCosmetics = Maps.newConcurrentMap();
     

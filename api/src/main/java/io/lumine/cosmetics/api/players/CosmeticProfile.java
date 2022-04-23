@@ -20,7 +20,11 @@ public interface CosmeticProfile {
     public void equip(Cosmetic cosmetic);
 
     public void unequip(Cosmetic cosmetic);
+
+    void setHidden(Class<? extends Cosmetic> cosmetic, boolean flag);
     
     public boolean isEquipped(Cosmetic cosmetic);
+
+    boolean isHidden(Class<? extends Cosmetic> cosmetic);
     
 }

@@ -30,37 +30,30 @@ public class OffhandManager extends MCCosmeticsManager<Offhand> implements Hidea
 
         Events.subscribe(InventoryCloseEvent.class)
                 .handler(event -> {
-                    final Player player = (Player) event.getPlayer();
-                    getProfiles().awaitProfile(player).thenAcceptAsync(maybeProfile -> {
-                        if(maybeProfile.isEmpty())
-                            return;
-                        final Profile profile = maybeProfile.get();
-                        equip(profile);
-                    });
+                    handleEquip((Player) event.getPlayer());
                 }).bindWith(this);
 
         Events.subscribe(PlayerRespawnEvent.class)
                 .handler(event -> {
-                    final Player player = event.getPlayer();
-                    getProfiles().awaitProfile(player).thenAcceptAsync(maybeProfile -> {
-                        if(maybeProfile.isEmpty())
-                            return;
-                        final Profile profile = maybeProfile.get();
-                        equip(profile);
-                    });
+                    handleEquip(event.getPlayer());
                 }).bindWith(this);
 
         Events.subscribe(PlayerSwapHandItemsEvent.class)
                 .handler(event -> {
-                    final Player player = event.getPlayer();
-                    getProfiles().awaitProfile(player).thenAcceptAsync(maybeProfile -> {
-                        if(maybeProfile.isEmpty())
-                            return;
-                        final Profile profile = maybeProfile.get();
-                        equip(profile);
-                    });
+                    handleEquip(event.getPlayer());
                 }).bindWith(this);
 
+    }
+
+    private void handleEquip(Player player) {
+        getProfiles().awaitProfile(player).thenAcceptAsync(maybeProfile -> {
+            if(maybeProfile.isEmpty())
+                return;
+            final Profile profile = maybeProfile.get();
+            if(profile.isHidden(Offhand.class))
+                return;
+            equip(profile);
+        });
     }
 
     @Override
@@ -82,11 +75,13 @@ public class OffhandManager extends MCCosmeticsManager<Offhand> implements Hidea
     public void hide(CosmeticProfile profile, Cosmetic request) {
         if(!(request instanceof Gesture))
             return;
+        profile.setHidden(getCosmeticClass(), true);
         getHelper().unapply(profile);
     }
 
     @Override
     public void show(CosmeticProfile profile) {
+        profile.setHidden(getCosmeticClass(), false);
         getHelper().apply(profile);
     }
 
