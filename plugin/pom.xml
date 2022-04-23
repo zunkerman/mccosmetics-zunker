@@ -197,8 +197,8 @@
         </dependency>
         <dependency>
             <groupId>com.ticxo.playeranimator</groupId>
-            <artifactId>plugin</artifactId>
-            <version>plugin</version>
+            <artifactId>PlayerAnimator</artifactId>
+            <version>R1.0.0</version>
         </dependency>
 
         <!-- Spigot API -->
