@@ -252,7 +252,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency> 
-            <groupId>LibsDisguises</groupId>
+            <groupId>LibsDisguises</groupId> 
             <artifactId>LibsDisguises</artifactId>
             <version>10.0.24</version>
             <scope>provided</scope>
