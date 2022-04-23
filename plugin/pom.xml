@@ -21,6 +21,11 @@
                 <filtering>false</filtering>
                 <directory>${basedir}/src/main/resources/</directory>
             </resource>
+            <resource> 
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources-filtered/</directory>
+            </resource>
         </resources>
         <plugins>
             <plugin>

@@ -20,7 +20,7 @@ public class ReloadCommand extends Command<MCCosmeticsPlugin> {
         getPlugin().reloadConfiguration();
 
         getPlugin().getMenuManager().reload();
-        
+            
         getPlugin().getCosmetics().reloadAllManagers();
         
         getPlugin().getProfiles().reloadAllCosmetics();
