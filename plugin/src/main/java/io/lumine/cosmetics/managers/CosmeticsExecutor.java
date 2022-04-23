@@ -30,6 +30,10 @@ public class CosmeticsExecutor extends ReloadableModule<MCCosmeticsPlugin> {
         cosmeticManagers.clear();
     }
     
+    public void reloadAllManagers() {
+        cosmeticManagers.values().forEach(manager -> manager.reload());
+    }
+    
     public Optional<MCCosmeticsManager> getManager(String type) {
         return Optional.ofNullable(cosmeticManagers.getOrDefault(type, null));
     }

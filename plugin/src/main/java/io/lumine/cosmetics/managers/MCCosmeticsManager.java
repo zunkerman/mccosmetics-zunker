@@ -32,7 +32,7 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
     protected final Map<String, T> cosmetics = Maps.newConcurrentMap();
     @Getter protected final Class<T> cosmeticClass;
     
-    @Getter protected SelectionMenu menu;
+    @Getter protected SelectionMenu menu = null;
 
     public MCCosmeticsManager(MCCosmeticsPlugin plugin, Class<T> tClass) {
         super(plugin, false); 
@@ -57,9 +57,10 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
         }
 
         if(menu == null) {
-            var menuFile = new File(plugin.getDataFolder(), "menus/selection_" + type);
+            var menuFile = new File(plugin.getDataFolder(), "menus/selection_" + type + ".yml");
             
             if(menuFile.exists()) {
+                Log.info("Found custom selection menu for {0}", type);
                 menu = new SelectionMenu(plugin, plugin.getMenuManager(), type);
                 menu.reload();
             }

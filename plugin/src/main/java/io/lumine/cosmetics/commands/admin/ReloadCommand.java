@@ -21,6 +21,8 @@ public class ReloadCommand extends Command<MCCosmeticsPlugin> {
 
         getPlugin().getMenuManager().reload();
         
+        //getPlugin().getCosmetics().reloadAllManagers();
+        
         getPlugin().getProfiles().reloadAllCosmetics();
 
         CommandHelper.sendSuccess(sender, "MCCosmetics has been reloaded.");
