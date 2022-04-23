@@ -103,17 +103,12 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
     }
 
     public void reloadCosmetics() {
-        Log.info("Reloading cosmetics on {0}", player.getName());
         for(var entry : equippedCosmetics.entrySet()) {
             final var type = entry.getKey();    
             final var data = entry.getValue();
             
-            Log.info("Type {0} == {1}", type, data.getId());
-            
             MCCosmeticsPlugin.inst().getCosmetics().getManager(type).ifPresent(manager -> {
-                Log.info("found manager");
                 manager.getCosmetic(data.getId()).ifPresent(cosmetic -> {
-                    Log.info("found cosmetic");
                     equip((Cosmetic) cosmetic);
                 });
             });
