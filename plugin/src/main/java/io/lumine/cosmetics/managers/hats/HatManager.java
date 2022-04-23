@@ -4,6 +4,7 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.manager.HideableCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
+import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.cosmetics.managers.gestures.Gesture;
 import io.lumine.cosmetics.managers.offhand.Offhand;
@@ -13,6 +14,7 @@ import io.lumine.utils.Events;
 import io.lumine.utils.events.extra.ArmorEquipEvent; 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.File;
 

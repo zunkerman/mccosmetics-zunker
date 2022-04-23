@@ -61,7 +61,7 @@ public class SprayCommand extends Command<MCCosmeticsPlugin> {
 
     @Override
     public String getPermissionNode() {
-        return null;
+        return Permissions.COMMAND_SPRAY;
     }
 
     @Override

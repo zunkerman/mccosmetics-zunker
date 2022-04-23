@@ -42,7 +42,7 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
     private static final DoubleProp SPRAY_SOUND_VOL = Property.Double(Scope.CONFIG, "Configuration.Sprays.Volume", 1D);
     private static final DoubleProp SPRAY_SOUND_PI = Property.Double(Scope.CONFIG, "Configuration.Sprays.Pitch", 2D);
 
-    private static final IntProp SPRAY_PERSIST = Property.Int(Scope.CONFIG, "Configuration.Sprays.PersistTime", 120);
+    private static final IntProp SPRAY_PERSIST = Property.Int(Scope.CONFIG, "Configuration.Sprays.PersistTime", 60);
     
     private final static CooldownMap<UUID> keytapTimer = CooldownMap.create(Cooldown.of(500, TimeUnit.MILLISECONDS));
     
