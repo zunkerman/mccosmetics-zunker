@@ -10,7 +10,7 @@
     <organization>
         <name>Lumine LLC</name>
         <url>https://www.lumine.io</url>
-    </organization>
+    </organization> 
   
 	<properties> 
 	    <mccosmetics.version>0.1.0-SNAPSHOT</mccosmetics.version>
