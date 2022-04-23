@@ -2,6 +2,7 @@ package io.lumine.cosmetics.managers.sprays;
 
 import io.lumine.utils.Events;
 import io.lumine.utils.Schedulers;
+import io.lumine.utils.config.properties.types.IntProp;
 import io.lumine.utils.cooldown.Cooldown;
 import io.lumine.utils.cooldown.CooldownMap;
 import com.google.common.collect.Lists;
@@ -40,6 +41,8 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
     private static final StringProp SPRAY_SOUND = Property.String(Scope.CONFIG, "Configuration.Sprays.Sound", "entity.cat.hiss");
     private static final DoubleProp SPRAY_SOUND_VOL = Property.Double(Scope.CONFIG, "Configuration.Sprays.Volume", 1D);
     private static final DoubleProp SPRAY_SOUND_PI = Property.Double(Scope.CONFIG, "Configuration.Sprays.Pitch", 2D);
+
+    private static final IntProp SPRAY_PERSIST = Property.Int(Scope.CONFIG, "Configuration.Sprays.PersistTime", 120);
     
     private final static CooldownMap<UUID> keytapTimer = CooldownMap.create(Cooldown.of(500, TimeUnit.MILLISECONDS));
     
@@ -168,7 +171,7 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
         final var sound = SPRAY_SOUND.get();
         final double volume = SPRAY_SOUND_VOL.get();
         final double pitch = SPRAY_SOUND_PI.get();
-        
+
         location.getWorld().getPlayers().forEach(p -> p.playSound(location, sound, (float) volume, (float) pitch));
          
         Schedulers.sync().runLater(() -> {
@@ -177,6 +180,10 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
         Schedulers.sync().runLater(() -> {
             location.getWorld().getPlayers().forEach(p -> p.playSound(location, sound, (float) volume, (float) pitch));
         }, 4);
+
+        Schedulers.sync().runLater(() -> {
+            removeSpray(player);
+        }, SPRAY_PERSIST.get());
     }
     
     public void removeSpray(Player player) {
