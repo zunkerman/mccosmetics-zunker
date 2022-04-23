@@ -22,6 +22,7 @@ import io.lumine.cosmetics.nms.VolatileCodeHandler;
 import io.lumine.cosmetics.players.ProfileManager;
 import io.lumine.utils.chat.ColorString;
 import io.lumine.utils.logging.ConsoleColor;
+import io.lumine.utils.logging.Log;
 import io.lumine.utils.plugin.LuminePlugin;
 import io.lumine.utils.version.ServerVersion;
 import lombok.Getter;
@@ -101,7 +102,11 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         backManager = new BackManager(this);
         sprayManager = new SprayManager(this);
         offhandManager = new OffhandManager(this);
-        megManager = new MEGManager(this);
+        if(Bukkit.getPluginManager().getPlugin("ModelEngine") != null) {
+            megManager = new MEGManager(this);
+        } else {
+            Log.info("ModelEngine not found; disabling ModelEngine and MEG Accesstory Cosmetic features.");
+        }
         gestureManager = new GestureManager(this);
         
         profiles = new ProfileManager(this);

@@ -24,6 +24,7 @@ public class CompatibilityManager extends ReloadableModule<MCCosmeticsPlugin> {
         if(Bukkit.getPluginManager().getPlugin("MCPets") != null) {
             mcpets = Optional.of(new MCPetsCompat(plugin));
         }
+
     }
   
     @Override
