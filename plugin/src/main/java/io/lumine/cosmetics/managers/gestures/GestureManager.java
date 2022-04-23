@@ -86,6 +86,8 @@ public class GestureManager extends MCCosmeticsManager<Gesture> {
 
 	private void loadGestures() {
 
+		PlayerAnimator.api.getAnimationManager().clearRegistry();
+
 		final String type = CosmeticType.folder(cosmeticClass);
 		for(var packFolder : plugin.getConfiguration().getPackFolders()) {
 			final File confFolder = new File(packFolder.getAbsolutePath() + System.getProperty("file.separator") + type);

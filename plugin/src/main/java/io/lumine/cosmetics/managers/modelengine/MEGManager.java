@@ -76,10 +76,10 @@ public class MEGManager extends MCCosmeticsManager<MEGAccessory> {
 			modeledEntity.getAllActiveModel().clear();
 		}
 
-		modeledEntity = ModelEngineAPI.api.getModelManager().createModeledEntity(new FakeEntity(player, meg.getOffset(), meg.getAnchor()));
+		modeledEntity = new MEGModel(player, new FakeEntity(player, meg.getOffset(), meg.getAnchor()));
 		modeledEntity.addActiveModel(activeModel);
 		modeledEntity.setInvisible(false);
-		modeledEntity.detectPlayers();
+		modeledEntity.addPlayerAsync(player);
 	}
 
 	public void unequip(CosmeticProfile profile) {
