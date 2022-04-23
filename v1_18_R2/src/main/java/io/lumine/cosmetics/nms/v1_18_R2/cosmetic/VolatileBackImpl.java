@@ -47,13 +47,20 @@ public class VolatileBackImpl implements VolatileEquipmentHelper {
 		if (profile == null)
 			return;
 		Player player = profile.getPlayer();
-		Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(BackAccessory.class);
-
-		if (cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic back))
+		
+		var maybeEquipped = profile.getEquipped(BackAccessory.class);
+		if(maybeEquipped.isEmpty()) {
+		    return;
+		}
+		var equipped = maybeEquipped.get();
+		var cosmetic = equipped.getCosmetic();
+		
+		if (!(cosmetic instanceof ItemCosmetic back)) {
 			return;
+		}
 
 		var nmsPlayer = ((CraftPlayer) player).getHandle();
-		var nmsBack = CraftItemStack.asNMSCopy(back.getCosmetic());
+		var nmsBack = CraftItemStack.asNMSCopy(back.getCosmetic(equipped.getVariant()));
 
 		ArmorStand stand = activeProfile.get(player);
 		if(stand == null) {
@@ -239,8 +246,8 @@ public class VolatileBackImpl implements VolatileEquipmentHelper {
 		if(profile == null)
 			return false;
 
-		Optional<Cosmetic> maybeBack = profile.getCosmeticInventory().getEquipped(BackAccessory.class);
-		return maybeBack.isPresent() && maybeBack.get() instanceof ItemCosmetic && activeProfile.containsKey(profile.getPlayer());
+		var maybeBack = profile.getEquipped(BackAccessory.class);
+		return maybeBack.isPresent() && maybeBack.get().getCosmetic() instanceof ItemCosmetic && activeProfile.containsKey(profile.getPlayer());
 	}
 
 	private ClientboundSetPassengersPacket createPassengerPacket(int mount, int... driver) {

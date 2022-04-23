@@ -11,7 +11,7 @@ public class bStats {
         	Metrics metrics = new Metrics(plugin);
 
             final String devBuilds = plugin.getDescription().getVersion().contains("SNAPSHOT") ? "Yes" : "No";
-            final String preBuilds = MCCosmeticsPlugin.p() ? "Yes" : "No";
+            final String preBuilds = MCCosmeticsPlugin.isPremium() ? "Yes" : "No";
 
             metrics.addCustomChart(new Metrics.SimplePie("premium", () -> preBuilds));
             metrics.addCustomChart(new Metrics.SimplePie("devbuilds", () -> devBuilds));

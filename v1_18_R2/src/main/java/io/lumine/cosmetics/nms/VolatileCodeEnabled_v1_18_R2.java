@@ -17,6 +17,7 @@ import io.netty.channel.ChannelPipeline;
 import lombok.Getter;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.entity.PersistentEntitySectionManager;
@@ -141,9 +142,9 @@ public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
     }
 
     @Override
-    public void removeFakeEntity(int arg0) {
-        // TODO Auto-generated method stub
-        
+    public void removeFakeEntity(int id) {
+        ClientboundRemoveEntitiesPacket packet = new ClientboundRemoveEntitiesPacket(id);
+        broadcast(packet);
     }
 
     @Override

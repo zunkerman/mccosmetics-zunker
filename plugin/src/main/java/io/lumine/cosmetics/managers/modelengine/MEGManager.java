@@ -43,9 +43,15 @@ public class MEGManager extends MCCosmeticsManager<MEGAccessory> {
 
 	@Override
 	public void equip(CosmeticProfile profile) {
-		final var opt = profile.getCosmeticInventory().getEquipped(MEGAccessory.class);
-		if(opt.isEmpty() || !(opt.get() instanceof MEGAccessory meg))
+		final var maybeEquipped = profile.getEquipped(MEGAccessory.class);
+		if(maybeEquipped.isEmpty()) {
+		    return;
+		}
+		var opt = maybeEquipped.get().getCosmetic();
+		
+		if(!(opt instanceof MEGAccessory meg)) {
 			return;
+		}
 
 		final var blueprint = ModelEngineAPI.getModelBlueprint(meg.getModelId());
 		if(blueprint == null)
@@ -77,9 +83,15 @@ public class MEGManager extends MCCosmeticsManager<MEGAccessory> {
 	}
 
 	public void unequip(CosmeticProfile profile) {
-		final var opt = profile.getCosmeticInventory().getEquipped(MEGAccessory.class);
-		if(opt.isEmpty() || !(opt.get() instanceof MEGAccessory))
-			return;
+        final var maybeEquipped = profile.getEquipped(MEGAccessory.class);
+        if(maybeEquipped.isEmpty()) {
+            return;
+        }
+        var opt = maybeEquipped.get().getCosmetic();
+        
+        if(!(opt instanceof MEGAccessory meg)) {
+            return;
+        }
 
 		final var player = profile.getPlayer();
 		ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(player.getUniqueId());

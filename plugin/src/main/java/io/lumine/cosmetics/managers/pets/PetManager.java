@@ -19,13 +19,13 @@ public class PetManager extends MCCosmeticsManager<Pet> {
 
 	@Override
 	public void equip(CosmeticProfile profile) {
-		var maybePet = profile.getCosmeticInventory().getEquipped(Pet.class);
+		var maybePet = profile.getEquipped(Pet.class);
 		
 		if(maybePet.isEmpty()) {
 		    return;
 		}
 		
-		var pet = (Pet) maybePet.get();
+		var pet = (Pet) maybePet.get().getCosmetic();
 		
 		if(pet.getSpawner().isValid()) {
 		    pet.getSpawner().equip(profile.getPlayer());

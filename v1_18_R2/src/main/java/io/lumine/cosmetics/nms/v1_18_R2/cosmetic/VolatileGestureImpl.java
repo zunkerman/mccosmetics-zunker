@@ -12,6 +12,7 @@ import io.lumine.cosmetics.managers.gestures.GestureManager;
 import io.lumine.cosmetics.managers.gestures.QuitMethod;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
+import io.lumine.cosmetics.players.Profile;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
@@ -58,15 +59,21 @@ public class VolatileGestureImpl implements VolatileEquipmentHelper {
 		if(activeProfile.contains(player))
 			return;
 
-		Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(Gesture.class);
-		if (cosmetic.isEmpty() || !(cosmetic.get() instanceof Gesture gesture))
-			return;
+        final var maybeEquipped = profile.getEquipped(Gesture.class);
+        if(maybeEquipped.isEmpty()) {
+            return;
+        }
+        var opt = maybeEquipped.get().getCosmetic();
+        
+        if(!(opt instanceof Gesture gesture))
+            return;
 
 		playerTracker.put(player.getEntityId(), player);
 		getHorsed(player);
 		player.setInvisible(true);
-		for(final var value : profile.getCosmeticInventory().getEquipped().values()) {
-			final var manager = value.getManager();
+
+		for(final var value : ((Profile) profile).getEquipped().values()) {
+			final var manager = value.getCosmetic().getManager();
 			if(!(manager instanceof HideableCosmetic hide))
 				continue;
 			hide.hide(profile, gesture);
@@ -88,8 +95,8 @@ public class VolatileGestureImpl implements VolatileEquipmentHelper {
 		nmsHandler.broadcast(player, new ClientboundRemoveEntitiesPacket(horse.getId()));
 
 		player.setInvisible(false);
-		for(final var value : profile.getCosmeticInventory().getEquipped().values()) {
-			final var manager = value.getManager();
+		for(final var value : ((Profile) profile).getEquipped().values()) {
+			final var manager = value.getCosmetic().getManager();
 			if(!(manager instanceof HideableCosmetic hide))
 				continue;
 			hide.show(profile);
@@ -136,8 +143,13 @@ public class VolatileGestureImpl implements VolatileEquipmentHelper {
 		final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(sender);
 		if(profile == null)
 			return true;
-		final var opt = profile.getCosmeticInventory().getEquipped(Gesture.class);
-		if(opt.isEmpty() || !(opt.get() instanceof Gesture gesture))
+		final var maybeEquipped = profile.getEquipped(Gesture.class);
+		if(maybeEquipped.isEmpty()) {
+		    return true;
+		}
+		var opt = maybeEquipped.get().getCosmetic();
+		
+		if(!(opt instanceof Gesture gesture))
 			return true;
 
 		if(packet instanceof ServerboundPlayerInputPacket inputPacket) {

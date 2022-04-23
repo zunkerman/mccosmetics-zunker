@@ -37,9 +37,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class SprayManager extends MCCosmeticsManager<Spray> {
 
-    private static final StringProp SPRAY_SOUND = Property.String(Scope.CONFIG, "", "entity.cat.hiss");
-    private static final DoubleProp SPRAY_SOUND_VOL = Property.Double(Scope.CONFIG, "", 1D);
-    private static final DoubleProp SPRAY_SOUND_PI = Property.Double(Scope.CONFIG, "", 2D);
+    private static final StringProp SPRAY_SOUND = Property.String(Scope.CONFIG, "Configuration.Sprays.Sound", "entity.cat.hiss");
+    private static final DoubleProp SPRAY_SOUND_VOL = Property.Double(Scope.CONFIG, "Configuration.Sprays.Volume", 1D);
+    private static final DoubleProp SPRAY_SOUND_PI = Property.Double(Scope.CONFIG, "Configuration.Sprays.Pitch", 2D);
     
     private final static CooldownMap<UUID> keytapTimer = CooldownMap.create(Cooldown.of(500, TimeUnit.MILLISECONDS));
     
@@ -122,10 +122,10 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
     
     public boolean useSpray(Player player) {
         var profile = getPlugin().getProfiles().getProfile(player);
-        var maybeSpray = profile.getCosmeticInventory().getEquipped(Spray.class);
+        var maybeSpray = profile.getEquipped(Spray.class);
         
         if(maybeSpray.isPresent()) {
-            return useSpray(player, (Spray) maybeSpray.get());
+            return useSpray(player, (Spray) maybeSpray.get().getCosmetic());
         } else {
             return false;
         }
@@ -182,6 +182,7 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
     public void removeSpray(Player player) {
         if(activeByPlayer.containsKey(player.getUniqueId())) {
             int oid = activeByPlayer.get(player.getUniqueId());
+            Log.info("Removing Spray");
             getPlugin().getVolatileCodeHandler().removeFakeEntity(oid);
         }
     }

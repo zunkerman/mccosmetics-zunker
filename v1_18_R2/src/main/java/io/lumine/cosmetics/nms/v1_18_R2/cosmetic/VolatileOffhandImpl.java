@@ -44,12 +44,18 @@ public class VolatileOffhandImpl implements VolatileEquipmentHelper {
             return;
 
         Player player = profile.getPlayer();
-        Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(Offhand.class);
-
-        if (cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic offhand))
+       
+        final var maybeEquipped = profile.getEquipped(Offhand.class);
+        if(maybeEquipped.isEmpty()) {
+            return;
+        }
+        var equip = maybeEquipped.get();
+        var opt = equip.getCosmetic();
+        
+        if(!(opt instanceof ItemCosmetic offhand))
             return;
 
-        var nmsOffhand = CraftItemStack.asNMSCopy(offhand.getCosmetic());
+        var nmsOffhand = CraftItemStack.asNMSCopy(offhand.getCosmetic(equip.getVariant()));
 
         playerTracker.put(player.getEntityId(), player);
 
@@ -92,12 +98,18 @@ public class VolatileOffhandImpl implements VolatileEquipmentHelper {
     }
 
     public List<Object> handleSpawn(Profile profile) {
-        Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(Offhand.class);
-        if(cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic offhand))
+        final var maybeEquipped = profile.getEquipped(Offhand.class);
+        if(maybeEquipped.isEmpty()) {
+            return null;
+        }
+        var equip = maybeEquipped.get();
+        var opt = equip.getCosmetic();
+        
+        if(!(opt instanceof ItemCosmetic offhand))
             return null;
 
         final var player = profile.getPlayer();
-        final var nmsOffhand = CraftItemStack.asNMSCopy(offhand.getCosmetic());
+        final var nmsOffhand = CraftItemStack.asNMSCopy(offhand.getCosmetic(equip.getVariant()));
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.OFFHAND, nmsOffhand)));
 
         return List.of(equipmentPacket);

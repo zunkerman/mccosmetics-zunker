@@ -80,13 +80,17 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         } else {
             MCLogger.log("The server is running Spigot; disabled PaperSpigot exclusive functionality");
         }
+        
+        configuration = new Configuration(this);
+        
+        getConfiguration().load(this);
+        MCLogger.log("MCCosmetics configuration file loaded successfully.");
 
         PlayerAnimatorImpl.initialize(this);
 
         /*
          * Plugin Components
          */
-        this.bind(configuration = new Configuration(this));
 
         volatileCodeHandler = getVolatileCodeHandler();
         compatibility = new CompatibilityManager(this);
@@ -104,9 +108,6 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         
         menuManager = new MenuManager(this);
         
-        getConfiguration().load(this);
-        MCLogger.log("MCCosmetics configuration file loaded successfully.");
-
         /*
          * Events
          */
@@ -126,7 +127,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
             new bStats(this);
         }
 
-        MCLogger.log("" + ConsoleColor.GREEN + ConsoleColor.CHECK_MARK + " MCCosmetics" + (p() ? " Premium" : "") + " v" + getVersion() +  " (build "+ getBuildNumber() +") has been successfully loaded!" + ConsoleColor.RESET);
+        MCLogger.log("" + ConsoleColor.GREEN + ConsoleColor.CHECK_MARK + " MCCosmetics" + (isPremium() ? " Premium" : "") + " v" + getVersion() +  " (build "+ getBuildNumber() +") has been successfully loaded!" + ConsoleColor.RESET);
     }
 
     @Override
@@ -138,12 +139,10 @@ public class MCCosmeticsPlugin extends LuminePlugin {
     public void disable() {
         MCLogger.log("Disabling MCCosmetics...");
 
-        //configuration.save();
-
-        MCLogger.log("All active settings have been saved.");
-         
         configuration.unload();
         compatibility.terminate(); 
+        
+        MCLogger.log("All active settings have been saved.");
     }
     
     /**
@@ -156,13 +155,26 @@ public class MCCosmeticsPlugin extends LuminePlugin {
     /** 
      * @exclude
      */
-    private static boolean p = false;
+    private static Object p = amIPremium();
 
     /**
      * @exclude 
      */
-    public static final boolean p() {
-        return p;
+    public static final boolean isPremium() {
+        return p != null;
+    }
+    
+    /**
+     * @exclude 
+     */
+    private static Object amIPremium() {
+        try {
+            return Class.forName("io.lumine.cosmetics.CarsonJF");
+        } catch (final ClassNotFoundException e) {
+            return null;
+        } catch (final Exception e) {
+            throw new RuntimeException("An error occurred while enabling CarsonJF", e);
+        }
     }
 
     /**

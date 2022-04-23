@@ -24,8 +24,7 @@ public class SprayCommand extends Command<MCCosmeticsPlugin> {
 
         var player = (Player) sender;
         var profile = getPlugin().getProfiles().getProfile(player);
-        var inv = profile.getCosmeticInventory();
-        
+
         if(args.length > 0) {
             var sprayName = args[1];
             var maybeSpray = getPlugin().getSprayManager().getCosmetic(sprayName);
@@ -36,19 +35,19 @@ public class SprayCommand extends Command<MCCosmeticsPlugin> {
             
             var spray = maybeSpray.get();
             
-            if(inv.hasUnlocked(spray)) {
+            if(profile.has(spray)) {
                 getPlugin().getSprayManager().useSpray(player, spray);
             }
         } else {
-            var maybeSpray = inv.getEquipped(Spray.class);
+            var maybeSpray = profile.getEquipped(Spray.class);
             
             if(maybeSpray.isEmpty()) {
                 return true;
             }
             
-            var spray = (Spray) maybeSpray.get();
+            var spray = (Spray) maybeSpray.get().getCosmetic();
             
-            if(inv.hasUnlocked(spray)) {
+            if(profile.has(spray)) {
                 getPlugin().getSprayManager().useSpray(player, spray);
             }
         }

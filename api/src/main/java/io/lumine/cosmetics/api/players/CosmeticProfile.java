@@ -1,8 +1,12 @@
 package io.lumine.cosmetics.api.players;
 
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
+import io.lumine.cosmetics.api.cosmetics.CosmeticVariant;
+import io.lumine.cosmetics.api.cosmetics.EquippedCosmetic;
+
 import org.bukkit.entity.Player;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface CosmeticProfile {
@@ -13,18 +17,22 @@ public interface CosmeticProfile {
     
     public Player getPlayer();
     
-    public CosmeticInventory getCosmeticInventory();
-    
     public boolean has(Cosmetic cosmetic);
     
     public void equip(Cosmetic cosmetic);
 
+    public void equip(CosmeticVariant cosmetic);
+
     public void unequip(Cosmetic cosmetic);
 
-    void setHidden(Class<? extends Cosmetic> cosmetic, boolean flag);
+    public void unequip(Class<? extends Cosmetic> tClass);
     
+    public Optional<EquippedCosmetic> getEquipped(Class<? extends Cosmetic> clazz);   
+
     public boolean isEquipped(Cosmetic cosmetic);
 
+    void setHidden(Class<? extends Cosmetic> cosmetic, boolean flag);
+
     boolean isHidden(Class<? extends Cosmetic> cosmetic);
-    
+
 }

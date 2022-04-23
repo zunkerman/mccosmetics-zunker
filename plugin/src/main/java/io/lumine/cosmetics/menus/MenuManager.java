@@ -15,6 +15,7 @@ public class MenuManager extends ReloadableModule<MCCosmeticsPlugin> {
 
     @Override
     public void load(MCCosmeticsPlugin plugin) {
+
         if(customizeMenu == null) {
             customizeMenu = new CustomizeMenu(plugin,this);
             selectionMenu = new GenericSelectionMenu(plugin,this);

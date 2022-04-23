@@ -22,13 +22,15 @@ public class CustomizeMenu extends CosmeticMenu<Profile> {
 
         for(var entry : getPlugin().getCosmetics().getCosmeticManagers().entrySet()) {
             final var manager = entry.getValue();
-            final var type = CosmeticType.type(manager.getCosmeticClass());
+            final var type = CosmeticType.folder(manager.getCosmeticClass());
 
             builder.getIcon("BUTTON_" + type.toUpperCase()).ifPresent(icon -> {
                 Log.info("Found cosmetic menu button for {0}", type);
                 icon.getBuilder().click((profile,player) -> {
                     // TODO: sorting
                     List<Cosmetic> cosmetics = Lists.newArrayList(manager.getAllCosmetics());
+                    
+                    Log.info("click");
                     
                     if(manager.getMenu() == null) {
                         getMenuManager().getSelectionMenu().open(player, profile, cosmetics);

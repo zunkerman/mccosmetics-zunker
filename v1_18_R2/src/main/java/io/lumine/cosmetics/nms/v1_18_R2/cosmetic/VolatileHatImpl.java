@@ -6,6 +6,7 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
+import io.lumine.cosmetics.managers.gestures.Gesture;
 import io.lumine.cosmetics.managers.hats.Hat;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
@@ -40,12 +41,17 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
             return;
 
         Player player = profile.getPlayer();
-        Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(Hat.class);
 
-        if (cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic hat))
+        final var maybeEquipped = profile.getEquipped(Hat.class);
+        if(maybeEquipped.isEmpty()) {
+            return;
+        }
+        var opt = maybeEquipped.get().getCosmetic();
+        
+        if(!(opt instanceof Hat hat))
             return;
 
-        var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic());
+        var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic(maybeEquipped.get().getVariant()));
 
         playerTracker.put(player.getEntityId(), player);
 
@@ -106,12 +112,18 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
     }
 
     public List<Object> handleSpawn(Profile profile) {
-        Optional<Cosmetic> cosmetic = profile.getCosmeticInventory().getEquipped(Hat.class);
-        if(cosmetic.isEmpty() || !(cosmetic.get() instanceof ItemCosmetic hat))
+        final var maybeEquipped = profile.getEquipped(Hat.class);
+        if(maybeEquipped.isEmpty()) {
+            return null;
+        }
+        var equip = maybeEquipped.get();
+        var opt = equip.getCosmetic();
+        
+        if(!(opt instanceof ItemCosmetic hat))
             return null;
 
         final var player = profile.getPlayer();
-        final var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic());
+        final var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic(equip.getVariant()));
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsHat)));
 
         return List.of(equipmentPacket);

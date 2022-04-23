@@ -3,6 +3,7 @@ package io.lumine.cosmetics.players;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.events.CosmeticPlayerLoadedEvent;
 import io.lumine.utils.Events;
+import io.lumine.utils.logging.Log;
 import io.lumine.utils.storage.players.PlayerRepository;
 import io.lumine.utils.storage.players.adapters.file.JsonPlayerStorageAdapter;
 import org.bukkit.entity.Player;

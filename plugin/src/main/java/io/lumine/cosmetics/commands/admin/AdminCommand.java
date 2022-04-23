@@ -16,7 +16,8 @@ public class AdminCommand extends Command<MCCosmeticsPlugin> {
         
         addSubCommands(
                 new ReloadCommand(this),
-                new SprayCommand(this));
+                new SprayCommand(this),
+                new VersionCommand(this));
     }
 
     @Override
