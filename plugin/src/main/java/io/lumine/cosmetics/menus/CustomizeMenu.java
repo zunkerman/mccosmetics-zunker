@@ -33,7 +33,7 @@ public class CustomizeMenu extends CosmeticMenu<Profile> {
                     Log.info("click");
                     
                     if(manager.getMenu() == null) {
-                        getMenuManager().getSelectionMenu().open(player, profile, cosmetics);
+                        getMenuManager().getSelectionMenu().open(player, new SelectionMenuContext(profile,manager), cosmetics);
                     } else {
                         manager.getMenu().open(player, profile, cosmetics);
                     }

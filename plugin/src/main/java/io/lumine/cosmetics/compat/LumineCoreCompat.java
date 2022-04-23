@@ -79,7 +79,6 @@ public class LumineCoreCompat {
             return Promise.completed(true);
         }
 
-        @Override
         public boolean saveSync(UUID key, Profile profile) {
             File file = getFile(key.toString());
 

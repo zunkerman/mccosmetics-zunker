@@ -61,7 +61,7 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
             
             if(menuFile.exists()) {
                 Log.info("Found custom selection menu for {0}", type);
-                menu = new SelectionMenu(plugin, plugin.getMenuManager(), type);
+                menu = new SelectionMenu(plugin, plugin.getMenuManager(), this, type);
                 menu.reload();
             }
         } else {
