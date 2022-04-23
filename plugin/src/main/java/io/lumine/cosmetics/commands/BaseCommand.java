@@ -21,7 +21,7 @@ public class BaseCommand extends Command<MCCosmeticsPlugin> {
         final var profile = getPlugin().getProfiles().getProfile(player);
         
         if(profile == null) {
-            throw new IllegalStateException("aaaaaaa");
+            throw new IllegalStateException("This should never happen, please report to the developers.");
         }
         
         getPlugin().getMenuManager().getCustomizeMenu().open(player,profile);
