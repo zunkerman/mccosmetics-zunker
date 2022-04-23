@@ -1,12 +1,11 @@
 Menu:
-  Display: "Customize Hats"
-  Size: 45
+  Display: "&f\ue835"
+  Size: 36
   Schema:
-  - '$ $ $ $ $ $ $ $ $'
-  - '$ $ $ $ $ $ $ $ $'
-  - '$ $ $ $ $ $ $ $ $'
-  - '$ $ $ $ $ $ $ $ $'
-  - 'P N 1 1 X 1 1 1 B'
+  - 'Q Q Q Q Q Q Q Q Q'
+  - 'Q $ $ $ $ $ $ $ Q'
+  - 'Q Q Q Q Q Q Q Q Q'
+  - 'Q B Q Q X Q P N Q'
   Icons:
     FANCY_BORDER:
       Mapping: 1
@@ -15,20 +14,21 @@ Menu:
       Model: 1
     BUTTON_BACK:
       Mapping: B
-      Material: GOLD_INGOT
-      Model: 4
+      Material: PAPER
+      Model: 1807
       Display: '&7Back to Main Menu &8>>'
     NEXT_PAGE:
       Mapping: N
-      Material: GOLD_INGOT
-      Model: 2
+      Material: PAPER
+      Model: 1803
       Display: '&7Next Page &8>>'
     PREVIOUS_PAGE:
       Mapping: P
-      Material: GOLD_INGOT
-      Model: 3
+      Material: PAPER
+      Model: 1802
       Display: '&7<< Previous Page'
-    REMOVE_HAT:
+    BUTTON_REMOVE:
       Mapping: X
-      Material: BARRIER
-      Display: '&4REMOVE HAT'
+      Material: PAPER
+      Model: 1809
+      Display: '&4REMOVE BACKPACK'

@@ -107,7 +107,7 @@ public class Configuration extends ReloadableModule<MCCosmeticsPlugin> implement
             }
         }
         
-        if(getPlugin().isPremium() && !demoFolder.exists()) {
+        if(!demoFolder.exists()) {
             Log.info("Generating Start Pack files...");
 
             if(demoFolder.mkdir()) {
