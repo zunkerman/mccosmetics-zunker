@@ -9,6 +9,7 @@ import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.commands.CommandHelper;
 import io.lumine.cosmetics.config.Scope;
 import io.lumine.cosmetics.constants.Permissions;
+import io.lumine.cosmetics.menus.CosmeticMenu;
 import io.lumine.utils.config.properties.Property;
 import io.lumine.utils.config.properties.types.*;
 import io.lumine.utils.items.ItemFactory;
@@ -101,13 +102,14 @@ public abstract class AbstractCosmetic extends Cosmetic {
 					}
 					return desc;
 				})
-				.click((prof,p) -> {
+				.click((prof,player) -> {
 					if(prof.getPlayer().isOp() || prof.has(this)) {
+					    CosmeticMenu.playMenuClick(player);
 						prof.equip(this);
-						CommandHelper.sendSuccess(p, "Set your " + type + " to " + getDisplay());
-						p.closeInventory();
+						CommandHelper.sendSuccess(player, "Set your " + type + " to " + getDisplay());
+						player.closeInventory();
 					} else {
-						CommandHelper.sendError(p, "You haven't unlocked that cosmetic!");
+						CommandHelper.sendError(player, "You haven't unlocked that cosmetic!");
 					}
 				}).build();
 	}

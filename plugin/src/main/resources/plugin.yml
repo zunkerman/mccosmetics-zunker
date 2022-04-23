@@ -3,9 +3,9 @@ author: Lumine & MCModels
 main: io.lumine.cosmetics.MCCosmeticsPlugin
 version: ${project.version}-${build.number}
 api-version: 1.13
-depend:
-- ModelEngine
+depend: []
 softdepend:
+- ModelEngine
 - MythicMobs
 - Vault
 - LibsDisguises

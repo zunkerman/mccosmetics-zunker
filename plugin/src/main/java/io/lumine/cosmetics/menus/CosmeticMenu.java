@@ -39,16 +39,20 @@ public abstract class CosmeticMenu<T> extends ReloadableMenu<T> {
     public EditableMenuBuilder<Profile> addPageButtons(EditableMenuBuilder<Profile> builder) {
         builder.getIcon("NEXT_PAGE").ifPresent(icon -> {
             icon.getBuilder().click((profile,player) -> {
-                //MainMenu.playMenuClick(player);
+                playMenuClick(player);
                 nextPage(player);
             });
         });
         builder.getIcon("PREVIOUS_PAGE").ifPresent(icon -> {
             icon.getBuilder().click((profile,player) -> {
-                //MainMenu.playMenuClick(player);
+                playMenuClick(player);
                 previousPage(player);
             });
         });
         return builder;
+    }
+    
+    public static void playMenuClick(Player player) {
+        player.playSound(player.getLocation(), "entity.chicken.egg", 1F, 1F);
     }
 }

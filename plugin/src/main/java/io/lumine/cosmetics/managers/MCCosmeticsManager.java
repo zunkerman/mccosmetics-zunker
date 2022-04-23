@@ -37,6 +37,8 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
     public MCCosmeticsManager(MCCosmeticsPlugin plugin, Class<T> tClass) {
         super(plugin, false); 
         this.cosmeticClass = tClass;
+        
+        plugin.getCosmetics().registerCosmeticManager(CosmeticType.type(cosmeticClass), this);
     }
 
     @Override
@@ -68,7 +70,6 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
             menu.reload();
         }
 
-        plugin.getCosmetics().registerCosmeticManager(CosmeticType.type(cosmeticClass), this);
         Log.info("Loaded " + cosmetics.size() + " " + type + ".");
     }
 
