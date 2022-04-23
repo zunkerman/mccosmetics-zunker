@@ -139,6 +139,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
     public void disable() {
         MCLogger.log("Disabling MCCosmetics...");
 
+        profiles.unload();
         configuration.unload();
         compatibility.terminate(); 
         

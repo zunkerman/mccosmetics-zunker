@@ -26,7 +26,7 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
 
     @Getter private transient final Map<Class<? extends Cosmetic>, EquippedCosmetic> equipped = Maps.newConcurrentMap();
     @Getter private transient final Set<Class<? extends Cosmetic>> hidden = Sets.newConcurrentHashSet();
-    @Getter private final Map<String,ProfileCosmeticData> equippedCosmetics = Maps.newConcurrentMap();
+    @Getter private Map<String,ProfileCosmeticData> equippedCosmetics = Maps.newConcurrentMap();
         
     @Getter private transient Player player;
     
