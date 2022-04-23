@@ -22,7 +22,7 @@ public class ProfileManager extends PlayerRepository<MCCosmeticsPlugin,Profile> 
             default:
                 this.initialize(new JsonPlayerStorageAdapter<>(plugin,Profile.class));
                 break;
-        }
+        } 
     }
 
     @Override
