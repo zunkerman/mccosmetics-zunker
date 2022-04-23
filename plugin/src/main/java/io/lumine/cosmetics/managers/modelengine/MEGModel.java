@@ -149,21 +149,13 @@ public class MEGModel extends AbstractModeledEntity {
 		if(id.length <= ix)
 			return 0;
 		String v = id[ix].toLowerCase();
-		switch (v) {
-			case "walk_speed":
-			case "speed":
-				return getWalkSpeedSquared();
-			case "walk_speed_real":
-			case "speed_real":
-				return getWalkSpeed();
-			case "health":
-			case "hp":
-				return getHealth();
-			case "max_health":
-			case "max_hp":
-				return getMaxHealth();
-		}
-		return 0;
+		return switch (v) {
+			case "walk_speed", "speed" -> getWalkSpeedSquared();
+			case "walk_speed_real", "speed_real" -> getWalkSpeed();
+			case "health", "hp" -> getHealth();
+			case "max_health", "max_hp" -> getMaxHealth();
+			default -> 0;
+		};
 	}
 
 	private double getWalkSpeedSquared() {
