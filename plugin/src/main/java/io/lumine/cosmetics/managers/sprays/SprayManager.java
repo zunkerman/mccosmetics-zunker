@@ -183,7 +183,7 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
 
         Schedulers.sync().runLater(() -> {
             removeSpray(player);
-        }, SPRAY_PERSIST.get());
+        }, SPRAY_PERSIST.get() * 20);
     }
     
     public void removeSpray(Player player) {
