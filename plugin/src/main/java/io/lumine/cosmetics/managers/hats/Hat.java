@@ -23,6 +23,7 @@ public class Hat extends AbstractCosmetic implements ItemCosmetic {
 		return this.key;
 	}
 
+
     @Override
     public Icon<CosmeticProfile> getIcon() {
         return buildIcon("hat");
