@@ -71,7 +71,9 @@ public class VolatileGestureImpl implements VolatileEquipmentHelper {
             return;
 
 		playerTracker.put(player.getEntityId(), player);
-		getHorsed(player);
+		activeProfile.add(player);
+		if(!gesture.isCanMove())
+			getHorsed(player);
 		player.setInvisible(true);
 
 		for(final var value : ((Profile) profile).getEquipped().values()) {
@@ -96,6 +98,13 @@ public class VolatileGestureImpl implements VolatileEquipmentHelper {
 		playerTracker.remove(player.getEntityId());
 		nmsHandler.broadcast(player, new ClientboundRemoveEntitiesPacket(horse.getId()));
 
+		final var nmsPlayer = ((CraftPlayer) player).getHandle();
+		List<Pair<EquipmentSlot, ItemStack>> equipment = new ArrayList<>();
+		for(EquipmentSlot slot : EquipmentSlot.values())
+			equipment.add(Pair.of(slot, nmsPlayer.getItemBySlot(slot)));
+		ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), equipment);
+		nmsHandler.broadcastAroundAndSelf(player, equipmentPacket);
+
 		player.setInvisible(false);
 		for(final var value : ((Profile) profile).getEquipped().values()) {
 			final var manager = value.getCosmetic().getManager();
@@ -103,13 +112,6 @@ public class VolatileGestureImpl implements VolatileEquipmentHelper {
 				continue;
 			hide.show(profile);
 		}
-
-		final var nmsPlayer = ((CraftPlayer) player).getHandle();
-		List<Pair<EquipmentSlot, ItemStack>> equipment = new ArrayList<>();
-		for(EquipmentSlot slot : EquipmentSlot.values())
-			equipment.add(Pair.of(slot, nmsPlayer.getItemBySlot(slot)));
-		ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), equipment);
-		nmsHandler.broadcastAroundAndSelf(player, equipmentPacket);
 	}
 
 	private ClientboundSetPassengersPacket createPassengerPacket(int mount, int... driver) {
@@ -129,8 +131,6 @@ public class VolatileGestureImpl implements VolatileEquipmentHelper {
 			horse.getAttribute(CraftAttributeMap.toMinecraft(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(0);
 		}
 		horse.setPos(nmsPlayer.getX(), nmsPlayer.getY() - horse.getPassengersRidingOffset() - nmsPlayer.getMyRidingOffset(), nmsPlayer.getZ());
-
-		activeProfile.add(player);
 
 		ClientboundAddMobPacket mobPacket = new ClientboundAddMobPacket(horse);
 		ClientboundSetEntityDataPacket dataPacket = new ClientboundSetEntityDataPacket(horse.getId(), horse.getEntityData(), true);
