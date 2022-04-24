@@ -3,6 +3,9 @@ package io.lumine.cosmetics.commands.admin;
 import java.util.Collections;
 import java.util.List;
 
+import io.lumine.cosmetics.config.Scope;
+import io.lumine.utils.config.properties.Property;
+import io.lumine.utils.text.Text;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -26,7 +29,10 @@ public class SprayCommand extends Command<MCCosmeticsPlugin> {
         var maybeSpray = getPlugin().getSprayManager().getCosmetic(sprayName);
 
         if(maybeSpray.isEmpty()) {
-            CommandHelper.sendSuccess(sender, "Spray not found.");
+            CommandHelper.sendSuccess(sender,
+                    Property.String(Scope.CONFIG,
+                            "Configuration.Language.Spray-Not-Found",
+                            "<bold><red>Spray not found!</red></bold>").get());
             return true;
         }
         

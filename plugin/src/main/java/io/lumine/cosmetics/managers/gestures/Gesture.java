@@ -73,7 +73,7 @@ public class Gesture extends AbstractCosmetic {
 						CommandHelper.sendSuccess(p, "Now playing gesture: " + getDisplay());
 						p.closeInventory();
 					} else {
-						CommandHelper.sendError(p, "You haven't unlocked that hat yet!");
+						CommandHelper.sendError(p, "You haven't unlocked that gesture yet!");
 					}
 				}).build();
 	}

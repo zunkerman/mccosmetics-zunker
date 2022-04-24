@@ -2,8 +2,10 @@ package io.lumine.cosmetics.commands.admin;
 
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.commands.CommandHelper;
+import io.lumine.cosmetics.config.Scope;
 import io.lumine.cosmetics.constants.Permissions;
 import io.lumine.utils.commands.Command;
+import io.lumine.utils.config.properties.Property;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collections;
@@ -25,7 +27,8 @@ public class ReloadCommand extends Command<MCCosmeticsPlugin> {
         
         getPlugin().getProfiles().reloadAllCosmetics();
 
-        CommandHelper.sendSuccess(sender, "MCCosmetics has been reloaded.");
+        CommandHelper.sendSuccess(sender, Property.String(Scope.CONFIG,
+                "Configuration.Language.Reloaded","MCCosmetics has been reloaded.").get());
         return true;
     }
 

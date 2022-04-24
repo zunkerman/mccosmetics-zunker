@@ -109,7 +109,8 @@ public abstract class AbstractCosmetic extends Cosmetic {
 						CommandHelper.sendSuccess(player, "Set your " + type + " to " + getDisplay());
 						player.closeInventory();
 					} else {
-						CommandHelper.sendError(player, "You haven't unlocked that cosmetic!");
+						CommandHelper.sendError(player, Property.String(Scope.CONFIG,
+								"Configuration.Language.Cosmetic-Not-Unlocked","You haven't unlocked that cosmetic!").get());
 					}
 				}).build();
 	}

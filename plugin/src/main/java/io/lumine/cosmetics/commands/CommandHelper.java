@@ -60,13 +60,4 @@ public class CommandHelper {
         player.sendMessage(" ");
         sendCommandFooter(player);
     }
-    
-    public static void sendPlayerSuccess(CommandSender sender, String message) {
-        sender.sendMessage(Text.colorizeLegacy("<white>[<#dc0c1f><bold>MCCosmetics<white></bold>] <green>" + message));
-    }
-
-    public static void sendPlayerError(CommandSender sender, String message) {
-        sender.sendMessage(Text.colorizeLegacy("<white>[<#dc0c1f><bold>MCCosmetics<white></bold>] <#ea6d78>" + message));
-    }
-
 }
