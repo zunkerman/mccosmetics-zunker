@@ -11,7 +11,6 @@ import io.lumine.cosmetics.managers.sprays.Spray;
 import io.lumine.cosmetics.nms.cosmetic.VolatileCosmeticHelper;
 import io.lumine.cosmetics.nms.v1_18_R2.cosmetic.*;
 import io.lumine.cosmetics.nms.v1_18_R2.network.VolatileChannelHandler;
-import io.lumine.utils.reflection.Reflector;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import lombok.Getter;
@@ -20,7 +19,6 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.entity.PersistentEntitySectionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
@@ -37,8 +35,6 @@ public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
 
     @Getter private final MCCosmeticsPlugin plugin;
     private final Map<Class<? extends Cosmetic>, VolatileCosmeticHelper> cosmeticHelpers = Maps.newConcurrentMap();
-
-    private Reflector<ServerLevel> refServerLevel = new Reflector<>(ServerLevel.class, "O");
     
     public VolatileCodeEnabled_v1_18_R2(MCCosmeticsPlugin plugin) {
         this.plugin = plugin;
@@ -133,11 +129,10 @@ public class VolatileCodeEnabled_v1_18_R2 implements VolatileCodeHandler {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public Entity getEntity(World world, int id) {
         ServerLevel level = ((CraftWorld) world).getHandle();
-        PersistentEntitySectionManager<net.minecraft.world.entity.Entity> entityManager = (PersistentEntitySectionManager<net.minecraft.world.entity.Entity>) refServerLevel.get(level, "O");
-        net.minecraft.world.entity.Entity entity = entityManager.getEntityGetter().get(id);
+        final var entityManager = level.entityManager;
+        final var entity = entityManager.getEntityGetter().get(id);
         return entity == null ? null : entity.getBukkitEntity();
     }
 
