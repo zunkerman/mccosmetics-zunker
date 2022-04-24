@@ -95,8 +95,9 @@ public class Configuration extends ReloadableModule<MCCosmeticsPlugin> implement
                         }
                     }
                     jarFile.close();
-                } catch(IOException exception) {
+                } catch(IOException ex) {
                     Log.error("Could not load default menu configuration.");
+                    ex.printStackTrace();
                 }
             } else Log.error("Could not create directory!");
         }
@@ -108,7 +109,7 @@ public class Configuration extends ReloadableModule<MCCosmeticsPlugin> implement
         }
         
         if(!demoFolder.exists()) {
-            Log.info("Generating Start Pack files...");
+            Log.info("Generating Starter Pack files...");
 
             if(demoFolder.mkdir()) {
                 try {
@@ -120,8 +121,9 @@ public class Configuration extends ReloadableModule<MCCosmeticsPlugin> implement
                         }
                     }
                     jarFile.close();
-                } catch(IOException exception) {
+                } catch(IOException ex) {
                     Log.error("Could not load starter pack files.");
+                    ex.printStackTrace();
                 }
             } else Log.error("Could not create directory!");
         }
