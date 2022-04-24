@@ -13,7 +13,7 @@
     </organization>  
   
 	<properties> 
-	    <mccosmetics.version>0.2.0</mccosmetics.version>
+	    <mccosmetics.version>0.3.0-SNAPSHOT</mccosmetics.version>
 	    <paperapi.version>1.18.2-R0.1-SNAPSHOT</paperapi.version>
 	    <lumineutils.version>1.18-SNAPSHOT</lumineutils.version>
 	    <lombok.version>1.18.22</lombok.version>
