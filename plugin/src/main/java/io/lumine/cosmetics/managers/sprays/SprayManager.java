@@ -189,7 +189,6 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
     public void removeSpray(Player player) {
         if(activeByPlayer.containsKey(player.getUniqueId())) {
             int oid = activeByPlayer.get(player.getUniqueId());
-            Log.info("Removing Spray");
             getPlugin().getVolatileCodeHandler().removeFakeEntity(oid);
         }
     }
