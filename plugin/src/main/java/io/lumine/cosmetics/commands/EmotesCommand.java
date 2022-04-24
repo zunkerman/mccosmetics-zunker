@@ -22,14 +22,16 @@ public class EmotesCommand extends Command<MCCosmeticsPlugin> {
     @Override
     public boolean onCommand(CommandSender commandSender, String[] strings) {
 
-        if(strings.length < 1)
+        if(strings.length == 0){
             return false;
+        }
 
         Optional<Profile> profile = plugin.getProfiles().getProfile(((Player)commandSender).getName());
 
         var cosmetic = getPlugin().getGestureManager().getCosmetic(strings[0]);
 
         profile.ifPresent(value -> cosmetic.ifPresent(gesture -> gesture.equip(value)));
+        /**TODO: Make it silently tell you if you only typed /emote instead of erroring **/
         return true;
     }
 
