@@ -106,7 +106,7 @@ public class Configuration extends ReloadableModule<MCCosmeticsPlugin> implement
             if(!packFolder.mkdir()) {
                 Log.error("Could not create packs directory!");
             }
-        }
+        } 
         
         if(!demoFolder.exists()) {
             Log.info("Generating Starter Pack files...");
