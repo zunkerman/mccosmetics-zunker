@@ -1,9 +1,11 @@
 package io.lumine.cosmetics.menus;
 
 import io.lumine.cosmetics.MCCosmeticsPlugin;
+import io.lumine.cosmetics.config.Scope;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.cosmetics.players.Profile;
 import io.lumine.utils.Schedulers;
+import io.lumine.utils.config.properties.Property;
 import io.lumine.utils.config.properties.types.MenuProp;
 import io.lumine.utils.menu.EditableMenuBuilder;
 
@@ -33,7 +35,9 @@ public class SelectionMenu extends CosmeticMenu<Profile> {
                 playMenuClick(player);
                 cosmeticManager.unequip(profile);
                 profile.unequip(cosmeticManager.getCosmeticClass());
-                player.closeInventory();
+                if(Property.Boolean(Scope.CONFIG, "Configuration.Menus.Close-On-Unequip", false).get()) {
+                    player.closeInventory();
+                }
                 
                 Schedulers.sync().runLater(() -> {
                     cosmeticManager.unequip(profile);

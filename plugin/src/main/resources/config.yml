@@ -6,6 +6,8 @@ Configuration:
     Volume: 1.0
     Pitch: 2.0
     PersistTime: 60
+  Menus:
+    Close-On-Unequip: false
   Language:
     Command-Header: "<yellow><strikethrough>------------<gold>=====</strikethrough> <bold><gradient:#dc0c1f:#ed858f>MCCosmetics</gradient></bold> <strikethrough><gold>=====<yellow>------------</strikethrough>"
     Command-Footer: "<yellow><strikethrough>--------------------------------------</strikethrough>"
