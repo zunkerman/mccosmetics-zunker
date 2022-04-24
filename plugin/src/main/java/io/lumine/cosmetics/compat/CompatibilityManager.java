@@ -36,6 +36,7 @@ public class CompatibilityManager extends ReloadableModule<MCCosmeticsPlugin> {
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             Log.info("PlaceholderAPI found; enabling PlaceholderAPI support.");
             papi = Optional.of(new PlaceholderAPICompat(plugin));
+            papi.get().register();
         }
 
     }
