@@ -12,7 +12,6 @@ import io.lumine.cosmetics.players.Profile;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddPlayerPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
 import net.minecraft.network.protocol.game.ServerboundAcceptTeleportationPacket;
