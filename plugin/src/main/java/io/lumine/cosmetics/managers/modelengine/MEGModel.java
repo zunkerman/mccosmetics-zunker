@@ -44,6 +44,11 @@ public class MEGModel extends AbstractModeledEntity {
 	}
 
 	@Override
+	public void setWalking(boolean walking) {
+		moveEventFired = walking;
+	}
+
+	@Override
 	public boolean tick() {
 		if(!isInit)
 			return true;
