@@ -13,6 +13,7 @@ public class CompatibilityManager extends ReloadableModule<MCCosmeticsPlugin> {
     @Getter private Optional<LumineCoreCompat> lumineCore = Optional.empty();
     @Getter private Optional<MCPetsCompat> mcpets = Optional.empty();
     @Getter private Optional<MythicMobsCompat> mythicMobs = Optional.empty();
+    @Getter private Optional<PlaceholderAPICompat> papi = Optional.empty();
     
     public CompatibilityManager(MCCosmeticsPlugin plugin)  {
         super(plugin);
@@ -31,6 +32,10 @@ public class CompatibilityManager extends ReloadableModule<MCCosmeticsPlugin> {
         if(Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
             Log.info("MythicMobs found; enabling MythicMobs support.");
             mythicMobs = Optional.of(new MythicMobsCompat(plugin));
+        }
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            Log.info("PlaceholderAPI found; enabling PlaceholderAPI support.");
+            papi = Optional.of(new PlaceholderAPICompat(plugin));
         }
 
     }
