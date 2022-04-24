@@ -18,6 +18,22 @@ public class PlaceholderAPICompat extends PlaceholderExpansion {
     public String onPlaceholderRequest(Player player, String identifier) {
         Profile profile = plugin.getProfiles().getProfile(player);
 
+        if(identifier.startsWith("is_equipped_")){
+            String cosmeticType = identifier.split("_")[2].toUpperCase();
+            return profile.getEquippedCosmetics().containsKey(cosmeticType) ? "true" : "false";
+        }
+
+        if(identifier.startsWith("current_")){
+            String cosmeticType = identifier.split("_")[1].toUpperCase();
+
+            if(!profile.getEquippedCosmetics().containsKey(cosmeticType)){
+                return "NONE";
+            } else{
+                return profile.getEquippedCosmetics().get(cosmeticType).getId();
+            }
+
+        }
+
         switch (identifier) {
             case "is_gesturing":
                 return profile.getEquippedCosmetics().containsKey("GESTURE") ? "true" : "false";
