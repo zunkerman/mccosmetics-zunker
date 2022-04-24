@@ -22,6 +22,9 @@ public class EmotesCommand extends Command<MCCosmeticsPlugin> {
     @Override
     public boolean onCommand(CommandSender commandSender, String[] strings) {
 
+        if(strings.length < 1)
+            return false;
+
         Optional<Profile> profile = plugin.getProfiles().getProfile(((Player)commandSender).getName());
 
         var cosmetic = getPlugin().getGestureManager().getCosmetic(strings[0]);
