@@ -17,6 +17,7 @@ import io.lumine.utils.menu.Icon;
 import io.lumine.utils.menu.IconBuilder;
 import io.lumine.utils.text.Text;
 import lombok.Getter;
+import org.apache.commons.codec.language.bm.Lang;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -29,8 +30,8 @@ public abstract class AbstractCosmetic extends Cosmetic {
 
 	protected static final EnumProp<Material> MATERIAL = Property.Enum(Scope.NONE, Material.class, "Material", Material.EMERALD);
 	protected static final IntProp MODEL = Property.Int(Scope.NONE, "Model");
-	protected static final StringProp DISPLAY = Property.String(Scope.NONE, "Display");
-	protected static final StringListProp DESCRIPTION = Property.StringList(Scope.NONE, "Description");
+	protected static final LangProp DISPLAY = Property.Lang(Scope.NONE, "Display");
+	protected static final LangListProp DESCRIPTION = Property.LangList(Scope.NONE, "Description");
     protected static final StringProp COLOR = Property.String(Scope.NONE, "Color");
 	protected static final StringProp TEXTURE = Property.String(Scope.NONE, "SkullTexture");
 	
