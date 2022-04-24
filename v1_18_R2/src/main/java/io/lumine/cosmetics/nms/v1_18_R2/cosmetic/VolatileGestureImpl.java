@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.util.Pair;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
-import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.manager.HideableCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.managers.gestures.Gesture;
@@ -27,7 +26,10 @@ import org.bukkit.craftbukkit.v1_18_R2.attribute.CraftAttributeMap;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class VolatileGestureImpl implements VolatileEquipmentHelper {
 
