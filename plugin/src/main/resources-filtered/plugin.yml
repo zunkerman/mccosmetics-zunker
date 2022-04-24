@@ -22,6 +22,9 @@ commands:
   spray:
     description: Use your equipped spray
     aliases: [s]
+  emote:
+    description: Use your equipped emote
+    aliases: [emotes, e]
 permissions:
   mccosmetics.admin.command:
     description: Gives access to the base admin commands
