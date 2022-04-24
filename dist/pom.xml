@@ -65,6 +65,10 @@
                                     <pattern>io.lumine.utils</pattern>
                                     <shadedPattern>io.lumine.cosmetics.utils</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>com.ticxo.playeranimator</pattern>
+                                    <shadedPattern>io.lumine.cosmetics.playeranimator</shadedPattern>
+                                </relocation>
                             </relocations>
                             <minimizeJar>false</minimizeJar>
                         </configuration>
