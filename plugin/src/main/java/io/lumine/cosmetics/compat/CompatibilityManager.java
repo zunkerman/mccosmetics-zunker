@@ -1,6 +1,7 @@
 package io.lumine.cosmetics.compat;
 
 import io.lumine.cosmetics.MCCosmeticsPlugin;
+import io.lumine.utils.logging.Log;
 import io.lumine.utils.plugin.ReloadableModule;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -11,6 +12,7 @@ public class CompatibilityManager extends ReloadableModule<MCCosmeticsPlugin> {
 
     @Getter private Optional<LumineCoreCompat> lumineCore = Optional.empty();
     @Getter private Optional<MCPetsCompat> mcpets = Optional.empty();
+    @Getter private Optional<MythicMobsCompat> mythicMobs = Optional.empty();
     
     public CompatibilityManager(MCCosmeticsPlugin plugin)  {
         super(plugin);
@@ -19,10 +21,16 @@ public class CompatibilityManager extends ReloadableModule<MCCosmeticsPlugin> {
     @Override
     public void load(MCCosmeticsPlugin plugin) {
         if(Bukkit.getPluginManager().getPlugin("LumineCore") != null) {
+            Log.info("Found LumineCore, enabling compatibility.");
             lumineCore = Optional.of(new LumineCoreCompat(plugin));
         }
         if(Bukkit.getPluginManager().getPlugin("MCPets") != null) {
+            Log.info("MCPets detected, enabling compatibility.");
             mcpets = Optional.of(new MCPetsCompat(plugin));
+        }
+        if(Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
+            Log.info("MythicMobs found; enabling MythicMobs support.");
+            mythicMobs = Optional.of(new MythicMobsCompat(plugin));
         }
 
     }

@@ -5,8 +5,8 @@ import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.cosmetics.managers.AbstractCosmetic;
+import io.lumine.utils.items.ItemFactory;
 import io.lumine.utils.menu.Icon;
-import io.lumine.xikage.mythicmobs.utils.items.ItemFactory;
 
 import org.bukkit.inventory.ItemStack;
 
