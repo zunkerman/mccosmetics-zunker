@@ -6,3 +6,7 @@ Configuration:
     Volume: 1.0
     Pitch: 2.0
     PersistTime: 60
+  Language:
+    Command-Header: "<yellow><strikethrough>------------<gold>=====</strikethrough> <bold><gradient:#dc0c1f:#ed858f>MCCosmetics</gradient></bold> <strikethrough><gold>=====<yellow>------------</strikethrough>"
+    Command-Footer: "<yellow><strikethrough>--------------------------------------</strikethrough>"
+    Command-Prefix: "<bold><white>[<#dc0c1f>MCCosmetics<white>]</bold> "

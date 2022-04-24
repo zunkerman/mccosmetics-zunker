@@ -82,6 +82,8 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         } else {
             MCLogger.log("The server is running Spigot; disabled PaperSpigot exclusive functionality");
         }
+
+        this.saveDefaultConfig();
         
         configuration = new Configuration(this);
         
