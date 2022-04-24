@@ -3,17 +3,19 @@ package io.lumine.cosmetics.nms.v1_18_R2.cosmetic;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
-import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
-import io.lumine.cosmetics.managers.gestures.Gesture;
 import io.lumine.cosmetics.managers.hats.Hat;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
 import io.lumine.cosmetics.players.Profile;
+import io.netty.buffer.Unpooled;
 import lombok.Getter;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.protocol.game.ClientboundAddPlayerPacket;
+import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
+import net.minecraft.network.protocol.game.ServerboundAcceptTeleportationPacket;
 import net.minecraft.world.entity.EquipmentSlot;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
@@ -21,7 +23,6 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class VolatileHatImpl implements VolatileEquipmentHelper {
 
@@ -74,15 +75,7 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
             final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(sender);
             if(profile == null || profile.isHidden(Hat.class))
                 return true;
-
-            final var list = handleSpawn(profile);
-            if(list == null)
-                return true;
-
-            final var connection = ((CraftPlayer) sender).getHandle().connection;
-            for(Object obj : list) {
-                connection.send((Packet<?>) obj);
-            }
+            handleSpawn(profile);
         }
         return true;
     }
@@ -92,13 +85,15 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
         if(packet instanceof ClientboundAddPlayerPacket playerPacket) {
             int id = playerPacket.getEntityId();
             Profile profile = getProfile(receiver, id);
-            if(profile != null && !profile.isHidden(Hat.class))
-                return handleSpawn(profile);
+            if(profile != null && !profile.isHidden(Hat.class)) {
+                handleSpawn(profile);
+            }
         }else if(packet instanceof ClientboundSetEquipmentPacket equipmentPacket) {
             int id = equipmentPacket.getEntity();
             Profile profile = getProfile(receiver, id);
-            if(profile != null && !profile.isHidden(Hat.class))
-                return handleSpawn(profile);
+            if(profile != null && !profile.isHidden(Hat.class)) {
+                handleSpawn(profile);
+            }
         }
 
         return null;
@@ -111,22 +106,27 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
         return plugin.getProfiles().getProfile(player);
     }
 
-    public List<Object> handleSpawn(Profile profile) {
+    public void handleSpawn(Profile profile) {
         final var maybeEquipped = profile.getEquipped(Hat.class);
         if(maybeEquipped.isEmpty()) {
-            return null;
+            return;
         }
         var equip = maybeEquipped.get();
         var opt = equip.getCosmetic();
         
         if(!(opt instanceof ItemCosmetic hat))
-            return null;
+            return;
 
         final var player = profile.getPlayer();
         final var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic(equip.getVariant()));
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsHat)));
 
-        return List.of(equipmentPacket);
+        FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        byteBuf.writeByte(80);
+        equipmentPacket.write(byteBuf);
+
+        final var pipeline = ((CraftPlayer) player).getHandle().connection.getConnection().channel.pipeline();
+        pipeline.writeAndFlush(byteBuf);
     }
 
 }

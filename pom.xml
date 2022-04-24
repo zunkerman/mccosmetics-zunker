@@ -25,6 +25,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<ticxo.build.location>../target</ticxo.build.location>
+		<ticxo.build.premium>../target</ticxo.build.premium>
 	</properties>
 	
 	<modules>

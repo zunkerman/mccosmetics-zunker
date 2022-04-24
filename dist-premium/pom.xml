@@ -60,7 +60,7 @@
                 <version>3.1.0</version>
                 <configuration>
                     <finalName>MCCosmeticsPremium-${project.parent.version}</finalName>
-                    <outputDirectory>${ticxo.build.location}</outputDirectory>
+                    <outputDirectory>${ticxo.build.premium}</outputDirectory>
                 </configuration>
             </plugin>
 
