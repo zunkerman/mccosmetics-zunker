@@ -2,6 +2,7 @@ package io.lumine.cosmetics.config;
 
 import com.google.common.collect.Lists;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
+import io.lumine.cosmetics.storage.StorageDriver;
 import io.lumine.utils.config.properties.Property;
 import io.lumine.utils.config.properties.PropertyHolder;
 import io.lumine.utils.config.properties.types.EnumProp;

@@ -1,4 +1,4 @@
-package io.lumine.cosmetics.config;
+package io.lumine.cosmetics.storage;
 
 public enum StorageDriver {
     JSON,
