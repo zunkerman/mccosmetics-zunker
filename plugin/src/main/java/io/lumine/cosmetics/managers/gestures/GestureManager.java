@@ -35,10 +35,12 @@ public class GestureManager extends MCCosmeticsManager<Gesture> {
 		super.load(plugin);
 
 		Events.subscribe(PlayerJoinEvent.class).handler(event -> PlayerAnimator.api.injectPlayer(event.getPlayer())).bindWith(this);
-		Events.subscribe(PlayerQuitEvent.class).handler(event -> PlayerAnimator.api.removePlayer(event.getPlayer())).bindWith(this);
+		Events.subscribe(PlayerQuitEvent.class).handler(event -> {
+			PlayerAnimator.api.removePlayer(event.getPlayer());
+			quit(event.getPlayer(), null);
+		}).bindWith(this);
 		Events.subscribe(PlayerToggleSneakEvent.class).handler(event -> quit(event.getPlayer(), QuitMethod.SNEAK)).bindWith(this);
 		Events.subscribe(PlayerJumpEvent.class).handler(event -> quit(event.getPlayer(), QuitMethod.JUMP)).bindWith(this);
-		Events.subscribe(PlayerQuitEvent.class).handler(event -> quit(event.getPlayer(), null)).bindWith(this);
 
 	}
 
