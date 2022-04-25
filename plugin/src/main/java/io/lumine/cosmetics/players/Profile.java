@@ -50,6 +50,8 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
 
     @Override
     public void equip(Cosmetic cosmetic) {
+        if(isEquipped(cosmetic))
+            cosmetic.getManager().unequip(this);
         equippedCosmetics.put(cosmetic.getType(), new ProfileCosmeticData(cosmetic));
         equipped.put(cosmetic.getClass(), new EquippedCosmetic(cosmetic));
         cosmetic.getManager().equip(this);
@@ -58,10 +60,7 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
     @Override
     public void equip(CosmeticVariant variant) {
         var cosmetic = variant.getCosmetic();
-        
-        equippedCosmetics.put(cosmetic.getType(), new ProfileCosmeticData(cosmetic));
-        equipped.put(cosmetic.getClass(), new EquippedCosmetic(variant));
-        cosmetic.getManager().equip(this);
+        equip(cosmetic);
     }
 
     @Override
@@ -94,7 +93,7 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
     
     @Override
     public boolean isEquipped(Cosmetic cosmetic) {
-        return isEquipped(cosmetic);
+        return equipped.containsKey(cosmetic.getClass());
     }
 
     @Override

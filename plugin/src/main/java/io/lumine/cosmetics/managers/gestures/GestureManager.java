@@ -79,7 +79,10 @@ public class GestureManager extends MCCosmeticsManager<Gesture> {
 
 	@Override
 	public void unequip(CosmeticProfile profile) {
-		ticking.remove(profile.getPlayer());
+		CustomPlayerModel model = ticking.remove(profile.getPlayer());
+		if(model == null)
+			return;
+		model.despawn();
 		((VolatileEquipmentHelper) getNMSHelper()).unapply(profile);
 	}
 
