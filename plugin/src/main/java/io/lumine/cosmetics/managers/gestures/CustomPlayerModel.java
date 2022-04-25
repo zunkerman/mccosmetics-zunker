@@ -8,12 +8,17 @@ import org.bukkit.entity.Player;
 public class CustomPlayerModel extends PlayerModel {
 
 	@Getter private final QuitMethod quitMethod;
+	private final boolean canLook;
 	private final Runnable onEnd;
+	private float lockedYaw;
 	private boolean isPlaying;
 
-	public CustomPlayerModel(Player player, QuitMethod quitMethod, Runnable onEnd) {
+	public CustomPlayerModel(Player player, QuitMethod quitMethod, boolean canLook, Runnable onEnd) {
 		super(player);
 		this.quitMethod = quitMethod;
+		this.canLook = canLook;
+		if(!canLook)
+			lockedYaw = player.getLocation().getYaw();
 		this.onEnd = onEnd;
 	}
 
@@ -35,6 +40,13 @@ public class CustomPlayerModel extends PlayerModel {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public float getBaseYaw() {
+		if(canLook)
+			return super.getBaseYaw();
+		return lockedYaw;
 	}
 
 }

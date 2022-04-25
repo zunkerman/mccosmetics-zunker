@@ -69,9 +69,7 @@ public class GestureManager extends MCCosmeticsManager<Gesture> {
         }
 
 		final var player = profile.getPlayer();
-		CustomPlayerModel model = new CustomPlayerModel(player, gesture.getQuitMethod(), () -> {
-			profile.unequip(gesture);
-		});
+		CustomPlayerModel model = new CustomPlayerModel(player, gesture.getQuitMethod(), gesture.isCanLook(), () -> profile.unequip(gesture));
 		ticking.put(player, model);
 		final var animation = model.getTexture().isSlim() ? gesture.getSlimGesture() : gesture.getDefaultGesture();
 		model.playAnimation(animation);
