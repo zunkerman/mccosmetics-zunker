@@ -70,6 +70,7 @@ public class Gesture extends AbstractCosmetic {
 				.click((prof,p) -> {
 					if(prof.getPlayer().isOp() || prof.has(this)) {
 						prof.equip(this);
+						((GestureManager) getManager()).playGesture(prof);
 						CommandHelper.sendSuccess(p, "Now playing gesture: " + getDisplay());
 						p.closeInventory();
 					} else {

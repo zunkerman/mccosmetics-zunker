@@ -58,7 +58,21 @@ public class GestureManager extends MCCosmeticsManager<Gesture> {
 
 	@Override
 	public void equip(CosmeticProfile profile) {
+	    // Gestures aren't really equipped
+	}
+
+	@Override
+	public void unequip(CosmeticProfile profile) {
+	    stopGesture(profile);
+	}
+	
+	public void playGesture(CosmeticProfile profile) {
+	    if(ticking.containsKey(profile.getPlayer())) {
+            return;
+        }
+	    
         final var maybeEquipped = profile.getEquipped(Gesture.class);
+
         if(maybeEquipped.isEmpty()) {
             return;
         }
@@ -68,26 +82,25 @@ public class GestureManager extends MCCosmeticsManager<Gesture> {
             return;
         }
 
-		final var player = profile.getPlayer();
-		CustomPlayerModel model = new CustomPlayerModel(player, gesture.getQuitMethod(), gesture.isCanLook(), () -> profile.unequip(gesture));
-		ticking.put(player, model);
-		final var animation = model.getTexture().isSlim() ? gesture.getSlimGesture() : gesture.getDefaultGesture();
-		model.playAnimation(animation);
+        final var player = profile.getPlayer();
+        CustomPlayerModel model = new CustomPlayerModel(player, gesture.getQuitMethod(), gesture.isCanLook(), () -> profile.unequip(gesture));
+        ticking.put(player, model);
+        final var animation = model.getTexture().isSlim() ? gesture.getSlimGesture() : gesture.getDefaultGesture();
+        model.playAnimation(animation);
 
-		((VolatileEquipmentHelper) getNMSHelper()).apply(profile);
+        ((VolatileEquipmentHelper) getNMSHelper()).apply(profile);
 	}
-
-	@Override
-	public void unequip(CosmeticProfile profile) {
-		CustomPlayerModel model = ticking.remove(profile.getPlayer());
-		if(model == null)
-			return;
-		model.despawn();
-		((VolatileEquipmentHelper) getNMSHelper()).unapply(profile);
+	
+	public void stopGesture(CosmeticProfile profile) {
+        CustomPlayerModel model = ticking.remove(profile.getPlayer());
+        if(model == null) {
+            return;
+        }
+        model.despawn();
+        ((VolatileEquipmentHelper) getNMSHelper()).unapply(profile);
 	}
 
 	private void loadGestures() {
-
 		PlayerAnimator.api.getAnimationManager().clearRegistry();
 
 		final String type = CosmeticType.folder(cosmeticClass);

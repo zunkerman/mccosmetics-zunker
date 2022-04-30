@@ -4,6 +4,7 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.constants.Permissions;
 import io.lumine.cosmetics.managers.gestures.Gesture;
+import io.lumine.cosmetics.managers.gestures.GestureManager;
 import io.lumine.cosmetics.players.Profile;
 import io.lumine.utils.commands.Command;
 import org.bukkit.command.CommandSender;
@@ -22,16 +23,22 @@ public class EmotesCommand extends Command<MCCosmeticsPlugin> {
     @Override
     public boolean onCommand(CommandSender commandSender, String[] strings) {
 
-        if(strings.length == 0){
+        if(strings.length == 0) {
+            CommandHelper.sendError(commandSender, "Syntax: /emote [emote_name]");
             return false;
         }
 
-        Optional<Profile> profile = plugin.getProfiles().getProfile(((Player)commandSender).getName());
+        Optional<Profile> maybeProfile = plugin.getProfiles().getProfile(((Player)commandSender).getName());
 
-        var cosmetic = getPlugin().getGestureManager().getCosmetic(strings[0]);
+        maybeProfile.ifPresent(profile -> {
+            var maybeCosmetic = getPlugin().getGestureManager().getCosmetic(strings[0]);
 
-        profile.ifPresent(value -> cosmetic.ifPresent(gesture -> gesture.equip(value)));
-        /**TODO: Make it silently tell you if you only typed /emote instead of erroring **/
+            maybeCosmetic.ifPresent(gesture -> {
+                gesture.equip(profile);
+                ((GestureManager) gesture.getManager()).playGesture(profile);
+            });
+        });
+
         return true;
     }
 
