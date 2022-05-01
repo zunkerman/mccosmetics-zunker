@@ -10,6 +10,7 @@ softdepend:
 - Vault
 - LibsDisguises
 - PlaceholderAPI
+- WorldGuard
 loadbefore: []
 description: The total solution for all things mob-related.
 commands:
