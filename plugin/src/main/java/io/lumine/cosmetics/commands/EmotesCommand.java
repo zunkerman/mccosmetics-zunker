@@ -34,8 +34,11 @@ public class EmotesCommand extends Command<MCCosmeticsPlugin> {
             var maybeCosmetic = getPlugin().getGestureManager().getCosmetic(strings[0]);
 
             maybeCosmetic.ifPresent(gesture -> {
-                gesture.equip(profile);
-                ((GestureManager) gesture.getManager()).playGesture(profile);
+
+                if(commandSender.hasPermission(gesture.getPermission())) {
+                    gesture.equip(profile);
+                    ((GestureManager) gesture.getManager()).playGesture(profile);
+                }
             });
         });
 
