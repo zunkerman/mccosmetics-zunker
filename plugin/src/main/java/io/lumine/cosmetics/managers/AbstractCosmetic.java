@@ -54,7 +54,6 @@ public abstract class AbstractCosmetic extends Cosmetic {
 	@Getter protected String display;
 	protected List<String> description;
     protected String color;
-	protected String permission;
     
 	@Getter protected ItemStack menuItem;
 	
@@ -92,7 +91,6 @@ public abstract class AbstractCosmetic extends Cosmetic {
 		this.description = DESCRIPTION.fget(file,this);
         this.color = COLOR.fget(file,this);
 		this.colorable = COLORABLE.fget(file,this);
-		this.permission = PERMISSION_NODE.fget(file, this);
 
 		for(String node : VARIANTS.fget(file,this)) {
 		    var variant = new AbstractCosmeticVariant(this,file,node);
