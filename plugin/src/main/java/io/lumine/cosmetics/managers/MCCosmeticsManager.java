@@ -76,7 +76,6 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
         } else {
             menu.reload();
         }
-
         Log.info("Loaded " + cosmetics.size() + " " + type + ".");
     }
 
