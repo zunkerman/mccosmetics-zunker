@@ -32,7 +32,7 @@ public class MEGManager extends MCCosmeticsManager<MEGAccessory> {
 
 		Events.subscribe(PlayerDeathEvent.class)
             .handler(event -> {
-                final var player = event.getPlayer();
+                final var player = event.getEntity();
                 final var profile = plugin.getProfiles().getProfile(player);
                 
                 if(profile.getEquipped(MEGAccessory.class).isPresent()) {
