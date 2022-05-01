@@ -8,7 +8,10 @@ import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.logging.MCLogger;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.utils.Events;
+import io.lumine.utils.Schedulers;
+
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.File;
@@ -25,15 +28,39 @@ public class MEGManager extends MCCosmeticsManager<MEGAccessory> {
 	public void load(MCCosmeticsPlugin plugin) {
 		super.load(plugin);
 
+		Events.subscribe(PlayerChangedWorldEvent.class)
+		    .handler(event -> {
+                final var player = event.getPlayer();
+                final var profile = plugin.getProfiles().getProfile(player);
+                
+                if(profile.getEquipped(MEGAccessory.class).isPresent()) {
+                    unequip(profile);
+                    
+                    Schedulers.sync().runLater(() -> {
+                        equip(profile);
+                    }, 5);
+                }
+		    })
+		    .bindWith(this);
+		
 		Events.subscribe(PlayerQuitEvent.class)
-				.handler(event -> {
-					final Player player = event.getPlayer();
-					getProfiles().awaitProfile(player).thenAcceptAsync(maybeProfile -> {
-						if(maybeProfile.isEmpty())
-							return;
-						unequip(maybeProfile.get());
-					});
-				}).bindWith(this);
+			.handler(event -> {
+				final Player player = event.getPlayer();
+				getProfiles().awaitProfile(player).thenAcceptAsync(maybeProfile -> {
+					if(maybeProfile.isEmpty()) {
+						return;
+					}
+					unequip(maybeProfile.get());
+				});
+			}).bindWith(this);
+	}
+	
+	@Override
+	public void unload() {
+	    getPlugin().getProfiles().getKnownProfiles().forEach(profile -> {
+	        unequip(profile);
+	    });
+	    super.unload();
 	}
 
 	@Override

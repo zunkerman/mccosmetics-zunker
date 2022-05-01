@@ -6,9 +6,14 @@ import io.lumine.cosmetics.api.cosmetics.manager.HideableCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.cosmetics.managers.gestures.Gesture;
+import io.lumine.cosmetics.managers.modelengine.MEGAccessory;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
+import io.lumine.utils.Events;
+import io.lumine.utils.Schedulers;
 
 import java.io.File;
+
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 
 public class BackManager extends MCCosmeticsManager<BackAccessory> implements HideableCosmetic {
 
@@ -16,6 +21,25 @@ public class BackManager extends MCCosmeticsManager<BackAccessory> implements Hi
         super(plugin, BackAccessory.class);
 
         load(plugin);
+    }
+    
+    public void load(MCCosmeticsPlugin plugin) {
+        super.load(plugin);
+        
+        Events.subscribe(PlayerChangedWorldEvent.class)
+            .handler(event -> {
+                final var player = event.getPlayer();
+                final var profile = plugin.getProfiles().getProfile(player);
+                
+                if(profile.getEquipped(BackAccessory.class).isPresent()) {
+                    unequip(profile);
+                    
+                    Schedulers.sync().runLater(() -> {
+                        equip(profile);
+                    }, 5);
+                }
+            })
+            .bindWith(this);
     }
 
     @Override

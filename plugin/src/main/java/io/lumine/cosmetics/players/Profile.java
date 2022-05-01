@@ -6,7 +6,7 @@ import io.lumine.cosmetics.api.cosmetics.CosmeticVariant;
 import io.lumine.cosmetics.api.cosmetics.EquippedCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.constants.CosmeticType;
-import io.lumine.utils.logging.Log;
+import io.lumine.utils.Schedulers;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
@@ -50,8 +50,9 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
 
     @Override
     public void equip(Cosmetic cosmetic) {
-        if(isEquipped(cosmetic))
+        if(isEquipped(cosmetic)) {
             cosmetic.getManager().unequip(this);
+        }
         equippedCosmetics.put(cosmetic.getType(), new ProfileCosmeticData(cosmetic));
         equipped.put(cosmetic.getClass(), new EquippedCosmetic(cosmetic));
         cosmetic.getManager().equip(this);
@@ -102,16 +103,24 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
     }
 
     public void reloadCosmetics() {
-        for(var entry : equippedCosmetics.entrySet()) {
-            final var type = entry.getKey();    
-            final var data = entry.getValue();
-            
-            MCCosmeticsPlugin.inst().getCosmetics().getManager(type).ifPresent(manager -> {
-                manager.getCosmetic(data.getId()).ifPresent(cosmetic -> {
-                    equip((Cosmetic) cosmetic);
+        equipped.values().forEach(equip -> {
+            equip.getCosmetic().getManager().unequip(this);
+        });
+        
+        equipped.clear();
+        
+        Schedulers.sync().runLater(() -> {
+            for(var entry : equippedCosmetics.entrySet()) {
+                final var type = entry.getKey();    
+                final var data = entry.getValue();
+                
+                MCCosmeticsPlugin.inst().getCosmetics().getManager(type).ifPresent(manager -> {
+                    manager.getCosmetic(data.getId()).ifPresent(cosmetic -> {
+                        equip((Cosmetic) cosmetic);
+                    });
                 });
-            });
-        }
+            }
+        }, 5);
     }
 
 }

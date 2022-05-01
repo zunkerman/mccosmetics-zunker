@@ -12,6 +12,7 @@ import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.config.Scope;
 import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
+import io.lumine.cosmetics.managers.back.BackAccessory;
 import io.lumine.cosmetics.nms.cosmetic.VolatileSprayHelper;
 import io.lumine.utils.config.properties.Property;
 import io.lumine.utils.config.properties.types.DoubleProp;
@@ -24,6 +25,7 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.util.RayTraceResult;
@@ -63,6 +65,12 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
         loadSprayImages();
         
         super.load(plugin);
+        
+        Events.subscribe(PlayerChangedWorldEvent.class)
+            .handler(event -> {
+                final var player = event.getPlayer();
+                removeSpray(player);
+            }).bindWith(this);
         
         Events.subscribe(PlayerQuitEvent.class)
             .handler(event -> {
@@ -181,9 +189,11 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
             location.getWorld().getPlayers().forEach(p -> p.playSound(location, sound, (float) volume, (float) pitch));
         }, 4);
 
-        Schedulers.sync().runLater(() -> {
-            removeSpray(player);
-        }, SPRAY_PERSIST.get() * 20);
+        if(SPRAY_PERSIST.get() > 0) {
+            Schedulers.sync().runLater(() -> {
+                removeSpray(player);
+            }, SPRAY_PERSIST.get() * 20);
+        }
     }
     
     public void removeSpray(Player player) {
