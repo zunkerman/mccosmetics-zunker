@@ -12,7 +12,7 @@
         <url>https://www.lumine.io</url>
     </organization>  
   
-	<properties>
+	<properties>  
 	    <mccosmetics.version>0.4.0-SNAPSHOT</mccosmetics.version>
 	    <paperapi.version>1.18.2-R0.1-SNAPSHOT</paperapi.version>
 	    <lumineutils.version>1.18-SNAPSHOT</lumineutils.version>
