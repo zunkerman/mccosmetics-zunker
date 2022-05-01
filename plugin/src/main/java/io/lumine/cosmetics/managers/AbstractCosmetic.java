@@ -34,6 +34,7 @@ public abstract class AbstractCosmetic extends Cosmetic {
 	protected static final LangListProp DESCRIPTION = Property.LangList(Scope.NONE, "Description");
     protected static final StringProp COLOR = Property.String(Scope.NONE, "Color");
 	protected static final StringProp TEXTURE = Property.String(Scope.NONE, "SkullTexture");
+	protected static final StringProp PERMISSION_NODE = Property.String(Scope.NONE, "Permission", "Default");
 	
     protected static final BooleanProp COLORABLE = Property.Boolean(Scope.NONE, "Colorable", false);
 
@@ -49,6 +50,7 @@ public abstract class AbstractCosmetic extends Cosmetic {
 	@Getter protected String display;
 	protected List<String> description;
     protected String color;
+	protected String permission;
     
 	@Getter protected ItemStack menuItem;
 	
@@ -66,6 +68,7 @@ public abstract class AbstractCosmetic extends Cosmetic {
 		this.description = DESCRIPTION.fget(file,this);
         this.color = COLOR.fget(file,this);
 		this.colorable = COLORABLE.fget(file,this);
+		this.permission = PERMISSION_NODE.fget(file, this);
 
 		for(String node : VARIANTS.fget(file,this)) {
 		    var variant = new AbstractCosmeticVariant(this,file,node);
@@ -117,7 +120,12 @@ public abstract class AbstractCosmetic extends Cosmetic {
 	}
 	
 	public String getPermission() {
-	    return Permissions.cosmeticPermission(this);
+		if(permission.equals("Default")) {
+			return Permissions.cosmeticPermission(this);
+		} else{
+			return permission;
+		}
+
 	}
 	
 	public boolean hasVariants() {
