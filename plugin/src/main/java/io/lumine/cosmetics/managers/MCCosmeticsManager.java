@@ -55,7 +55,13 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
         for(var file : files) {
             for(var node : KEYS.fget(file)) {
                 var cosmetic = build(file, node);
-                cosmetics.put(cosmetic.getId(), cosmetic);
+                if(!cosmetics.containsKey(cosmetic.getId())){
+                    cosmetics.put(cosmetic.getId(), cosmetic);
+                } else {
+                    Log.warn("Cosmetic with id " + cosmetic.getId() + " already exists!");
+                    Log.warn("Cosmetic will be ignored! Please rename this cosmetic.");
+                }
+
             }
         }
 
@@ -70,7 +76,6 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
         } else {
             menu.reload();
         }
-
         Log.info("Loaded " + cosmetics.size() + " " + type + ".");
     }
 
