@@ -17,13 +17,13 @@ public class ProfileCosmeticData {
     
     public ProfileCosmeticData(Cosmetic cosmetic) {
         this.type = cosmetic.getType();
-        this.id = cosmetic.getKey();
+        this.id = cosmetic.getId();
         this.variant = "default";
     }
 
     public ProfileCosmeticData(CosmeticVariant variant) {
         this.type = variant.getCosmetic().getType();
-        this.id = variant.getCosmetic().getKey();
+        this.id = variant.getCosmetic().getId();
         this.variant = variant.getKey();
     }
     

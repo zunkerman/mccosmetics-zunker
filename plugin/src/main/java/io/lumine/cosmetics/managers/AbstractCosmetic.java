@@ -28,6 +28,8 @@ import java.util.Optional;
 
 public abstract class AbstractCosmetic extends Cosmetic {
 
+    protected static final StringProp NAMESPACE = Property.String(Scope.NONE, "Namespace", null);
+    protected static final StringProp PERMISSION = Property.String(Scope.NONE, "Permission", null);
 	protected static final EnumProp<Material> MATERIAL = Property.Enum(Scope.NONE, Material.class, "Material", Material.EMERALD);
 	protected static final IntProp MODEL = Property.Int(Scope.NONE, "Model");
 	protected static final LangProp DISPLAY = Property.Lang(Scope.NONE, "Display");
@@ -40,7 +42,10 @@ public abstract class AbstractCosmetic extends Cosmetic {
     protected static final NodeListProp VARIANTS = Property.NodeList(Scope.NONE, "Variants");
 
 	protected final File file;
-	protected final String key;
+    @Getter protected final String id;
+	@Getter protected final String key;
+	@Getter protected final String namespace;
+	@Getter protected final String permission;
 	@Getter protected final List<String> sources = Lists.newArrayList();
 
 	// Menu Item
@@ -60,6 +65,26 @@ public abstract class AbstractCosmetic extends Cosmetic {
 
 		this.file = file;
 		this.key = key;
+		this.namespace = NAMESPACE.fget(file,this);
+		
+		if(namespace == null) {
+		    this.id = key;
+		} else {
+		    this.id = namespace + "." + key;
+		}
+		
+		String perm = PERMISSION.fget(file,this);
+		
+		if(perm == null) {
+		    if(namespace == null) {
+                this.permission = Permissions.COSMETIC_PERMISSION_PREFIX + key.toLowerCase();
+		    } else {
+		        this.permission = Permissions.COSMETIC_PERMISSION_PREFIX + namespace.toLowerCase() + "." + key.toLowerCase();
+		    }
+		} else {
+		    this.permission = perm;
+		}
+		
 		this.material = MATERIAL.fget(file,this);
 		this.model = MODEL.fget(file,this);
 		this.display = DISPLAY.fget(file,this);
@@ -115,11 +140,7 @@ public abstract class AbstractCosmetic extends Cosmetic {
 					}
 				}).build();
 	}
-	
-	public String getPermission() {
-	    return Permissions.cosmeticPermission(this);
-	}
-	
+
 	public boolean hasVariants() {
 	    return variants.isEmpty() == false;
 	}

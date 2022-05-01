@@ -54,7 +54,8 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
 
         for(var file : files) {
             for(var node : KEYS.fget(file)) {
-                cosmetics.put(node, build(file, node));
+                var cosmetic = build(file, node);
+                cosmetics.put(cosmetic.getId(), cosmetic);
             }
         }
 

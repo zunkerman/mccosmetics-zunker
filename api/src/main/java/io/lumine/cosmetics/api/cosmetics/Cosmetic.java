@@ -34,6 +34,10 @@ public abstract class Cosmetic implements PropertyHolder,MenuData<CosmeticProfil
         return maybeCosmetic.isPresent() && maybeCosmetic.get().equals(this);
     }
     
+    public abstract String getId();
+    
+    public abstract String getNamespace();
+    
     public abstract String getPermission();
     
     public abstract boolean hasVariants();
