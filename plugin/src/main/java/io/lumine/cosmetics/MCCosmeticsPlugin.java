@@ -6,6 +6,7 @@ import io.lumine.cosmetics.commands.EmotesCommand;
 import io.lumine.cosmetics.commands.SprayCommand;
 import io.lumine.cosmetics.commands.admin.AdminCommand;
 import io.lumine.cosmetics.compat.CompatibilityManager;
+import io.lumine.cosmetics.compat.WorldGuardSupport;
 import io.lumine.cosmetics.config.Configuration;
 import io.lumine.cosmetics.listeners.PlayerListeners;
 import io.lumine.cosmetics.logging.MCLogger;
@@ -35,6 +36,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
 
     @Getter private Configuration configuration;
     @Getter private CompatibilityManager compatibility;
+    @Getter private WorldGuardSupport worldGuardSupport;
     
     @Getter private ProfileManager profiles;
     @Getter private MenuManager menuManager;
@@ -65,7 +67,12 @@ public class MCCosmeticsPlugin extends LuminePlugin {
      */
     @Override
     public void load() {
+
         plugin = this;
+
+        if(Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
+            worldGuardSupport = new WorldGuardSupport(this);
+        }
     }  
     
     /**

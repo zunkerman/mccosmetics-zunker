@@ -155,6 +155,12 @@
     </pluginRepositories>
     <dependencies>
         <dependency>
+            <groupId>com.sk89q.worldguard</groupId>
+            <artifactId>worldguard-bukkit</artifactId>
+            <version>7.0.2-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>io.lumine</groupId>
             <artifactId>MCCosmetics-API</artifactId>
             <version>${mccosmetics.version}</version>
