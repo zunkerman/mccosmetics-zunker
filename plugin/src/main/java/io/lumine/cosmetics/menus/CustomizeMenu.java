@@ -26,14 +26,7 @@ public class CustomizeMenu extends CosmeticMenu<Profile> {
 
             builder.getIcon("BUTTON_" + type.toUpperCase()).ifPresent(icon -> {
                 icon.getBuilder().click((profile,player) -> {
-                    // TODO: sorting
-                    List<Cosmetic> cosmetics = Lists.newArrayList(manager.getAllCosmetics());
-
-                    if(manager.getMenu() == null) {
-                        getMenuManager().getSelectionMenu().open(player, new SelectionMenuContext(profile,manager), cosmetics);
-                    } else {
-                        manager.getMenu().open(player, profile, cosmetics);
-                    }
+                    getMenuManager().openCosmeticMenu(manager,profile);
                 });
             });
         }

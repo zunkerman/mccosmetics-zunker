@@ -1,6 +1,12 @@
 package io.lumine.cosmetics.menus;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import io.lumine.cosmetics.MCCosmeticsPlugin;
+import io.lumine.cosmetics.managers.MCCosmeticsManager;
+import io.lumine.cosmetics.players.Profile;
 import io.lumine.utils.plugin.ReloadableModule;
 import lombok.Getter;
 
@@ -27,5 +33,16 @@ public class MenuManager extends ReloadableModule<MCCosmeticsPlugin> {
 
     @Override
     public void unload() {}
+
+    public void openCosmeticMenu(MCCosmeticsManager manager, Profile profile) {
+        // TODO: sorting
+        var cosmetics = Lists.newArrayList(manager.getAllCosmetics());
+
+        if(manager.getMenu() == null) {
+            getSelectionMenu().open(profile.getPlayer(), new SelectionMenuContext(profile, manager), cosmetics);
+        } else {
+            manager.getMenu().open(profile.getPlayer(), profile, cosmetics);
+        }
+    }
 
 }
