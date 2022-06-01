@@ -57,7 +57,7 @@ public class Gesture extends AbstractCosmetic {
 	public Icon<CosmeticProfile> getIcon() {
 		return IconBuilder.<CosmeticProfile>create()
 				.name(Text.colorize(this.getDisplay()))
-				.item(this.menuItem)
+				.itemStack(this.menuItem)
 				.hideFlags()
 				.lore(prof -> {
 					List<String> desc = Lists.newArrayList(description);

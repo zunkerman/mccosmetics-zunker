@@ -117,7 +117,7 @@ public abstract class AbstractCosmetic extends Cosmetic {
 	protected Icon<CosmeticProfile> buildIcon(String type) {
 		return IconBuilder.<CosmeticProfile>create()
 				.name(Text.colorize(this.getDisplay()))
-				.item(this.menuItem)
+				.itemStack(this.menuItem)
 				.hideFlags()
 				.lore(prof -> {
 					List<String> desc = Lists.newArrayList(description);
