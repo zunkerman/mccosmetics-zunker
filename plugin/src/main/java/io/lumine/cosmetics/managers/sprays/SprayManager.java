@@ -1,12 +1,5 @@
 package io.lumine.cosmetics.managers.sprays;
 
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldguard.LocalPlayer;
-import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.regions.RegionContainer;
-import com.sk89q.worldguard.protection.regions.RegionQuery;
 import io.lumine.utils.Events;
 import io.lumine.utils.Schedulers;
 import io.lumine.utils.config.properties.types.IntProp;
@@ -151,20 +144,12 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
             return false;
         }
     }
-    public boolean canSprayWG(Player player, Location location) {
-            RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-            RegionQuery query = container.createQuery();
-            ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(location));
 
-            LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
-
-            return set.testState(localPlayer, SPRAY_FLAG);
-    }
     
     public boolean useSpray(Player player, Spray spray) {
         final Location location = player.getEyeLocation();
         if(plugin.getWorldGuardSupport() != null) {
-            if (!canSprayWG(player, location)) {
+            if (!plugin.getWorldGuardSupport().canSprayWG(player, location)) {
                 return false;
             }
         }
