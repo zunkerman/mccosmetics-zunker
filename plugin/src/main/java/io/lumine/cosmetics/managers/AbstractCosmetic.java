@@ -125,7 +125,7 @@ public abstract class AbstractCosmetic extends Cosmetic {
 						desc.add("");
 						desc.add(Text.colorizeLegacy("<red>Not Unlocked"));
 					}
-					return desc;
+					return desc; 
 				})
 				.click((prof,player) -> {
 					if(prof.getPlayer().isOp() || prof.has(this)) {
