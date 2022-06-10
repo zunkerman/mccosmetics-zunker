@@ -52,6 +52,12 @@
             <version>${mccosmetics.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>io.lumine</groupId>
+            <artifactId>MCCosmetics-v1_19_R1</artifactId>
+            <version>${mccosmetics.version}</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

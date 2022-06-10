@@ -13,8 +13,8 @@
     </organization>  
   
 	<properties>  
-	    <mccosmetics.version>0.5.0-SNAPSHOT</mccosmetics.version>
-	    <paperapi.version>1.18.2-R0.1-SNAPSHOT</paperapi.version>
+	    <mccosmetics.version>0.6.0-SNAPSHOT</mccosmetics.version>
+	    <paperapi.version>1.19-R0.1-SNAPSHOT</paperapi.version>
 	    <lumineutils.version>1.18-SNAPSHOT</lumineutils.version>
 	    <lombok.version>1.18.22</lombok.version>
     	<!--suppress UnresolvedMavenProperty -->
@@ -34,6 +34,7 @@
 		<module>v1_17_R1</module>
 		<module>v1_18_R1</module>
         <module>v1_18_R2</module>
+        <module>v1_19_R1</module>
         <module>dist</module>
         <module>dist-premium</module>
 	</modules>
