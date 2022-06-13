@@ -7,12 +7,14 @@ import io.lumine.cosmetics.api.cosmetics.EquippedCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.utils.Schedulers;
+import io.lumine.utils.serialize.Chroma;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import java.awt.Color;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -62,6 +64,16 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
     public void equip(CosmeticVariant variant) {
         var cosmetic = variant.getCosmetic();
         equip(cosmetic);
+    }
+    
+    @Override
+    public void equip(Cosmetic cosmetic, Chroma color) {
+        if(isEquipped(cosmetic)) {
+            cosmetic.getManager().unequip(this);
+        }
+        equippedCosmetics.put(cosmetic.getType(), new ProfileCosmeticData(cosmetic, color));
+        equipped.put(cosmetic.getClass(), new EquippedCosmetic(cosmetic, color));
+        cosmetic.getManager().equip(this);
     }
 
     @Override
@@ -116,6 +128,7 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
                 
                 MCCosmeticsPlugin.inst().getCosmetics().getManager(type).ifPresent(manager -> {
                     manager.getCosmetic(data.getId()).ifPresent(cosmetic -> {
+                        var c = data.toEquippedCosmetic();
                         equip((Cosmetic) cosmetic);
                     });
                 });

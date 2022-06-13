@@ -32,7 +32,7 @@ public class ProfileManager extends PlayerRepository<MCCosmeticsPlugin,Profile> 
            if(event.getNewGameMode().equals(GameMode.SPECTATOR)){
                Optional<Profile> profile = this.getProfile(event.getPlayer().getUniqueId());
 
-               if(profile.isEmpty()){
+               if(profile.isEmpty()) {
                    return;
                }
 

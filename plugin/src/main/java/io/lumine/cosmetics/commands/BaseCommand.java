@@ -13,6 +13,8 @@ public class BaseCommand extends Command<MCCosmeticsPlugin> {
 
     public BaseCommand(MCCosmeticsPlugin plugin) {
         super(plugin);
+        
+        this.addSubCommands(new DyeCommand(this));
     }
 
     @Override
@@ -30,7 +32,7 @@ public class BaseCommand extends Command<MCCosmeticsPlugin> {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
-        return Collections.emptyList();
+        return null;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package io.lumine.cosmetics.managers.back;
 
+import io.lumine.cosmetics.api.cosmetics.ColorableCosmetic;
 import io.lumine.cosmetics.api.cosmetics.CosmeticVariant;
+import io.lumine.cosmetics.api.cosmetics.EquippedCosmetic;
 import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.constants.CosmeticType;
@@ -12,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 
-public class BackAccessory extends AbstractCosmetic implements ItemCosmetic {
+public class BackAccessory extends AbstractCosmetic implements ColorableCosmetic,ItemCosmetic {
 
 	public BackAccessory(BackManager manager, File file, String key) {
 		super(manager, file, CosmeticType.type(BackAccessory.class), key);
@@ -29,11 +31,14 @@ public class BackAccessory extends AbstractCosmetic implements ItemCosmetic {
 	}
 
     @Override
-    public ItemStack getCosmetic(CosmeticVariant variant) {
+    public ItemStack getCosmetic(EquippedCosmetic equipped) {
         var item = getMenuItem();
         
-        if(variant != null) {
+        if(equipped.getVariant() != null) {
+            var variant = equipped.getVariant();
             item = ItemFactory.of(item).color(variant.getColor()).build();
+        } else if(equipped.getColor() != null) {
+            item = ItemFactory.of(item).color(equipped.getColor()).build();
         }
 
         return item;

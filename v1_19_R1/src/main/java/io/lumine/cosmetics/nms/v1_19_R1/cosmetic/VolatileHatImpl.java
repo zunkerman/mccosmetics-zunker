@@ -51,7 +51,7 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
         if(!(opt instanceof Hat hat))
             return;
 
-        var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic(maybeEquipped.get().getVariant()));
+        var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic(maybeEquipped.get()));
 
         playerTracker.put(player.getEntityId(), player);
 
@@ -117,7 +117,7 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
             return;
 
         final var player = profile.getPlayer();
-        final var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic(equip.getVariant()));
+        final var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic(equip));
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsHat)));
 
         FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());

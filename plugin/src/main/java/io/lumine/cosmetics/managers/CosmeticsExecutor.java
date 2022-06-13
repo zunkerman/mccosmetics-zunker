@@ -1,5 +1,6 @@
 package io.lumine.cosmetics.managers;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.utils.events.extra.ArmorEquipEventListener;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class CosmeticsExecutor extends ReloadableModule<MCCosmeticsPlugin> {
 
@@ -49,6 +51,17 @@ public class CosmeticsExecutor extends ReloadableModule<MCCosmeticsPlugin> {
 
     public Collection<String> getRegisteredTypes() {
         return cosmeticManagers.keySet();
+    }
+    
+    public Collection<String> getRegisteredTypes(Predicate<MCCosmeticsManager> predicate) {
+        Collection<String> ret = Lists.newArrayList();
+        
+        for(var entry : cosmeticManagers.entrySet()) {
+            if(predicate.test(entry.getValue())) {
+                ret.add(entry.getKey());
+            }
+        }
+        return ret;
     }
     
 }

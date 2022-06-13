@@ -6,6 +6,7 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.CosmeticVariant;
 import io.lumine.cosmetics.api.cosmetics.EquippedCosmetic;
+import io.lumine.utils.serialize.Chroma;
 import lombok.Data;
 
 @Data
@@ -27,6 +28,12 @@ public class ProfileCosmeticData {
         this.variant = variant.getKey();
     }
     
+    public ProfileCosmeticData(Cosmetic cosmetic, Chroma color) {
+        this.type = cosmetic.getType();
+        this.id = cosmetic.getId();
+        this.variant = color.toHexString();
+    }
+    
     public Optional<EquippedCosmetic> toEquippedCosmetic() {
         var maybeManager = MCCosmeticsPlugin.inst().getCosmetics().getManager(type);
         if(maybeManager.isEmpty()) {
@@ -39,14 +46,18 @@ public class ProfileCosmeticData {
         }
         var cosmetic = (Cosmetic) maybeCosmetic.get();
         
-        if(cosmetic.hasVariants() && this.variant != null) {
-            var maybeVariant = cosmetic.getVariant(this.variant);
-            
-            if(maybeVariant.isPresent()) {
-                return Optional.of(new EquippedCosmetic(maybeVariant.get()));
+        if(variant != null) {
+            if(variant.startsWith("#")) {
+                return Optional.of(new EquippedCosmetic(cosmetic, Chroma.of(variant)));
+            } else if(cosmetic.hasVariants()) {
+                var maybeVariant = cosmetic.getVariant(this.variant);
+                
+                if(maybeVariant.isPresent()) {
+                    return Optional.of(new EquippedCosmetic(maybeVariant.get()));
+                }
             }
-        };
-        return Optional.empty();
+        }
+        return Optional.of(new EquippedCosmetic(cosmetic));
     }
      
 }

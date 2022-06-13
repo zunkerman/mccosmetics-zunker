@@ -1,6 +1,8 @@
 package io.lumine.cosmetics.managers.modelengine;
 
 import com.ticxo.modelengine.api.util.ConfigManager;
+
+import io.lumine.cosmetics.api.cosmetics.ColorableCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.config.Scope;
 import io.lumine.cosmetics.constants.CosmeticType;
@@ -16,7 +18,7 @@ import lombok.Getter;
 
 import java.io.File;
 
-public class MEGAccessory extends AbstractCosmetic {
+public class MEGAccessory extends AbstractCosmetic implements ColorableCosmetic {
 
 	private static final StringProp MODEL = Property.String(Scope.NONE, "ModelId");
 	private static final StringProp STATE = Property.String(Scope.NONE, "State");

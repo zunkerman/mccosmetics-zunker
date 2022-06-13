@@ -3,6 +3,7 @@ package io.lumine.cosmetics.api.players;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.CosmeticVariant;
 import io.lumine.cosmetics.api.cosmetics.EquippedCosmetic;
+import io.lumine.utils.serialize.Chroma;
 
 import org.bukkit.entity.Player;
 
@@ -22,6 +23,8 @@ public interface CosmeticProfile {
     public void equip(Cosmetic cosmetic);
 
     public void equip(CosmeticVariant cosmetic);
+    
+    public void equip(Cosmetic cosmetic, Chroma color);
 
     public void unequip(Cosmetic cosmetic);
 

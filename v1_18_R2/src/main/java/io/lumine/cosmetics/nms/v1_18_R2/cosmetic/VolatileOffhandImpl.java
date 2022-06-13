@@ -51,7 +51,7 @@ public class VolatileOffhandImpl implements VolatileEquipmentHelper {
         if(!(opt instanceof ItemCosmetic offhand))
             return;
 
-        var nmsOffhand = CraftItemStack.asNMSCopy(offhand.getCosmetic(equip.getVariant()));
+        var nmsOffhand = CraftItemStack.asNMSCopy(offhand.getCosmetic(equip));
 
         playerTracker.put(player.getEntityId(), player);
 
@@ -105,7 +105,7 @@ public class VolatileOffhandImpl implements VolatileEquipmentHelper {
             return;
 
         final var player = profile.getPlayer();
-        final var nmsOffhand = CraftItemStack.asNMSCopy(offhand.getCosmetic(equip.getVariant()));
+        final var nmsOffhand = CraftItemStack.asNMSCopy(offhand.getCosmetic(equip));
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.OFFHAND, nmsOffhand)));
 
         FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());

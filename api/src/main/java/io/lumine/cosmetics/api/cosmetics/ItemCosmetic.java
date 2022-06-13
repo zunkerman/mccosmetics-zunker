@@ -4,6 +4,6 @@ import org.bukkit.inventory.ItemStack;
 
 public interface ItemCosmetic {
 
-	ItemStack getCosmetic(CosmeticVariant variant);
+	ItemStack getCosmetic(EquippedCosmetic equipped);
 
 }

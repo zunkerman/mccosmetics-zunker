@@ -56,7 +56,7 @@ public class VolatileBackImpl implements VolatileEquipmentHelper {
 		}
 
 		var nmsPlayer = ((CraftPlayer) player).getHandle();
-		var nmsBack = CraftItemStack.asNMSCopy(back.getCosmetic(equipped.getVariant()));
+		var nmsBack = CraftItemStack.asNMSCopy(back.getCosmetic(equipped));
 
 		ArmorStand stand = activeProfile.get(player);
 		if(stand == null) {
