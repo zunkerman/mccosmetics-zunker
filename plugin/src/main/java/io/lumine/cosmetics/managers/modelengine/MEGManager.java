@@ -83,9 +83,7 @@ public class MEGManager extends MCCosmeticsManager<MEGAccessory> {
 	
 	@Override
 	public void unload() {
-	    getPlugin().getProfiles().getKnownProfiles().forEach(profile -> {
-	        unequip(profile);
-	    });
+	    getPlugin().getProfiles().getKnownProfiles().forEach(this::unequip);
 	    super.unload();
 	}
 
@@ -151,7 +149,6 @@ public class MEGManager extends MCCosmeticsManager<MEGAccessory> {
 		if(modeledEntity != null) {
 			modeledEntity.clearModels();
 			modeledEntity.getAllActiveModel().clear();
-			ModelEngineAPI.api.getModelManager().removeModeledEntity(player.getUniqueId());
 		}
 	}
 

@@ -63,7 +63,13 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
     @Override
     public void equip(CosmeticVariant variant) {
         var cosmetic = variant.getCosmetic();
-        equip(cosmetic);
+        if(isEquipped(cosmetic)) {
+            cosmetic.getManager().unequip(this);
+        }
+
+        equippedCosmetics.put(cosmetic.getType(), new ProfileCosmeticData(cosmetic));
+        equipped.put(cosmetic.getClass(), new EquippedCosmetic(variant));
+        cosmetic.getManager().equip(this);
     }
     
     @Override
