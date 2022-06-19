@@ -14,7 +14,7 @@ public class BaseCommand extends Command<MCCosmeticsPlugin> {
     public BaseCommand(MCCosmeticsPlugin plugin) {
         super(plugin);
         
-        this.addSubCommands(new DyeCommand(this));
+        this.addSubCommands(new DyeCommand(this), new EquipCommand(this), new UnequipCommand(this));
     }
 
     @Override
