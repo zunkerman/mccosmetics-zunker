@@ -20,6 +20,9 @@ commands:
   cosmetics:
     description: MCCosmetics user command
     aliases: [cosmetic]
+  sprays:
+    description: Open the sprays menu
+    aliases: []
   spray:
     description: Use your equipped spray
     aliases: [s]

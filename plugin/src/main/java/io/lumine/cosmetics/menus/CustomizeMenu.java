@@ -1,15 +1,10 @@
 package io.lumine.cosmetics.menus;
 
-import com.google.common.collect.Lists;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
-import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.cosmetics.players.Profile;
 import io.lumine.utils.config.properties.types.MenuProp;
-import io.lumine.utils.logging.Log;
 import io.lumine.utils.menu.EditableMenuBuilder;
-
-import java.util.List;
 
 public class CustomizeMenu extends CosmeticMenu<Profile> {
 
