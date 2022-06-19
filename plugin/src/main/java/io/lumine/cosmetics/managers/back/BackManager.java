@@ -13,7 +13,9 @@ import io.lumine.utils.Schedulers;
 
 import java.io.File;
 
+import org.bukkit.GameMode;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 
 public class BackManager extends MCCosmeticsManager<BackAccessory> implements HideableCosmetic {
 
@@ -36,6 +38,26 @@ public class BackManager extends MCCosmeticsManager<BackAccessory> implements Hi
                     
                     Schedulers.sync().runLater(() -> {
                         equip(profile);
+                    }, 5);
+                }
+            })
+            .bindWith(this);
+        
+        Events.subscribe(PlayerGameModeChangeEvent.class)
+            .handler(event -> {
+                if(event.getNewGameMode() == GameMode.SPECTATOR) {
+                    final var player = event.getPlayer();
+                    final var profile = plugin.getProfiles().getProfile(player);
+                    
+                    unequip(profile);
+                } else if(event.getPlayer().getPlayer().getGameMode() == GameMode.SPECTATOR) {
+                    final var player = event.getPlayer();
+                    final var profile = plugin.getProfiles().getProfile(player);
+                    
+                    Schedulers.sync().runLater(() -> {
+                        if(player.getGameMode() != GameMode.SPECTATOR) {
+                            equip(profile);
+                        }
                     }, 5);
                 }
             })
