@@ -5,6 +5,7 @@ Configuration:
     Sound: 'entity.cat.hiss'
     Volume: 1.0
     Pitch: 2.0
+    ReplaceLast: true
     PersistTime: 60
   Menus:
     Close-On-Unequip: false

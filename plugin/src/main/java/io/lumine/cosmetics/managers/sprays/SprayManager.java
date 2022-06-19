@@ -15,6 +15,7 @@ import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.cosmetics.managers.back.BackAccessory;
 import io.lumine.cosmetics.nms.cosmetic.VolatileSprayHelper;
 import io.lumine.utils.config.properties.Property;
+import io.lumine.utils.config.properties.types.BooleanProp;
 import io.lumine.utils.config.properties.types.DoubleProp;
 import io.lumine.utils.config.properties.types.StringProp;
 import io.lumine.utils.files.Files;
@@ -47,6 +48,7 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
     private static final DoubleProp SPRAY_SOUND_VOL = Property.Double(Scope.CONFIG, "Configuration.Sprays.Volume", 1D);
     private static final DoubleProp SPRAY_SOUND_PI = Property.Double(Scope.CONFIG, "Configuration.Sprays.Pitch", 2D);
 
+    private static final BooleanProp REPLACE_SPRAY = Property.Boolean(Scope.CONFIG, "Configuration.Sprays.ReplaceLast", true);
     private static final IntProp SPRAY_PERSIST = Property.Int(Scope.CONFIG, "Configuration.Sprays.PersistTime", 60);
     
     private final static CooldownMap<UUID> keytapTimer = CooldownMap.create(Cooldown.of(500, TimeUnit.MILLISECONDS));
@@ -178,13 +180,14 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
         return true;
     }
     
-    public void spawnSpray(Player player, Spray spray, Location location, BlockFace face, int rotation) {
-        removeSpray(player);
-        
+    public void spawnSpray(Player player, Spray spray, Location location, BlockFace face, int rotation) {       
         int eid = ((VolatileSprayHelper) getNMSHelper()).drawSpray(spray, location, face, rotation);
                 
-        activeByPlayer.put(player.getUniqueId(), eid);
-        
+        if(REPLACE_SPRAY.get()) {
+            activeByPlayer.put(player.getUniqueId(), eid);
+            removeSpray(player);
+        }
+
         final var sound = SPRAY_SOUND.get();
         final double volume = SPRAY_SOUND_VOL.get();
         final double pitch = SPRAY_SOUND_PI.get();
@@ -200,7 +203,7 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
 
         if(SPRAY_PERSIST.get() > 0) {
             Schedulers.sync().runLater(() -> {
-                removeSpray(player);
+                removeSpray(eid);
             }, SPRAY_PERSIST.get() * 20);
         }
     }
@@ -210,6 +213,10 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
             int oid = activeByPlayer.get(player.getUniqueId());
             getPlugin().getVolatileCodeHandler().removeFakeEntity(oid);
         }
+    }
+    
+    public void removeSpray(int id) {
+        getPlugin().getVolatileCodeHandler().removeFakeEntity(id);
     }
     
     private int getRotation(float yaw, boolean allowDiagonals) {
