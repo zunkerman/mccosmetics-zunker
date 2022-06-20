@@ -13,7 +13,7 @@ public class SpraysCommand extends Command<MCCosmeticsPlugin> {
 
     public SpraysCommand(MCCosmeticsPlugin plugin) {
         super(plugin);
-    }
+    } 
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
