@@ -26,6 +26,9 @@ commands:
   spray:
     description: Use your equipped spray
     aliases: [s]
+  sprayremove:
+    description: Remove your used sprays
+    aliases: [removespray]
   emote:
     description: Use your equipped emote
     aliases: [emotes, e]

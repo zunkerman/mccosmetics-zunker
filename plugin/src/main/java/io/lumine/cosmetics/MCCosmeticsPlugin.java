@@ -4,6 +4,7 @@ import com.ticxo.playeranimator.PlayerAnimatorImpl;
 import io.lumine.cosmetics.commands.BaseCommand;
 import io.lumine.cosmetics.commands.EmotesCommand;
 import io.lumine.cosmetics.commands.SprayCommand;
+import io.lumine.cosmetics.commands.SprayRemoveCommand;
 import io.lumine.cosmetics.commands.SpraysCommand;
 import io.lumine.cosmetics.commands.admin.AdminCommand;
 import io.lumine.cosmetics.compat.CompatibilityManager;
@@ -139,6 +140,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         this.registerCommand("mccosmetics", adminCommand);
         this.registerCommand("sprays", new SpraysCommand(this));
         this.registerCommand("spray", new SprayCommand(this));
+        this.registerCommand("sprayremove", new SprayRemoveCommand(this));
         this.registerCommand("emote", new EmotesCommand(this));
 
         if(configuration.isAllowingMetrics())  {
