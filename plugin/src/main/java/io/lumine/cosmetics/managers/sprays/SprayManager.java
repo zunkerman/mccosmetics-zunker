@@ -181,11 +181,14 @@ public class SprayManager extends MCCosmeticsManager<Spray> {
     }
     
     public void spawnSpray(Player player, Spray spray, Location location, BlockFace face, int rotation) {       
+        if(REPLACE_SPRAY.get()) {
+            removeSpray(player);
+        }
+        
         int eid = ((VolatileSprayHelper) getNMSHelper()).drawSpray(spray, location, face, rotation);
                 
         if(REPLACE_SPRAY.get()) {
             activeByPlayer.put(player.getUniqueId(), eid);
-            removeSpray(player);
         }
 
         final var sound = SPRAY_SOUND.get();
