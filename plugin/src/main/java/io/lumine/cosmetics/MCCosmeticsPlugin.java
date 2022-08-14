@@ -115,7 +115,12 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         sprayManager = new SprayManager(this);
         offhandManager = new OffhandManager(this);
         if(Bukkit.getPluginManager().getPlugin("ModelEngine") != null) {
-            megManager = new MEGManager(this);
+            try {
+                megManager = new MEGManager(this);
+            } catch(Exception | Error ex) {
+                megManager = null;
+                Log.info("Incompatible ModelEngine found; disabling ModelEngine and MEG Accesstory Cosmetic features.");
+            }
         } else {
             Log.info("ModelEngine not found; disabling ModelEngine and MEG Accesstory Cosmetic features.");
         }
