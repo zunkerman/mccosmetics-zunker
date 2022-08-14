@@ -214,9 +214,11 @@ public class MCCosmeticsPlugin extends LuminePlugin {
                 
         String packageName = Bukkit.getServer().getClass().getPackage().getName();
         String version = packageName.substring(packageName.lastIndexOf('.') + 1);
-        if (version.equals("craftbukkit")) {
-            version = "pre";
-        }   
+
+        if(version.startsWith("v1_19") && !"1.19-R0.1-SNAPSHOT".equals(Bukkit.getBukkitVersion())) {
+            version = "v1_19_R1_2";
+        }
+        
         try {
             final Class<?> clazz = Class.forName("io.lumine.cosmetics.nms.VolatileCodeEnabled_" + version);
             if (VolatileCodeHandler.class.isAssignableFrom(clazz)) {

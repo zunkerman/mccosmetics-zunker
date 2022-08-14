@@ -9,8 +9,8 @@ import io.lumine.cosmetics.managers.hats.Hat;
 import io.lumine.cosmetics.managers.offhand.Offhand;
 import io.lumine.cosmetics.managers.sprays.Spray;
 import io.lumine.cosmetics.nms.cosmetic.VolatileCosmeticHelper;
-import io.lumine.cosmetics.nms.v1_19_R1.cosmetic.*;
-import io.lumine.cosmetics.nms.v1_19_R1.network.VolatileChannelHandler;
+import io.lumine.cosmetics.nms.v1_19_R1_2.cosmetic.*;
+import io.lumine.cosmetics.nms.v1_19_R1_2.network.VolatileChannelHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import lombok.Getter;
@@ -31,12 +31,12 @@ import org.bukkit.entity.Player;
 import java.util.Collection;
 import java.util.Map;
 
-public class VolatileCodeEnabled_v1_19_R1 implements VolatileCodeHandler {
+public class VolatileCodeEnabled_v1_19_R1_2 implements VolatileCodeHandler {
 
     @Getter private final MCCosmeticsPlugin plugin;
     private final Map<Class<? extends Cosmetic>, VolatileCosmeticHelper> cosmeticHelpers = Maps.newConcurrentMap();
     
-    public VolatileCodeEnabled_v1_19_R1(MCCosmeticsPlugin plugin) {
+    public VolatileCodeEnabled_v1_19_R1_2(MCCosmeticsPlugin plugin) {
         this.plugin = plugin;
         cosmeticHelpers.put(Hat.class, new VolatileHatImpl(plugin, this));
         cosmeticHelpers.put(BackAccessory.class, new VolatileBackImpl(plugin, this));

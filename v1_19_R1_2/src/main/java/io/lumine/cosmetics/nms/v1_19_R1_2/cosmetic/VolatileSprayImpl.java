@@ -1,8 +1,8 @@
-package io.lumine.cosmetics.nms.v1_19_R1.cosmetic;
+package io.lumine.cosmetics.nms.v1_19_R1_2.cosmetic;
 
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.managers.sprays.Spray;
-import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_19_R1;
+import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_19_R1_2;
 import io.lumine.cosmetics.nms.cosmetic.VolatileSprayHelper;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
@@ -23,9 +23,9 @@ import org.bukkit.inventory.meta.MapMeta;
 public class VolatileSprayImpl implements VolatileSprayHelper {
 
     @Getter private final MCCosmeticsPlugin plugin;
-    private final VolatileCodeEnabled_v1_19_R1 nmsHandler;
+    private final VolatileCodeEnabled_v1_19_R1_2 nmsHandler;
 
-    public VolatileSprayImpl(MCCosmeticsPlugin plugin, VolatileCodeEnabled_v1_19_R1 nmsHandler) {
+    public VolatileSprayImpl(MCCosmeticsPlugin plugin, VolatileCodeEnabled_v1_19_R1_2 nmsHandler) {
         this.plugin = plugin;
         this.nmsHandler = nmsHandler;
     }

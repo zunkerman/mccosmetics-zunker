@@ -1,4 +1,4 @@
-package io.lumine.cosmetics.nms.v1_19_R1.cosmetic;
+package io.lumine.cosmetics.nms.v1_19_R1_2.cosmetic;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -9,7 +9,7 @@ import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.managers.gestures.Gesture;
 import io.lumine.cosmetics.managers.gestures.GestureManager;
 import io.lumine.cosmetics.managers.gestures.QuitMethod;
-import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_19_R1;
+import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_19_R1_2;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
 import io.lumine.cosmetics.players.Profile;
 import io.netty.buffer.Unpooled;
@@ -42,13 +42,13 @@ public class VolatileGestureImpl implements VolatileEquipmentHelper {
 
 	@Getter
 	private final MCCosmeticsPlugin plugin;
-	private final VolatileCodeEnabled_v1_19_R1 nmsHandler;
+	private final VolatileCodeEnabled_v1_19_R1_2 nmsHandler;
 	private final Set<Player> activeProfile = Sets.newConcurrentHashSet();
 	private final Map<Integer, Player> playerTracker = Maps.newConcurrentMap();
 
 	private Horse horse;
 
-	public VolatileGestureImpl(MCCosmeticsPlugin plugin, VolatileCodeEnabled_v1_19_R1 nmsHandler) {
+	public VolatileGestureImpl(MCCosmeticsPlugin plugin, VolatileCodeEnabled_v1_19_R1_2 nmsHandler) {
 		this.plugin = plugin;
 		this.nmsHandler = nmsHandler;
 	}

@@ -1,6 +1,6 @@
-package io.lumine.cosmetics.nms.v1_19_R1.network;
+package io.lumine.cosmetics.nms.v1_19_R1_2.network;
 
-import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_19_R1;
+import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_19_R1_2;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
@@ -12,10 +12,10 @@ import java.util.List;
 
 public class VolatileChannelHandler extends ChannelDuplexHandler {
 
-	private final VolatileCodeEnabled_v1_19_R1 nmsHandler;
+	private final VolatileCodeEnabled_v1_19_R1_2 nmsHandler;
 	@Getter private final Player player;
 
-	public VolatileChannelHandler(Player player, VolatileCodeEnabled_v1_19_R1 nmsHandler) {
+	public VolatileChannelHandler(Player player, VolatileCodeEnabled_v1_19_R1_2 nmsHandler) {
 		this.player = player;
 		this.nmsHandler = nmsHandler;
 	}
