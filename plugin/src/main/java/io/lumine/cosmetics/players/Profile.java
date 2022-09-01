@@ -6,6 +6,9 @@ import io.lumine.cosmetics.api.cosmetics.CosmeticVariant;
 import io.lumine.cosmetics.api.cosmetics.EquippedCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.constants.CosmeticType;
+import io.lumine.cosmetics.storage.sql.SqlStorage;
+import io.lumine.cosmetics.storage.sql.mappings.Keys;
+import io.lumine.cosmetics.storage.sql.mappings.tables.records.ProfileRecord;
 import io.lumine.utils.Schedulers;
 import io.lumine.utils.serialize.Chroma;
 import lombok.Getter;
@@ -30,6 +33,7 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
     @Getter private transient final Set<Class<? extends Cosmetic>> hidden = Sets.newConcurrentHashSet();
     @Getter private Map<String,ProfileCosmeticData> equippedCosmetics = Maps.newConcurrentMap();
         
+    @Getter private transient ProfileManager manager;
     @Getter private transient Player player;
     
     public Profile() {}
@@ -39,10 +43,19 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
         this.name = name;
     }
     
-    public void initialize(final Player player)  {
+    public void initialize(final ProfileManager manager, final Player player)  {
+        this.manager = manager;
         this.player = player;
         
         reloadCosmetics();
+    }
+    
+    public void loadFromSql(ProfileRecord record) {
+        var fetchEquipped = record.fetchChildren(Keys.MCCOSMETICS_PROFILE_EQUIPPED_PROFILE_FK);
+        
+        for(var equipRecord : fetchEquipped) {
+            equippedCosmetics.put(equipRecord.getSlot(), new ProfileCosmeticData(equipRecord));
+        }
     }
 
     @Override
@@ -55,9 +68,16 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
         if(isEquipped(cosmetic)) {
             cosmetic.getManager().unequip(this);
         }
-        equippedCosmetics.put(cosmetic.getType(), new ProfileCosmeticData(cosmetic));
+        
+        final var cosmeticData = new ProfileCosmeticData(cosmetic);
+        
+        equippedCosmetics.put(cosmetic.getType(), cosmeticData);
         equipped.put(cosmetic.getClass(), new EquippedCosmetic(cosmetic));
         cosmetic.getManager().equip(this);
+        
+        if(manager.getAdapter() instanceof SqlStorage sqlStorage) {
+            sqlStorage.saveCosmeticEquipped(this, cosmetic.getType(), cosmeticData);
+        }
     }
 
     @Override
@@ -67,9 +87,15 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
             cosmetic.getManager().unequip(this);
         }
 
-        equippedCosmetics.put(cosmetic.getType(), new ProfileCosmeticData(cosmetic));
+        final var cosmeticData = new ProfileCosmeticData(cosmetic);
+        
+        equippedCosmetics.put(cosmetic.getType(), cosmeticData);
         equipped.put(cosmetic.getClass(), new EquippedCosmetic(variant));
         cosmetic.getManager().equip(this);
+        
+        if(manager.getAdapter() instanceof SqlStorage sqlStorage) {
+            sqlStorage.saveCosmeticEquipped(this, cosmetic.getType(), cosmeticData);
+        }
     }
     
     @Override
@@ -77,9 +103,16 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
         if(isEquipped(cosmetic)) {
             cosmetic.getManager().unequip(this);
         }
-        equippedCosmetics.put(cosmetic.getType(), new ProfileCosmeticData(cosmetic, color));
+        
+        final var cosmeticData = new ProfileCosmeticData(cosmetic, color);
+        
+        equippedCosmetics.put(cosmetic.getType(), cosmeticData);
         equipped.put(cosmetic.getClass(), new EquippedCosmetic(cosmetic, color));
         cosmetic.getManager().equip(this);
+        
+        if(manager.getAdapter() instanceof SqlStorage sqlStorage) {
+            sqlStorage.saveCosmeticEquipped(this, cosmetic.getType(), cosmeticData);
+        }
     }
 
     @Override
@@ -93,6 +126,10 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
         final var pCos = equipped.remove(tClass);
         if(pCos != null) {
             pCos.getCosmetic().getManager().unequip(this);
+            
+            if(manager.getAdapter() instanceof SqlStorage sqlStorage) {
+                sqlStorage.saveCosmeticEquipped(this, pCos.getCosmetic().getId(), null);
+            }
         }
     }
 

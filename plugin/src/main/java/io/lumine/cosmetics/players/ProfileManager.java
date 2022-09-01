@@ -3,6 +3,8 @@ package io.lumine.cosmetics.players;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.events.CosmeticPlayerLoadedEvent;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
+import io.lumine.cosmetics.storage.sql.SqlStorage;
+import io.lumine.utils.storage.sql.SqlConnector;
 import io.lumine.utils.Events;
 import io.lumine.utils.logging.Log;
 import io.lumine.utils.storage.players.PlayerRepository;
@@ -19,13 +21,23 @@ public class ProfileManager extends PlayerRepository<MCCosmeticsPlugin,Profile> 
     public ProfileManager(MCCosmeticsPlugin plugin) {
         super(plugin, Profile.class);
         
-        switch(plugin.getConfiguration().getStorageType()) {
-            case LUMINE:
-                this.initialize(plugin.getCompatibility().getLumineCore().get().getStorageDriver());
-                break;
-            default:
-                this.initialize(new JsonPlayerStorageAdapter<>(plugin,Profile.class));
-                break;
+        if(plugin.getConfiguration().getStorageType().isSql()) {
+            
+            final var provider = plugin.getConfiguration().getStorageType().getSqlProvider();
+            final var credentials = plugin.getConfiguration().getSqlCredentials();
+            
+            final var connector = new SqlConnector(plugin, provider, credentials);
+            
+            this.initialize(new SqlStorage<>(this,connector));
+        } else {
+            switch(plugin.getConfiguration().getStorageType()) {
+                case LUMINE:
+                    this.initialize(plugin.getCompatibility().getLumineCore().get().getStorageDriver());
+                    break;
+                default:
+                    this.initialize(new JsonPlayerStorageAdapter<>(plugin,Profile.class));
+                    break;
+            }
         }
 
         Events.subscribe(PlayerGameModeChangeEvent.class).handler(event -> {
@@ -51,7 +63,7 @@ public class ProfileManager extends PlayerRepository<MCCosmeticsPlugin,Profile> 
 
     @Override
     public void initProfile(Profile profile, Player player) {
-        profile.initialize(player);
+        profile.initialize(this,player);
         Events.call(new CosmeticPlayerLoadedEvent(player,profile));
     }
 

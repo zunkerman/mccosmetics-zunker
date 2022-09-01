@@ -1,8 +1,11 @@
 package io.lumine.cosmetics.config;
 
 import com.google.common.collect.Lists;
+
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.storage.StorageDriver;
+import io.lumine.utils.storage.sql.SqlCredentials;
+import io.lumine.utils.config.properties.types.SqlCredentialsProp;
 import io.lumine.utils.config.properties.Property;
 import io.lumine.utils.config.properties.PropertyHolder;
 import io.lumine.utils.config.properties.types.EnumProp;
@@ -23,8 +26,7 @@ public class Configuration extends ReloadableModule<MCCosmeticsPlugin> implement
     
     private static final IntProp CLOCK_INTERVAL = Property.Int(Scope.CONFIG, "Clock.Interval", 1);
     private static final EnumProp<StorageDriver> STORAGE_DRIVER = Property.Enum(Scope.CONFIG, StorageDriver.class, "Storage.Driver", StorageDriver.JSON); 
-    
-    
+    private static final SqlCredentialsProp SQL_CREDENTIALS = Property.SqlCredentials(Scope.CONFIG, "Storage");
     
     @Getter private boolean allowingMetrics = true;
     
@@ -69,6 +71,10 @@ public class Configuration extends ReloadableModule<MCCosmeticsPlugin> implement
     
     public StorageDriver getStorageType() {
         return STORAGE_DRIVER.get(this);
+    }
+    
+    public SqlCredentials getSqlCredentials() {
+        return SQL_CREDENTIALS.get(this);
     }
     
     private void generateDefaultConfigFiles() {

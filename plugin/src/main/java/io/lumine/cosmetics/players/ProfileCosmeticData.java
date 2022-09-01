@@ -6,6 +6,7 @@ import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.CosmeticVariant;
 import io.lumine.cosmetics.api.cosmetics.EquippedCosmetic;
+import io.lumine.cosmetics.storage.sql.mappings.tables.records.ProfileEquippedRecord;
 import io.lumine.utils.serialize.Chroma;
 import lombok.Data;
 
@@ -34,6 +35,12 @@ public class ProfileCosmeticData {
         this.variant = color.toHexString();
     }
     
+    public ProfileCosmeticData(ProfileEquippedRecord equipRecord) {
+        this.type = equipRecord.getSlot();
+        this.id = equipRecord.getCosmeticId();
+        this.variant = equipRecord.getCosmeticData();
+    }
+
     public Optional<EquippedCosmetic> toEquippedCosmetic() {
         var maybeManager = MCCosmeticsPlugin.inst().getCosmetics().getManager(type);
         if(maybeManager.isEmpty()) {
