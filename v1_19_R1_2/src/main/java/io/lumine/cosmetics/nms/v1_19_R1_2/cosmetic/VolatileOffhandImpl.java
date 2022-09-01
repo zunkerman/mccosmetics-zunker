@@ -94,7 +94,6 @@ public class VolatileOffhandImpl implements VolatileEquipmentHelper {
     }
 
     public void handleSpawn(Profile profile) {
-        /*
         final var maybeEquipped = profile.getEquipped(Offhand.class);
         if(maybeEquipped.isEmpty()) {
             return;
@@ -114,8 +113,7 @@ public class VolatileOffhandImpl implements VolatileEquipmentHelper {
         equipmentPacket.write(byteBuf);
 
         final var pipeline = ((CraftPlayer) player).getHandle().connection.getConnection().channel.pipeline();
-        pipeline.writeAndFlush(byteBuf);
-        */
+        pipeline.writeAndFlush(equipmentPacket);
     }
 
 }

@@ -107,7 +107,6 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
     }
 
     public void handleSpawn(Profile profile) {
-        /*
         final var maybeEquipped = profile.getEquipped(Hat.class);
         if(maybeEquipped.isEmpty()) {
             return;
@@ -122,13 +121,12 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
         final var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic(equip));
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsHat)));
 
-        FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
-        byteBuf.writeByte(80);
-        equipmentPacket.write(byteBuf);
+        //FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
+        //byteBuf.writeByte(80);
+        //equipmentPacket.write(byteBuf);
 
         final var pipeline = ((CraftPlayer) player).getHandle().connection.getConnection().channel.pipeline();
-        pipeline.writeAndFlush(byteBuf);
-        */
+        pipeline.writeAndFlush(equipmentPacket);
     }
 
 }
