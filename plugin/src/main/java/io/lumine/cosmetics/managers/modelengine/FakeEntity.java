@@ -1,27 +1,24 @@
 package io.lumine.cosmetics.managers.modelengine;
 
-import com.ticxo.modelengine.api.model.ModeledEntity;
-import com.ticxo.modelengine.api.model.base.BukkitPlayer;
-import com.ticxo.modelengine.api.model.base.EntityData;
-import com.ticxo.modelengine.api.util.math.Offset;
-import io.lumine.cosmetics.MCCosmeticsPlugin;
-import io.lumine.cosmetics.logging.MCLogger;
+import com.ticxo.modelengine.api.entity.BukkitPlayer;
+import com.ticxo.modelengine.api.nms.entity.wrapper.BodyRotationController;
+import com.ticxo.modelengine.api.utils.math.Offset;
 import io.lumine.utils.serialize.Orient;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 public class FakeEntity extends BukkitPlayer {
 
-	private final Player player;
 	private final Vector offset;
 	private final double yaw;
 	private final double pitch;
 	private final ModelAnchor anchor;
+	private BodyRotationController controller;
 
-	public FakeEntity(Player player, Orient orient, ModelAnchor anchor) {
-		super(player);
-		this.player = player;
+	public FakeEntity(@NotNull Player entity, Orient orient, ModelAnchor anchor) {
+		super(entity);
 		offset = orient.getLocus().toVector();
 		yaw = Math.toRadians(orient.getDirection().getYaw());
 		pitch = Math.toRadians(orient.getDirection().getPitch());
@@ -29,52 +26,26 @@ public class FakeEntity extends BukkitPlayer {
 	}
 
 	@Override
-	public void sendDespawnPacket(ModeledEntity modeledEntity) {
-
-	}
-
-	@Override
-	public void sendSpawnPacket(ModeledEntity modeledEntity) {
-
-	}
-
-	@Override
-	public void saveModelInfo(ModeledEntity model) {
-
-	}
-
-	@Override
-	public EntityData loadModelInfo() {
-		return null;
+	public BodyRotationController wrapBodyRotationControl() {
+		controller = super.wrapBodyRotationControl();
+		controller.setMaxHeadAngle(45);
+		controller.setMaxBodyAngle(45);
+		controller.setStableAngle(5);
+		return controller;
 	}
 
 	@Override
 	public Location getLocation() {
-		Location location = player.getLocation();
+		Location location = getOriginal().getLocation();
 		Vector offset;
 		if (anchor == ModelAnchor.HEAD) {
 			double pYaw = Math.toRadians(location.getYaw());
 			double pPitch = Math.toRadians(location.getPitch());
 			offset = Offset.rotateYaw(Offset.rotatePitch(this.offset.clone(), pitch + pPitch), yaw + pYaw);
-		} else {
-			double pYaw = getBodyYaw();
+		}else {
+			double pYaw = Math.toRadians(controller == null ? getYBodyRot() : controller.getYBodyRot());
 			offset = Offset.rotateYaw(this.offset.clone(), yaw + pYaw);
 		}
 		return location.add(offset);
 	}
-
-	@Override
-	public void setEntitySize(float width, float height, float eye) {
-
-	}
-
-	private double getBodyYaw() {
-		Location location = player.getLocation();
-		Vector nV = new Vector(location.getX() - getLastX(), 0, location.getZ() - getLastZ());
-		if(nV.getX() != 0 || nV.getZ() != 0)
-			MCCosmeticsPlugin.inst().getVolatileCodeHandler().setBodyYaw(player, location.getYaw());
-
-		return Math.toRadians(MCCosmeticsPlugin.inst().getVolatileCodeHandler().getBodyYaw(player));
-	}
-
 }

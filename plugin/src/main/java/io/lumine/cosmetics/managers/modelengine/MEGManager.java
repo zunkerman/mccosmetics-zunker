@@ -1,15 +1,15 @@
 package io.lumine.cosmetics.managers.modelengine;
 
 import com.ticxo.modelengine.api.ModelEngineAPI;
-import com.ticxo.modelengine.api.animation.StateProperty;
+import com.ticxo.modelengine.api.animation.AnimationProperty;
+import com.ticxo.modelengine.api.animation.blueprint.LoopMode;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import com.ticxo.modelengine.api.nms.entity.wrapper.RangeManager;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
-import io.lumine.cosmetics.logging.MCLogger;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.utils.Events;
 import io.lumine.utils.Schedulers;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -104,33 +104,33 @@ public class MEGManager extends MCCosmeticsManager<MEGAccessory> {
 			return;
 		}
 
-		final var blueprint = ModelEngineAPI.getModelBlueprint(meg.getModelId());
+		final var blueprint = ModelEngineAPI.getBlueprint(meg.getModelId());
 		if(blueprint == null)
 			return;
 
-		final var animation = blueprint.getAnimation(meg.getState());
+		final var animation = blueprint.getAnimations().get(meg.getState());
 		if(animation == null)
 			return;
 
 		final var player = profile.getPlayer();
-		final var activeModel = ModelEngineAPI.createActiveModel(meg.getModelId());
-		final var property = new StateProperty(meg.getState(), animation, 1, 0, 1);
-		property.setLoop(true);
-		property.setOverride(true);
-		activeModel.addState(property);
-		activeModel.setDamageTint(false);
-		activeModel.setAnimationMode(meg.getMode());
+		final var activeModel = ModelEngineAPI.createActiveModel(blueprint);
+		final var property = new AnimationProperty(animation, 1, 0, 1);
+		property.setForceLoopMode(LoopMode.LOOP);
+		property.setForceOverride(true);
+		activeModel.getAnimationHandler().playAnimation(property, true);
+		activeModel.setCanHurt(false);
 
 		ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(player.getUniqueId());
-		if(modeledEntity != null) {
-			modeledEntity.clearModels();
-			modeledEntity.getAllActiveModel().clear();
+		if(modeledEntity == null) {
+			modeledEntity = ModelEngineAPI.createModeledEntity(new FakeEntity(player, meg.getOffset(), meg.getAnchor()));
+			modeledEntity.setBaseEntityVisible(true);
+			ModelEngineAPI.getEntityHandler().setSelfFakeInvisible(player, false);
+			if(modeledEntity.getRangeManager() instanceof RangeManager.Disguise disguise)
+				disguise.setIncludeSelf(true);
 		}
 
-		modeledEntity = new MEGModel(player, new FakeEntity(player, meg.getOffset(), meg.getAnchor()));
-		modeledEntity.addActiveModel(activeModel);
-		modeledEntity.setInvisible(false);
-		modeledEntity.addPlayerAsync(player);
+		modeledEntity.destroy();
+		modeledEntity.addModel(activeModel, false);
 	}
 
 	public void unequip(CosmeticProfile profile) {
@@ -140,16 +140,12 @@ public class MEGManager extends MCCosmeticsManager<MEGAccessory> {
         }
         var opt = maybeEquipped.get().getCosmetic();
         
-        if(!(opt instanceof MEGAccessory meg)) {
+        if(!(opt instanceof MEGAccessory)) {
             return;
         }
 
 		final var player = profile.getPlayer();
-		ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(player.getUniqueId());
-		if(modeledEntity != null) {
-			modeledEntity.clearModels();
-			modeledEntity.getAllActiveModel().clear();
-		}
+		ModelEngineAPI.removeModeledEntity(player.getUniqueId());
 	}
 
 }

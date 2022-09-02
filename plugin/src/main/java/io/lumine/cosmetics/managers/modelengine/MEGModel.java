@@ -1,22 +1,8 @@
 package io.lumine.cosmetics.managers.modelengine;
 
-import com.ticxo.modelengine.api.animation.Query;
-import com.ticxo.modelengine.api.model.AbstractModeledEntity;
-import com.ticxo.modelengine.api.model.ActiveModel;
-import com.ticxo.modelengine.api.model.base.BaseEntity;
-import com.ticxo.modelengine.api.model.mount.handler.EmptyMountHandler;
-import com.ticxo.modelengine.api.model.mount.handler.IMountHandler;
-import com.ticxo.modelengine.api.model.nametag.EmptyNametagHandler;
-import com.ticxo.modelengine.api.model.nametag.INametagHandler;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
+public class MEGModel /*extends AbstractModeledEntity*/ {
 
-import java.util.List;
-
-public class MEGModel extends AbstractModeledEntity {
-
-	private final Player player;
+	/*private final Player player;
 	private final Query queries = new Query(this);
 	private final IMountHandler mountHandler;
 	private final INametagHandler nametagHandler;
@@ -183,5 +169,5 @@ public class MEGModel extends AbstractModeledEntity {
 		if(!getEntity().isLivingEntity())
 			return 0;
 		return getEntity().getMaxHealth();
-	}
+	}*/
 }

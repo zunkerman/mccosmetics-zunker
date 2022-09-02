@@ -114,7 +114,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         backManager = new BackManager(this);
         sprayManager = new SprayManager(this);
         offhandManager = new OffhandManager(this);
-        if(Bukkit.getPluginManager().getPlugin("ModelEngine") != null) {
+        if(Bukkit.getPluginManager().getPlugin("ModelEngine_Beta") != null) {
             try {
                 megManager = new MEGManager(this);
             } catch(Exception | Error ex) {
