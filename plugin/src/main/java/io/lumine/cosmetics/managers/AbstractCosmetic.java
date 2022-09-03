@@ -12,6 +12,7 @@ import io.lumine.cosmetics.commands.CommandHelper;
 import io.lumine.cosmetics.config.Scope;
 import io.lumine.cosmetics.constants.Permissions;
 import io.lumine.cosmetics.menus.CosmeticMenu;
+import io.lumine.utils.Schedulers;
 import io.lumine.utils.config.properties.Property;
 import io.lumine.utils.config.properties.types.*;
 import io.lumine.utils.items.ItemFactory;
@@ -140,7 +141,13 @@ public abstract class AbstractCosmetic extends Cosmetic {
 					        manager.equipMannequin(mannequin, new EquippedCosmetic(this));
                             CommandHelper.sendSuccess(player, "Set wardrobe " + type + " to " + getDisplay());
     					} else {
-    						prof.equip(this);
+    					    if(MCCosmeticsPlugin.inst().getConfiguration().getEquipDelay() > 0) {
+    					        Schedulers.sync().runLater(() -> {
+    					            prof.equip(this);
+    					        }, MCCosmeticsPlugin.inst().getConfiguration().getEquipDelay());
+    					    } else {
+    					        prof.equip(this);
+    					    }
     						CommandHelper.sendSuccess(player, "Set your " + type + " to " + getDisplay());
     					}
 						player.closeInventory();
