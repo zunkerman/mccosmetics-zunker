@@ -3,6 +3,8 @@ package io.lumine.cosmetics.nms;
 import com.google.common.collect.Maps;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
+import io.lumine.cosmetics.api.players.wardrobe.Mannequin;
+import io.lumine.cosmetics.api.players.wardrobe.WardrobeTracker;
 import io.lumine.cosmetics.managers.back.BackAccessory;
 import io.lumine.cosmetics.managers.gestures.Gesture;
 import io.lumine.cosmetics.managers.hats.Hat;
@@ -12,6 +14,7 @@ import io.lumine.cosmetics.nms.cosmetic.VolatileCosmeticHelper;
 import io.lumine.cosmetics.nms.v1_17_R1.cosmetic.*;
 import io.lumine.cosmetics.nms.v1_17_R1.cosmetic.*;
 import io.lumine.cosmetics.nms.v1_17_R1.network.VolatileChannelHandler;
+import io.lumine.cosmetics.nms.v1_17_R1.wardrobe.MannequinEntity;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import lombok.Getter;
@@ -23,6 +26,7 @@ import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
@@ -137,6 +141,11 @@ public class VolatileCodeEnabled_v1_17_R1 implements VolatileCodeHandler {
         final var entityManager = level.entityManager;
         final var entity = entityManager.getEntityGetter().get(id);
         return entity == null ? null : entity.getBukkitEntity();
+    }
+    
+    @Override
+    public Mannequin createMannequin(WardrobeTracker tracker, Player player, Location location) {
+        return new MannequinEntity(tracker,this,player,location);
     }
 
     @Override

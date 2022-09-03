@@ -1,4 +1,4 @@
-package io.lumine.cosmetics.nms.v1_19_R1_2.wardrobe;
+package io.lumine.cosmetics.nms.v1_19_R1.wardrobe;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +16,7 @@ import com.mojang.datafixers.util.Pair;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.players.wardrobe.Mannequin;
 import io.lumine.cosmetics.api.players.wardrobe.WardrobeTracker;
-import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_19_R1_2;
+import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_19_R1;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
@@ -32,7 +32,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 
 public class MannequinEntity implements Mannequin {
 
-    private final VolatileCodeEnabled_v1_19_R1_2 handler;
+    private final VolatileCodeEnabled_v1_19_R1 handler;
     @Getter private final WardrobeTracker tracker;
     @Getter private final UUID uniqueId;
     @Getter private final Player player;
@@ -42,7 +42,7 @@ public class MannequinEntity implements Mannequin {
     @Getter private ServerPlayer fakePlayer;
     private Map<Class<? extends Cosmetic>,Integer> extraEntities = Maps.newConcurrentMap();
 
-    public MannequinEntity(WardrobeTracker tracker, VolatileCodeEnabled_v1_19_R1_2 handler, Player player, Location location) {
+    public MannequinEntity(WardrobeTracker tracker, VolatileCodeEnabled_v1_19_R1 handler, Player player, Location location) {
         this.tracker = tracker;
         this.handler = handler;
         this.player = player;

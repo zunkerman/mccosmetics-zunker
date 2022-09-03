@@ -3,8 +3,10 @@ package io.lumine.cosmetics.nms.v1_18_R1.cosmetic;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
+import io.lumine.cosmetics.api.cosmetics.EquippedCosmetic;
 import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
+import io.lumine.cosmetics.api.players.wardrobe.Mannequin;
 import io.lumine.cosmetics.managers.hats.Hat;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R1;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
@@ -66,6 +68,30 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
         final var item = nmsPlayer.getItemBySlot(EquipmentSlot.HEAD);
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(nmsPlayer.getId(), List.of(Pair.of(EquipmentSlot.HEAD, item)));
         nmsHandler.broadcastAroundAndSelf(nmsPlayer.getBukkitEntity(), equipmentPacket);
+    }
+
+    @Override 
+    public void equipMannequin(Mannequin mannequin, EquippedCosmetic cosmetic) {
+        if(!(cosmetic.getCosmetic() instanceof Hat hat)) {
+            return;
+        }
+        
+        final var entityId = mannequin.getEntityId();
+        final var player = mannequin.getPlayer();
+        
+        var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic(cosmetic));
+        
+        ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(entityId, List.of(Pair.of(EquipmentSlot.HEAD, nmsHat)));
+
+        nmsHandler.broadcast(player, equipmentPacket);
+    }
+
+    @Override
+    public void unequipMannequin(Mannequin mannequin) {
+        final var nmsPlayer = ((CraftPlayer) mannequin.getPlayer()).getHandle();
+        final var item = nmsPlayer.getItemBySlot(EquipmentSlot.HEAD);
+        ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(nmsPlayer.getId(), List.of(Pair.of(EquipmentSlot.HEAD, item)));
+        nmsHandler.broadcast(nmsPlayer.getBukkitEntity(), equipmentPacket);
     }
 
     @Override

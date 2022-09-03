@@ -4,8 +4,10 @@ import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
+import io.lumine.cosmetics.api.cosmetics.EquippedCosmetic;
 import io.lumine.cosmetics.api.cosmetics.ItemCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
+import io.lumine.cosmetics.api.players.wardrobe.Mannequin;
 import io.lumine.cosmetics.logging.MCLogger;
 import io.lumine.cosmetics.managers.back.BackAccessory;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_18_R2;
@@ -97,6 +99,46 @@ public class VolatileBackImpl implements VolatileEquipmentHelper {
 		ClientboundRemoveEntitiesPacket removePacket = new ClientboundRemoveEntitiesPacket(stand.getId());
 		nmsHandler.broadcastAroundAndSelf(player, removePacket);
 	}
+    
+    @Override 
+    public void equipMannequin(Mannequin mannequin, EquippedCosmetic cosmetic) {
+        if(!(cosmetic.getCosmetic() instanceof BackAccessory back)) {
+            return;
+        }
+        
+        final var entityId = mannequin.getEntityId();
+        final var player = mannequin.getPlayer();
+        var nmsBack = CraftItemStack.asNMSCopy(back.getCosmetic(cosmetic));
+
+        var mannequinLocation = mannequin.getLocation();
+        
+        mannequin.removeExtraEntity(BackAccessory.class);
+
+        var stand = new ArmorStand(EntityType.ARMOR_STAND, ((CraftWorld) player.getWorld()).getHandle());
+        stand.moveTo(mannequinLocation.getX(), mannequinLocation.getY() + stand.getMyRidingOffset(), mannequinLocation.getZ(), mannequinLocation.getYaw(), 0);
+        stand.setMarker(true);
+        stand.setInvisible(true);
+        stand.setSilent(true);
+
+        mannequin.addExtraEntity(BackAccessory.class, stand.getId());
+        
+        var mobPacket = new ClientboundAddEntityPacket(stand);
+        var dataPacket = new ClientboundSetEntityDataPacket(stand.getId(), stand.getEntityData(), true);
+        var passengersPacket = createPassengerPacket(entityId, stand.getId());
+
+        nmsHandler.broadcast(player, mobPacket, dataPacket, passengersPacket);
+
+        stand.setItemSlot(EquipmentSlot.HEAD, nmsBack);
+
+        var equipmentPacket = new ClientboundSetEquipmentPacket(stand.getId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsBack)));
+
+        nmsHandler.broadcast(player, equipmentPacket);
+    }
+
+    @Override
+    public void unequipMannequin(Mannequin mannequin) {
+        mannequin.removeExtraEntity(BackAccessory.class);
+    }
 
 	@Override
 	public boolean read(Player sender, Object packet, boolean isCanceled) {
