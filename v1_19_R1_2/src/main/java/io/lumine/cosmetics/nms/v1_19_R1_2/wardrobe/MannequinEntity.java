@@ -21,6 +21,7 @@ import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundAddPlayerPacket;
+import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoPacket;
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import net.minecraft.network.protocol.game.ClientboundRotateHeadPacket;
@@ -84,19 +85,9 @@ public class MannequinEntity implements Mannequin {
         var head = (byte)(int)(serverPlayer.getYHeadRot() * 256.0F / 360.0F);
         var rotatePacket = new ClientboundRotateHeadPacket(fakePlayer, head);
         
-        var teleport = new FriendlyByteBuf(Unpooled.buffer());
+        var swingPacket = new ClientboundAnimatePacket(fakePlayer, 0);
         
-        teleport.writeVarInt(fakePlayer.getId());
-        teleport.writeDouble(location.getX());
-        teleport.writeDouble(location.getY());
-        teleport.writeDouble(location.getZ());
-        teleport.writeByte((byte)(int)(serverPlayer.getYRot() * 256.0F / 360.0F));
-        teleport.writeByte((byte)(int)(serverPlayer.getXRot() * 256.0F / 360.0F));
-        teleport.writeBoolean(true);
-        
-        var teleportPacket = new ClientboundTeleportEntityPacket(teleport);
-        
-        handler.broadcast(player, packetPlayerInfo, packetAddPlayer, equipmentPacket, rotatePacket, teleportPacket);
+        handler.broadcast(player, packetPlayerInfo, packetAddPlayer, equipmentPacket, rotatePacket, swingPacket);
         
         for(var eq : handler.getPlugin().getProfiles().getProfile(player).getEquipped().values()) {
             eq.getCosmetic().getManager().equipMannequin(this, eq);
