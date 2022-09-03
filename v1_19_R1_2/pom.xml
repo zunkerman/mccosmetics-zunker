@@ -86,9 +86,13 @@
             <id>lumine-snapshots</id>
             <url>https://mvn.lumine.io/repository/maven-snapshots/</url>
         </repository> 
-        <repository>
+        <repository> 
             <id>lumine-test</id>
             <url>https://mvn.lumine.io/repository/maven-test/</url>
+        </repository>
+        <repository>
+           <id>paper-repo</id>
+           <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
         <repository>
             <id>minecraft-libraries</id>
@@ -140,6 +144,12 @@
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.mojang</groupId>
+            <artifactId>authlib</artifactId>
+            <version>3.11.50</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.mojang</groupId>

@@ -6,8 +6,11 @@ import com.ticxo.modelengine.api.animation.blueprint.LoopMode;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import com.ticxo.modelengine.api.nms.entity.wrapper.RangeManager;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
+import io.lumine.cosmetics.api.cosmetics.EquippedCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
+import io.lumine.cosmetics.api.players.wardrobe.Mannequin;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
+import io.lumine.cosmetics.players.wardrobe.WardrobeMegDummy;
 import io.lumine.utils.Events;
 import io.lumine.utils.Schedulers;
 import org.bukkit.entity.Player;
@@ -147,5 +150,53 @@ public class MEGManager extends MCCosmeticsManager<MEGAccessory> {
 		final var player = profile.getPlayer();
 		ModelEngineAPI.removeModeledEntity(player.getUniqueId());
 	}
+	
+    @Override
+    public void equipMannequin(Mannequin mannequin, EquippedCosmetic cosmetic) {
+
+        var opt = cosmetic.getCosmetic();
+        
+        if(!(opt instanceof MEGAccessory meg)) {
+            return;
+        }
+
+        final var blueprint = ModelEngineAPI.getBlueprint(meg.getModelId());
+        if(blueprint == null)
+            return;
+
+        final var animation = blueprint.getAnimations().get(meg.getState());
+        if(animation == null)
+            return;
+        
+        mannequin.setCleanupWhenDone(MEGAccessory.class);
+
+        final var activeModel = ModelEngineAPI.createActiveModel(blueprint);
+        final var property = new AnimationProperty(animation, 1, 0, 1);
+        property.setForceLoopMode(LoopMode.LOOP);
+        property.setForceOverride(true);
+        activeModel.getAnimationHandler().playAnimation(property, true);
+        activeModel.setCanHurt(false);
+
+        var dummy = new WardrobeMegDummy(mannequin, meg.getOffset(), meg.getAnchor());
+        
+        ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(mannequin.getUniqueId());
+        if(modeledEntity == null) {
+            modeledEntity = ModelEngineAPI.createModeledEntity(dummy);
+            modeledEntity.setBaseEntityVisible(true);
+            if(modeledEntity.getRangeManager() instanceof RangeManager.Disguise disguise) {
+                disguise.setIncludeSelf(true);
+            }
+
+            modeledEntity.getRangeManager().forceSpawn(mannequin.getPlayer());
+        }
+
+        modeledEntity.destroy();
+        modeledEntity.addModel(activeModel, false);
+    }
+    
+    @Override
+    public void unequipMannequin(Mannequin mannequin) {
+        ModelEngineAPI.removeModeledEntity(mannequin.getUniqueId());
+    }
 
 }

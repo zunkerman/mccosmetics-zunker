@@ -1,42 +1,46 @@
 package io.lumine.cosmetics.commands;
 
 import io.lumine.cosmetics.MCCosmeticsPlugin;
+import io.lumine.cosmetics.api.cosmetics.ColorableCosmetic;
+import io.lumine.cosmetics.api.cosmetics.Cosmetic;
+import io.lumine.cosmetics.api.cosmetics.EquippedCosmetic;
+import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.cosmetics.constants.Permissions;
 import io.lumine.utils.commands.Command;
+import io.lumine.utils.serialize.Chroma;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
+import com.google.common.collect.Lists;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-public class BaseCommand extends Command<MCCosmeticsPlugin> {
+public class WardrobeCommand extends Command<MCCosmeticsPlugin> {
 
-    public BaseCommand(MCCosmeticsPlugin plugin) {
-        super(plugin);
-        
-        this.addSubCommands(
-                new DyeCommand(this), 
-                new EquipCommand(this), 
-                new UnequipCommand(this),
-                new WardrobeCommand(this));
+    public WardrobeCommand(Command command) {
+        super(command);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
         final var player = (Player) sender;
-        final var profile = getPlugin().getProfiles().getProfile(player);
         
-        if(profile == null) {
-            throw new IllegalStateException("This should never happen, please report to the developers.");
-        }
+        getPlugin().getWardrobeManager().openWardrobe(player);
         
-        getPlugin().getMenuManager().getCustomizeMenu().open(player,profile);
+        CommandHelper.sendSuccess(sender, "Spawned wardrobe");
+        
         return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -51,6 +55,6 @@ public class BaseCommand extends Command<MCCosmeticsPlugin> {
 
     @Override
     public String getName() {
-        return null;
+        return "wardrobe";
     }
 }

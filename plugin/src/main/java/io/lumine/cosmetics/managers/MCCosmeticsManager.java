@@ -4,14 +4,17 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
+import io.lumine.cosmetics.api.cosmetics.EquippedCosmetic;
 import io.lumine.cosmetics.api.cosmetics.manager.CosmeticManager;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
+import io.lumine.cosmetics.api.players.wardrobe.Mannequin;
 import io.lumine.cosmetics.config.Scope;
 import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.cosmetics.menus.SelectionMenu;
 import io.lumine.cosmetics.nms.VolatileCodeHandler;
 import io.lumine.cosmetics.nms.cosmetic.VolatileCosmeticHelper;
 import io.lumine.cosmetics.players.ProfileManager;
+import io.lumine.cosmetics.players.wardrobe.WardrobeExecutor;
 import io.lumine.utils.config.properties.Property;
 import io.lumine.utils.config.properties.types.NodeListProp;
 import io.lumine.utils.files.Files;
@@ -100,6 +103,16 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
 
     public abstract void equip(CosmeticProfile profile);
 
+    @Override
+    public void equipMannequin(Mannequin mannequin, EquippedCosmetic cosmetic) {
+        
+    }
+    
+    @Override
+    public void unequipMannequin(Mannequin mannequin) {
+        
+    }
+    
     protected ProfileManager getProfiles() {
         return plugin.getProfiles();
     }
@@ -110,6 +123,10 @@ public abstract class MCCosmeticsManager<T extends Cosmetic> extends ReloadableM
     
     protected VolatileCosmeticHelper getNMSHelper() {
         return getNMS().getCosmeticHelper(cosmeticClass);
+    }
+    
+    protected WardrobeExecutor getWardrobeManager() {
+        return plugin.getWardrobeManager();
     }
 
 }

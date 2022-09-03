@@ -3,8 +3,10 @@ package io.lumine.cosmetics.managers;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
 import io.lumine.cosmetics.api.cosmetics.CosmeticVariant;
+import io.lumine.cosmetics.api.cosmetics.EquippedCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
 import io.lumine.cosmetics.commands.CommandHelper;
 import io.lumine.cosmetics.config.Scope;
@@ -33,13 +35,15 @@ public abstract class AbstractCosmetic extends Cosmetic {
 	protected static final IntProp MODEL = Property.Int(Scope.NONE, "Model");
 	protected static final LangProp DISPLAY = Property.Lang(Scope.NONE, "Display");
 	protected static final LangListProp DESCRIPTION = Property.LangList(Scope.NONE, "Description");
-    protected static final StringProp COLOR = Property.String(Scope.NONE, "Color");
 	protected static final StringProp TEXTURE = Property.String(Scope.NONE, "SkullTexture");
 
+    protected static final StringProp COLOR = Property.String(Scope.NONE, "Color");
     protected static final BooleanProp COLORABLE = Property.Boolean(Scope.NONE, "Colorable", false);
 
     protected static final NodeListProp VARIANTS = Property.NodeList(Scope.NONE, "Variants");
 
+    private final MCCosmeticsManager manager;
+    
 	protected final File file;
     @Getter protected final String id;
 	@Getter protected final String key;
@@ -61,7 +65,7 @@ public abstract class AbstractCosmetic extends Cosmetic {
 
 	public AbstractCosmetic(MCCosmeticsManager manager, File file, String type, String key) {
 		super(manager, type, key);
-
+		this.manager = manager;
 		this.file = file;
 		this.key = key;
 		this.namespace = NAMESPACE.fget(file,this);
@@ -130,14 +134,29 @@ public abstract class AbstractCosmetic extends Cosmetic {
 				.click((prof,player) -> {
 					if(prof.getPlayer().isOp() || prof.has(this)) {
 					    CosmeticMenu.playMenuClick(player);
-						prof.equip(this);
-						CommandHelper.sendSuccess(player, "Set your " + type + " to " + getDisplay());
+					    if(manager.getWardrobeManager().isInWardrobe(player)) {
+					        var mannequin = manager.getWardrobeManager().getMannequin(player);
+					        
+					        manager.equipMannequin(mannequin, new EquippedCosmetic(this));
+                            CommandHelper.sendSuccess(player, "Set wardrobe " + type + " to " + getDisplay());
+    					} else {
+    						prof.equip(this);
+    						CommandHelper.sendSuccess(player, "Set your " + type + " to " + getDisplay());
+    					}
 						player.closeInventory();
 					} else {
 						CommandHelper.sendError(player, Property.String(Scope.CONFIG,
 								"Configuration.Language.Cosmetic-Not-Unlocked","You haven't unlocked that cosmetic!").get());
 					}
-				}).build();
+				})
+				.rightClick((prof,player) -> {
+                    if(prof.getPlayer().isOp() || prof.has(this)) {
+                        
+                    } else {
+                        CommandHelper.sendError(player, Property.String(Scope.CONFIG,
+                                "Configuration.Language.Cosmetic-Not-Unlocked","You haven't unlocked that cosmetic!").get());
+                    }
+                }).build();
 	}
 
 	public boolean hasVariants() {

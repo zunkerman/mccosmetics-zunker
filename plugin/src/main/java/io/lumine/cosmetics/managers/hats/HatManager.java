@@ -2,19 +2,18 @@ package io.lumine.cosmetics.managers.hats;
 
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.cosmetics.Cosmetic;
+import io.lumine.cosmetics.api.cosmetics.EquippedCosmetic;
 import io.lumine.cosmetics.api.cosmetics.manager.HideableCosmetic;
 import io.lumine.cosmetics.api.players.CosmeticProfile;
-import io.lumine.cosmetics.constants.CosmeticType;
 import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.cosmetics.managers.gestures.Gesture;
-import io.lumine.cosmetics.managers.offhand.Offhand;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
 import io.lumine.cosmetics.players.Profile;
 import io.lumine.utils.Events;
 import io.lumine.utils.events.extra.ArmorEquipEvent; 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import io.lumine.cosmetics.api.players.wardrobe.Mannequin;
 
 import java.io.File;
 
@@ -65,6 +64,16 @@ public class HatManager extends MCCosmeticsManager<Hat> implements HideableCosme
     @Override
     public void unequip(CosmeticProfile profile) {
         getHelper().unapply(profile);
+    }
+    
+    @Override
+    public void equipMannequin(Mannequin mannequin, EquippedCosmetic cosmetic) {
+        getHelper().equipMannequin(mannequin, cosmetic);
+    }
+    
+    @Override
+    public void unequipMannequin(Mannequin mannequin) {
+        getHelper().unequipMannequin(mannequin);
     }
 
     @Override

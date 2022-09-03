@@ -24,6 +24,7 @@ import io.lumine.cosmetics.metrics.bStats;
 import io.lumine.cosmetics.nms.VolatileCodeDisabled;
 import io.lumine.cosmetics.nms.VolatileCodeHandler;
 import io.lumine.cosmetics.players.ProfileManager;
+import io.lumine.cosmetics.players.wardrobe.WardrobeExecutor;
 import io.lumine.utils.chat.ColorString;
 import io.lumine.utils.logging.ConsoleColor;
 import io.lumine.utils.logging.Log;
@@ -54,6 +55,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
     @Getter private OffhandManager offhandManager;
     @Getter private MEGManager megManager;
     @Getter private GestureManager gestureManager;
+    @Getter private WardrobeExecutor wardrobeManager;
 
     private VolatileCodeHandler volatileCodeHandler;
 
@@ -129,6 +131,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         profiles = new ProfileManager(this);
         
         menuManager = new MenuManager(this);
+        wardrobeManager = new WardrobeExecutor(this);
         
         /*
          * Events
