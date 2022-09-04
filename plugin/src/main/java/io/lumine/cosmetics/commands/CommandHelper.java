@@ -60,4 +60,11 @@ public class CommandHelper {
         player.sendMessage(" ");
         sendCommandFooter(player);
     }
+    
+    public static void sendEditorMessage(CommandSender player, String... args) {
+        sendCommandHeader(player);
+        for(String ss : args) {
+            Text.sendMessage(player, Text.parse(COMMAND_PREFIX.get()).append(Text.parse("<white>" + ss)));
+        }
+    }
 }

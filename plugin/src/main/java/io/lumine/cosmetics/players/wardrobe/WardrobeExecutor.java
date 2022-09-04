@@ -10,6 +10,7 @@ import com.google.common.collect.Maps;
 import io.lumine.cosmetics.MCCosmeticsPlugin;
 import io.lumine.cosmetics.api.players.wardrobe.Mannequin;
 import io.lumine.cosmetics.api.players.wardrobe.WardrobeManager;
+import io.lumine.cosmetics.commands.CommandHelper;
 import io.lumine.utils.Events;
 import io.lumine.utils.plugin.ReloadableModule;
 
@@ -43,6 +44,12 @@ public class WardrobeExecutor extends ReloadableModule<MCCosmeticsPlugin> implem
         var tracker = createTracker(player);
         
         usingWardrobe.put(player,tracker);
+        
+        CommandHelper.sendEditorMessage(player, new String[] {
+                "<green>You're now in Wardrobe Mode!",
+                "Any cosmetics equipped will go on your mannequin",
+                "To exit, type the command again or walk away"
+        });
     }
     
     public void closeWardrobe(Player player) {
@@ -50,6 +57,7 @@ public class WardrobeExecutor extends ReloadableModule<MCCosmeticsPlugin> implem
         
         if(tracker != null) {
             tracker.terminate();
+            CommandHelper.sendSuccess(player, "You exited Wardrobe Mode");
         }
     }
 

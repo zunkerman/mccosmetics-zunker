@@ -52,10 +52,10 @@ public class WardrobeTrackerImpl extends PluginComponent<MCCosmeticsPlugin> impl
         
         this.mannequin = manager.getPlugin().getVolatileCodeHandler().createMannequin(this, player, location);
         
-        Players.playSound(player, location, Sound.ENTITY_CHICKEN_EGG);
+        Players.playSound(player, location, Sound.BLOCK_CONDUIT_ACTIVATE);
         Particle.CLOUD.create()
             .at(location.clone().add(0,1,0))
-            .amount(50)
+            .amount(100)
             .offset(0.5F, 1F, 0.5F)
             .speed(0.1F)
             .send(player);
@@ -89,7 +89,7 @@ public class WardrobeTrackerImpl extends PluginComponent<MCCosmeticsPlugin> impl
             Players.playSound(player, location, Sound.BLOCK_CONDUIT_DEACTIVATE);
             Particle.ENCHANTMENT_TABLE.create()
                 .at(location.clone().add(0,1,0))
-                .amount(50)
+                .amount(200)
                 .offset(0.5F, 1F, 0.5F)
                 .speed(0.1F)
                 .send(player);

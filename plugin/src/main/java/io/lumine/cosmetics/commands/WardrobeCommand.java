@@ -31,9 +31,13 @@ public class WardrobeCommand extends Command<MCCosmeticsPlugin> {
     public boolean onCommand(CommandSender sender, String[] args) {
         final var player = (Player) sender;
         
-        getPlugin().getWardrobeManager().openWardrobe(player);
+        var manager = getPlugin().getWardrobeManager();
         
-        CommandHelper.sendSuccess(sender, "Spawned wardrobe");
+        if(manager.isInWardrobe(player)) {
+            manager.closeWardrobe(player);
+        } else {
+            manager.openWardrobe(player);
+        }
         
         return true;
     }
