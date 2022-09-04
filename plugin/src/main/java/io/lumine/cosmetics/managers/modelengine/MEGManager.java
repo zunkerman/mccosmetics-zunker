@@ -18,6 +18,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.io.File;
 
@@ -71,6 +72,21 @@ public class MEGManager extends MCCosmeticsManager<MEGAccessory> {
                 }
 		    })
 		    .bindWith(this);
+		
+		Events.subscribe(PlayerTeleportEvent.class)
+            .handler(event -> {
+                final var player = event.getPlayer();
+                final var profile = plugin.getProfiles().getProfile(player);
+                
+                if(profile.getEquipped(MEGAccessory.class).isPresent()) {
+                    unequip(profile);
+                    
+                    Schedulers.sync().runLater(() -> {
+                        equip(profile);
+                    }, 5);
+                }
+            })
+            .bindWith(this);
 		
 		Events.subscribe(PlayerQuitEvent.class)
 			.handler(event -> {

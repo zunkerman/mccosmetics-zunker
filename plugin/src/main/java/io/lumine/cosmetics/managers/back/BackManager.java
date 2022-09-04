@@ -18,6 +18,7 @@ import java.io.File;
 import org.bukkit.GameMode;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class BackManager extends MCCosmeticsManager<BackAccessory> implements HideableCosmetic {
 
@@ -31,6 +32,21 @@ public class BackManager extends MCCosmeticsManager<BackAccessory> implements Hi
         super.load(plugin);
         
         Events.subscribe(PlayerChangedWorldEvent.class)
+            .handler(event -> {
+                final var player = event.getPlayer();
+                final var profile = plugin.getProfiles().getProfile(player);
+                
+                if(profile.getEquipped(BackAccessory.class).isPresent()) {
+                    unequip(profile);
+                    
+                    Schedulers.sync().runLater(() -> {
+                        equip(profile);
+                    }, 5);
+                }
+            })
+            .bindWith(this);
+        
+        Events.subscribe(PlayerTeleportEvent.class)
             .handler(event -> {
                 final var player = event.getPlayer();
                 final var profile = plugin.getProfiles().getProfile(player);
