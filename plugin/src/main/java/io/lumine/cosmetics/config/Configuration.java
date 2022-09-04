@@ -28,7 +28,7 @@ public class Configuration extends ReloadableModule<MCCosmeticsPlugin> implement
     private static final EnumProp<StorageDriver> STORAGE_DRIVER = Property.Enum(Scope.CONFIG, StorageDriver.class, "Storage.Driver", StorageDriver.JSON); 
     private static final SqlCredentialsProp SQL_CREDENTIALS = Property.SqlCredentials(Scope.CONFIG, "Storage");
     
-    private static final IntProp EQUIP_DELAY = Property.Int(Scope.CONFIG, "General.EquipDelay", 0);
+    private static final IntProp EQUIP_DELAY = Property.Int(Scope.CONFIG, "General.EquipDelay", 5);
     
     @Getter private boolean allowingMetrics = true;
     

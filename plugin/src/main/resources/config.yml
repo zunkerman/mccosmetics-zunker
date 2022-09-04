@@ -2,7 +2,7 @@ Configuration:
   Storage:
     Driver: JSON
   General:
-    EquipDelay: 0
+    EquipDelay: 5
   Sprays:
     Sound: 'entity.cat.hiss'
     Volume: 1.0

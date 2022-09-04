@@ -11,6 +11,7 @@ import io.lumine.cosmetics.managers.hats.Hat;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_19_R1_2;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
 import io.lumine.cosmetics.players.Profile;
+import io.lumine.utils.logging.Log;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
@@ -21,7 +22,9 @@ import net.minecraft.world.entity.EquipmentSlot;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +32,7 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
 
     @Getter private final MCCosmeticsPlugin plugin;
     private final VolatileCodeEnabled_v1_19_R1_2 nmsHandler;
-    private final Map<Integer, Player> playerTracker = Maps.newConcurrentMap();
+    //private final Map<Integer, Player> playerTracker = Maps.newConcurrentMap();
 
     public VolatileHatImpl(MCCosmeticsPlugin plugin, VolatileCodeEnabled_v1_19_R1_2 nmsHandler) {
         this.plugin = plugin;
@@ -55,7 +58,7 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
 
         var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic(maybeEquipped.get()));
 
-        playerTracker.put(player.getEntityId(), player);
+        //playerTracker.put(player.getEntityId(), player);
 
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsHat)));
 
@@ -81,7 +84,8 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
         
         var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic(cosmetic));
         
-        ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(entityId, List.of(Pair.of(EquipmentSlot.HEAD, nmsHat)));
+        ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(entityId, 
+                List.of(Pair.of(EquipmentSlot.HEAD, nmsHat)));
 
         nmsHandler.broadcast(player, equipmentPacket);
     }
@@ -107,18 +111,20 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
 
     @Override
     public List<Object> write(Player receiver, Object packet) {
-        
+        /*
         if(packet instanceof ClientboundAddPlayerPacket playerPacket) {
             int id = playerPacket.getEntityId();
             Profile profile = getProfile(receiver, id);
             if(profile != null && !profile.isHidden(Hat.class)) {
                 handleSpawn(profile);
             }
-        }else if(packet instanceof ClientboundSetEquipmentPacket equipmentPacket) {
+        } else */
+        
+        if(packet instanceof ClientboundSetEquipmentPacket equipmentPacket) {
             int id = equipmentPacket.getEntity();
             Profile profile = getProfile(receiver, id);
             if(profile != null && !profile.isHidden(Hat.class)) {
-                handleSpawn(profile);
+                modifyPacket(profile, equipmentPacket);
             }
         }
         
@@ -133,6 +139,7 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
     }
 
     public void handleSpawn(Profile profile) {
+
         final var maybeEquipped = profile.getEquipped(Hat.class);
         if(maybeEquipped.isEmpty()) {
             return;
@@ -140,19 +147,50 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
         var equip = maybeEquipped.get();
         var opt = equip.getCosmetic();
         
-        if(!(opt instanceof ItemCosmetic hat))
+        if(!(opt instanceof ItemCosmetic hat)) {
             return;
+        }
 
         final var player = profile.getPlayer();
         final var nmsHat = CraftItemStack.asNMSCopy(hat.getCosmetic(equip));
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.HEAD, nmsHat)));
 
-        //FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
-        //byteBuf.writeByte(80);
-        //equipmentPacket.write(byteBuf);
+        nmsHandler.broadcastAroundAndSelf(player, equipmentPacket);
+    }
+    
+    private void modifyPacket(Profile profile, ClientboundSetEquipmentPacket packet) {
+        final var maybeEquipped = profile.getEquipped(Hat.class);
+        if(maybeEquipped.isEmpty()) {
+            return;
+        }
+        var equip = maybeEquipped.get();
+        var opt = equip.getCosmetic();
+        
+        if(!(opt instanceof ItemCosmetic hat)) {
+            return;
+        }
 
-        final var pipeline = ((CraftPlayer) player).getHandle().connection.getConnection().channel.pipeline();
-        pipeline.writeAndFlush(equipmentPacket);
+        final var nmsItem = CraftItemStack.asNMSCopy(hat.getCosmetic(equip));
+        
+        var slots = (List<Pair<EquipmentSlot,net.minecraft.world.item.ItemStack>>) packet.getSlots();
+        List<Pair<EquipmentSlot,net.minecraft.world.item.ItemStack>> newSlots = new ArrayList<>();
+
+        boolean foundHead = false;
+        for(var pair : slots) {
+            final EquipmentSlot slot = pair.getFirst();
+            
+            if(slot == EquipmentSlot.HEAD) {
+                foundHead = true;
+                newSlots.add(Pair.of(pair.getFirst(), nmsItem));
+            } else {
+                newSlots.add(pair);
+            }
+        }
+        if(!foundHead) {
+            newSlots.add(Pair.of(EquipmentSlot.HEAD, nmsItem));
+        }
+        packet.getSlots().clear();
+        packet.getSlots().addAll(newSlots);
     }
 
 }

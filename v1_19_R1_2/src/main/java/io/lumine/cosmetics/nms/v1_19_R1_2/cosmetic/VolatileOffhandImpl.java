@@ -22,6 +22,7 @@ import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -98,16 +99,11 @@ public class VolatileOffhandImpl implements VolatileEquipmentHelper {
 
     @Override
     public List<Object> write(Player receiver, Object packet) {
-        if(packet instanceof ClientboundAddPlayerPacket playerPacket) {
-            int id = playerPacket.getEntityId();
-            Profile profile = getProfile(receiver, id);
-            if(profile != null && !profile.isHidden(Offhand.class))
-                handleSpawn(profile);
-        }else if(packet instanceof ClientboundSetEquipmentPacket equipmentPacket) {
+        if(packet instanceof ClientboundSetEquipmentPacket equipmentPacket) {
             int id = equipmentPacket.getEntity();
             Profile profile = getProfile(receiver, id);
             if(profile != null && !profile.isHidden(Offhand.class))
-                handleSpawn(profile);
+                modifyPacket(profile, equipmentPacket);
         }
 
         return null;
@@ -134,13 +130,42 @@ public class VolatileOffhandImpl implements VolatileEquipmentHelper {
         final var player = profile.getPlayer();
         final var nmsOffhand = CraftItemStack.asNMSCopy(offhand.getCosmetic(equip));
         ClientboundSetEquipmentPacket equipmentPacket = new ClientboundSetEquipmentPacket(player.getEntityId(), List.of(Pair.of(EquipmentSlot.OFFHAND, nmsOffhand)));
+        nmsHandler.broadcastAroundAndSelf(player, equipmentPacket);
+    }
+    
+    private void modifyPacket(Profile profile, ClientboundSetEquipmentPacket packet) {
+        final var maybeEquipped = profile.getEquipped(Hat.class);
+        if(maybeEquipped.isEmpty()) {
+            return;
+        }
+        var equip = maybeEquipped.get();
+        var opt = equip.getCosmetic();
+        
+        if(!(opt instanceof ItemCosmetic hat)) {
+            return;
+        }
 
-        FriendlyByteBuf byteBuf = new FriendlyByteBuf(Unpooled.buffer());
-        byteBuf.writeByte(80);
-        equipmentPacket.write(byteBuf);
+        final var nmsItem = CraftItemStack.asNMSCopy(hat.getCosmetic(equip));
+        
+        var slots = (List<Pair<EquipmentSlot,net.minecraft.world.item.ItemStack>>) packet.getSlots();
+        List<Pair<EquipmentSlot,net.minecraft.world.item.ItemStack>> newSlots = new ArrayList<>();
 
-        final var pipeline = ((CraftPlayer) player).getHandle().connection.getConnection().channel.pipeline();
-        pipeline.writeAndFlush(equipmentPacket);
+        boolean foundHead = false;
+        for(var pair : slots) {
+            final EquipmentSlot slot = pair.getFirst();
+            
+            if(slot == EquipmentSlot.HEAD) {
+                foundHead = true;
+                newSlots.add(Pair.of(pair.getFirst(), nmsItem));
+            } else {
+                newSlots.add(pair);
+            }
+        }
+        if(!foundHead) {
+            newSlots.add(Pair.of(EquipmentSlot.HEAD, nmsItem));
+        }
+        packet.getSlots().clear();
+        packet.getSlots().addAll(newSlots);
     }
 
 }
