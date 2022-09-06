@@ -36,7 +36,7 @@ public class BackManager extends MCCosmeticsManager<BackAccessory> implements Hi
                 final var player = event.getPlayer();
                 final var profile = plugin.getProfiles().getProfile(player);
                 
-                if(profile.getEquipped(BackAccessory.class).isPresent()) {
+                if(profile != null && profile.getEquipped(BackAccessory.class).isPresent()) {
                     unequip(profile);
                     
                     Schedulers.sync().runLater(() -> {
@@ -51,7 +51,7 @@ public class BackManager extends MCCosmeticsManager<BackAccessory> implements Hi
                 final var player = event.getPlayer();
                 final var profile = plugin.getProfiles().getProfile(player);
                 
-                if(profile.getEquipped(BackAccessory.class).isPresent()) {
+                if(profile != null && profile.getEquipped(BackAccessory.class).isPresent()) {
                     unequip(profile);
                     
                     Schedulers.sync().runLater(() -> {

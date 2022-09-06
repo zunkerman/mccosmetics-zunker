@@ -42,7 +42,7 @@ public class MEGManager extends MCCosmeticsManager<MEGAccessory> {
                 final var player = event.getEntity();
                 final var profile = plugin.getProfiles().getProfile(player);
                 
-                if(profile.getEquipped(MEGAccessory.class).isPresent()) {
+                if(profile != null && profile.getEquipped(MEGAccessory.class).isPresent()) {
                     unequip(profile);
                 }
             })
@@ -54,7 +54,7 @@ public class MEGManager extends MCCosmeticsManager<MEGAccessory> {
                 final var profile = plugin.getProfiles().getProfile(player);
                 
                 Schedulers.sync().runLater(() -> {
-                    if(profile.getEquipped(MEGAccessory.class).isPresent()) {
+                    if(profile != null && profile.getEquipped(MEGAccessory.class).isPresent()) {
                         equip(profile);
                     }
                 }, 5);
