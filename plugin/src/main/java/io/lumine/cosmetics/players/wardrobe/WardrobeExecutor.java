@@ -47,7 +47,7 @@ public class WardrobeExecutor extends ReloadableModule<MCCosmeticsPlugin> implem
         
         CommandHelper.sendEditorMessage(player, new String[] {
                 "<green>You're now in Wardrobe Mode!",
-                "Any cosmetics equipped will go on your mannequin",
+                "Cosmetics equipped will go on your mannequin",
                 "To exit, type the command again or walk away"
         });
     }

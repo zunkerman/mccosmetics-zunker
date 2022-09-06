@@ -12,6 +12,7 @@ import io.lumine.cosmetics.managers.offhand.Offhand;
 import io.lumine.cosmetics.nms.VolatileCodeEnabled_v1_19_R1_2;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
 import io.lumine.cosmetics.players.Profile;
+import io.lumine.utils.reflection.Reflector;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
@@ -133,6 +134,8 @@ public class VolatileOffhandImpl implements VolatileEquipmentHelper {
         nmsHandler.broadcastAroundAndSelf(player, equipmentPacket);
     }
     
+    private static Reflector<ClientboundSetEquipmentPacket> refEq = new Reflector(ClientboundSetEquipmentPacket.class, "c");
+    
     private void modifyPacket(Profile profile, ClientboundSetEquipmentPacket packet) {
         final var maybeEquipped = profile.getEquipped(Hat.class);
         if(maybeEquipped.isEmpty()) {
@@ -164,8 +167,7 @@ public class VolatileOffhandImpl implements VolatileEquipmentHelper {
         if(!foundHead) {
             newSlots.add(Pair.of(EquipmentSlot.HEAD, nmsItem));
         }
-        packet.getSlots().clear();
-        packet.getSlots().addAll(newSlots);
+        refEq.set(packet, "c", newSlots);
     }
 
 }
