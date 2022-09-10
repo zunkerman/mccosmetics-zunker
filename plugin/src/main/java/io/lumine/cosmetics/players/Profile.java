@@ -128,7 +128,7 @@ public class Profile implements CosmeticProfile,io.lumine.utils.storage.players.
             pCos.getCosmetic().getManager().unequip(this);
             
             if(manager.getAdapter() instanceof SqlStorage sqlStorage) {
-                sqlStorage.saveCosmeticEquipped(this, pCos.getCosmetic().getId(), null);
+                sqlStorage.saveCosmeticEquipped(this, pCos.getCosmetic().getType(), null);
             }
         }
     }
