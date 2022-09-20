@@ -140,7 +140,7 @@ public class VolatileHatImpl implements VolatileEquipmentHelper {
     }
 
     public void handleSpawn(Profile profile) {
-        
+
         final var maybeEquipped = profile.getEquipped(Hat.class);
         if(maybeEquipped.isEmpty()) {
             return;
