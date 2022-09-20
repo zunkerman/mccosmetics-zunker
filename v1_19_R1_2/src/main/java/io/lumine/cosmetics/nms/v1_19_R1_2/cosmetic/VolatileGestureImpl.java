@@ -142,20 +142,12 @@ public class VolatileGestureImpl implements VolatileEquipmentHelper {
 
 	@Override
 	public boolean read(Player sender, Object packet, boolean isCanceled) {
-		final var profile = MCCosmeticsPlugin.inst().getProfiles().getProfile(sender);
-		if(profile == null)
-			return true;
-		final var maybeEquipped = profile.getEquipped(Gesture.class);
-		if(maybeEquipped.isEmpty()) {
+		if(!plugin.getGestureManager().getTicking().containsKey(sender)) {
 		    return true;
 		}
-		var opt = maybeEquipped.get().getCosmetic();
-		
-		if(!(opt instanceof Gesture gesture))
-			return true;
 
 		if(packet instanceof ServerboundPlayerInputPacket inputPacket) {
-			final var manager = (GestureManager) gesture.getManager();
+			final var manager = (GestureManager) plugin.getGestureManager();
 			if(inputPacket.isShiftKeyDown())
 				manager.quit(sender, QuitMethod.SNEAK);
 			if(inputPacket.isJumping())

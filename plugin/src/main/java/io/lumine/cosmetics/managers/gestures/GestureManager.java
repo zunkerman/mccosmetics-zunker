@@ -11,6 +11,8 @@ import io.lumine.cosmetics.managers.MCCosmeticsManager;
 import io.lumine.cosmetics.nms.cosmetic.VolatileEquipmentHelper;
 import io.lumine.utils.Events;
 import io.lumine.utils.files.Files;
+import lombok.Getter;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -21,7 +23,7 @@ import java.util.Map;
 
 public class GestureManager extends MCCosmeticsManager<Gesture> {
 
-	private final Map<Player, CustomPlayerModel> ticking = Maps.newConcurrentMap();
+	@Getter private final Map<Player, CustomPlayerModel> ticking = Maps.newConcurrentMap();
 
 	public GestureManager(MCCosmeticsPlugin plugin) {
 		super(plugin, Gesture.class);
