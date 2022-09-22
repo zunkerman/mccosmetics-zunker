@@ -127,7 +127,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
             Log.info("ModelEngine not found; disabling ModelEngine and MEG Accesstory Cosmetic features.");
         }
         gestureManager = new GestureManager(this);
-        
+       
         profiles = new ProfileManager(this);
         
         menuManager = new MenuManager(this);
