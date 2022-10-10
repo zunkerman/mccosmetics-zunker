@@ -22,6 +22,8 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.entity.LevelEntityGetter;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -32,6 +34,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 
@@ -40,6 +43,8 @@ public class VolatileCodeEnabled_v1_19_R1_2 implements VolatileCodeHandler {
     @Getter private final MCCosmeticsPlugin plugin;
     private final Map<Class<? extends Cosmetic>, VolatileCosmeticHelper> cosmeticHelpers = Maps.newConcurrentMap();
     
+    private Method entityGetter;
+
     public VolatileCodeEnabled_v1_19_R1_2(MCCosmeticsPlugin plugin) {
         this.plugin = plugin;
         cosmeticHelpers.put(Hat.class, new VolatileHatImpl(plugin, this));
@@ -47,6 +52,13 @@ public class VolatileCodeEnabled_v1_19_R1_2 implements VolatileCodeHandler {
         cosmeticHelpers.put(Spray.class, new VolatileSprayImpl(plugin, this));
         cosmeticHelpers.put(Offhand.class, new VolatileOffhandImpl(plugin, this));
         cosmeticHelpers.put(Gesture.class, new VolatileGestureImpl(plugin, this));
+        
+        for(var method : ServerLevel.class.getMethods()) {
+            if(LevelEntityGetter.class.isAssignableFrom(method.getReturnType()) && method.getReturnType() != LevelEntityGetter.class) {
+                entityGetter = method;
+                break;
+            }
+        }
     }
 
     @Override
@@ -135,9 +147,18 @@ public class VolatileCodeEnabled_v1_19_R1_2 implements VolatileCodeHandler {
 
     public Entity getEntity(World world, int id) {
         ServerLevel level = ((CraftWorld) world).getHandle();
-        final var entityManager = level.entityManager;
-        final var entity = entityManager.getEntityGetter().get(id);
-        return entity == null ? null : entity.getBukkitEntity();
+        
+        try {
+            var getter = entityGetter != null ?
+                    (LevelEntityGetter<net.minecraft.world.entity.Entity>) entityGetter.invoke(level) :
+                    level.entityManager.getEntityGetter();
+
+            final var entity = getter.get(id);
+            return entity == null ? null : entity.getBukkitEntity();
+        } catch(Exception | Error ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
     
     @Override
