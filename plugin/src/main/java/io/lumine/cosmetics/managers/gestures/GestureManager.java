@@ -13,6 +13,7 @@ import io.lumine.utils.Events;
 import io.lumine.utils.files.Files;
 import lombok.Getter;
 
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -69,6 +70,8 @@ public class GestureManager extends MCCosmeticsManager<Gesture> {
 	}
 	
 	public void playGesture(CosmeticProfile profile) {
+		if(!profile.getPlayer().isOnGround()) return;
+
 	    if(ticking.containsKey(profile.getPlayer())) {
             return;
         }
@@ -85,6 +88,7 @@ public class GestureManager extends MCCosmeticsManager<Gesture> {
         }
 
         final var player = profile.getPlayer();
+		player.getWorld().playSound(player.getLocation(), gesture.getSoundName(), 1, 1);
         CustomPlayerModel model = new CustomPlayerModel(player, gesture.getQuitMethod(), gesture.isCanLook(), () -> profile.unequip(gesture));
         ticking.put(player, model);
         final var animation = model.getTexture().isSlim() ? gesture.getSlimGesture() : gesture.getDefaultGesture();

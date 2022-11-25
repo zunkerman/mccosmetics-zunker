@@ -22,16 +22,21 @@ public class Gesture extends AbstractCosmetic {
 
 
 	private static final StringProp DEFAULT = Property.String(Scope.NONE, "Gesture");
+
+	private static final StringProp SOUND_NAME = Property.String(Scope.NONE, "Sound");
 	private static final StringProp SLIM = Property.String(Scope.NONE, "Slim");
 	private static final BooleanProp CAN_MOVE = Property.Boolean(Scope.NONE, "CanMove", false);
 	private static final BooleanProp CAN_LOOK = Property.Boolean(Scope.NONE, "CanLook", false);
 	private static final EnumProp<QuitMethod> QUIT_CONTROL = Property.Enum(Scope.NONE, QuitMethod.class,"QuitControl", QuitMethod.SNEAK);
+
 
 	@Getter private final String defaultGesture;
 	@Getter private final String slimGesture;
 	@Getter private final boolean canMove;
 	@Getter private final boolean canLook;
 	@Getter private final QuitMethod quitMethod;
+	@Getter private final String soundName;
+
 
 	public Gesture(GestureManager manager, File file, String key) {
 		super(manager, file, CosmeticType.type(Gesture.class), key);
@@ -46,6 +51,7 @@ public class Gesture extends AbstractCosmetic {
 		canMove = CAN_MOVE.fget(file, this);
 		canLook = CAN_LOOK.fget(file, this);
 		quitMethod = QUIT_CONTROL.fget(file, this);
+		soundName = SOUND_NAME.fget(file, this);
 	}
 
 	@Override
@@ -78,4 +84,6 @@ public class Gesture extends AbstractCosmetic {
 					}
 				}).build();
 	}
+
+
 }

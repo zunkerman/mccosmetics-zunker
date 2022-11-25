@@ -136,7 +136,7 @@ public class MCCosmeticsPlugin extends LuminePlugin {
         /*
          * Events
          */
-        Bukkit.getPluginManager().registerEvents(new PlayerListeners(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerListeners(this), this);
 
         /*
          * Commands 
