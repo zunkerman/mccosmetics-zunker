@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerListeners implements Listener {
-	private MCCosmeticsPlugin plugin;
+	private final MCCosmeticsPlugin plugin;
 	public PlayerListeners(MCCosmeticsPlugin plugin) {
 		this.plugin = plugin;
 	}
@@ -21,6 +21,7 @@ public class PlayerListeners implements Listener {
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		MCCosmeticsPlugin.inst().getVolatileCodeHandler().removePlayer(event.getPlayer());
+		plugin.getGestureManager().stopGesture(plugin.getProfiles().getProfile(event.getPlayer()));
 	}
 
 	@EventHandler

@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.lumine</groupId>
         <artifactId>MCCosmetics-Plugin</artifactId>
-        <version>${mccosmetics.version}</version>
+        <version>0.10.0</version>
     </parent>
 
     <build> 
