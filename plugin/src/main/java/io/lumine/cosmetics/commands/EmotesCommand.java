@@ -50,8 +50,9 @@ public class EmotesCommand extends Command<MCCosmeticsPlugin> {
         if(strings.length == 1) {
             List<String> emotes = new ArrayList<>();
             for(Gesture gesture : getPlugin().getGestureManager().getAllCosmetics()){
-                emotes.add(gesture.getKey());
-
+                if (commandSender.hasPermission(gesture.getPermission())) {
+                    emotes.add(gesture.getKey());
+                }
             }
             return StringUtil.copyPartialMatches(strings[0], emotes, new ArrayList<>());
         }
